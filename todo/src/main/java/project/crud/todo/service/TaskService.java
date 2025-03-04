@@ -2,6 +2,10 @@ package project.crud.todo.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.crud.todo.domain.dto.TaskDTO;
@@ -9,12 +13,16 @@ import project.crud.todo.domain.entity.Task;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 public class TaskService {
+    public final int DEFAULT_TASK_SIZE = 5;
     public final TaskRepository taskRepository;
 
     @Autowired
@@ -53,5 +61,16 @@ public class TaskService {
         } else {
             throw new NoSuchElementException("Task not found");
         }
+    }
+
+    public List<TaskDTO> getAllByMonth(int page, String yearMonth) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
+        Page<Task> tasks = taskRepository.getTaskByYearAndMonth(yearMonth, pageable);
+        return tasks.stream()
+                .map(task -> new TaskDTO(
+                        task.getId()
+                        ,task.getContent()
+                        ,task.getDate()
+                )).collect(Collectors.toList());
     }
 }

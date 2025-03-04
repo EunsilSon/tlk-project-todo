@@ -10,6 +10,8 @@ import project.crud.todo.response.ApiResponse;
 import project.crud.todo.response.ResponseUtil;
 import project.crud.todo.service.TaskService;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -58,6 +60,16 @@ public class TaskController {
     public ApiResponse<TaskDTO> get(@PathVariable Long id) {
         try {
             return ResponseUtil.createSuccessResponse("Successes Get Task", taskService.get(id));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/tasks/{yearMonth}/{page}")
+    public ApiResponse<List<TaskDTO>> getAllByMonth(@PathVariable int page, @PathVariable String yearMonth) {
+        try {
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getAllByMonth(page, yearMonth));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
