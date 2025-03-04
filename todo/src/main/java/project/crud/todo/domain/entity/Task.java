@@ -36,7 +36,7 @@ public class Task {
         return date;
     }
 
-    public void setContent(String content) {
+    public void updateContent(String content) {
         this.content = content;
     }
 

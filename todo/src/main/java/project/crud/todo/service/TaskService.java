@@ -37,8 +37,9 @@ public class TaskService {
 
     @Transactional
     public void update(TaskVO taskVO) {
-        Task task = taskRepository.findById(taskVO.getId()).orElseThrow(() -> new NoSuchElementException("Task not found"));
-        task.setContent(taskVO.getContent());
+        Task task = taskRepository.findById(taskVO.getId())
+                .orElseThrow(() -> new NoSuchElementException("Task not found"));
+        task.updateContent(taskVO.getContent());
     }
 
     @Transactional
