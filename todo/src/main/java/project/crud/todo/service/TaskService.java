@@ -63,9 +63,20 @@ public class TaskService {
         }
     }
 
-    public List<TaskDTO> getAllByMonth(int page, String yearMonth) {
+    public List<TaskDTO> getAllByYearAndMonth(int page, String date) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTaskByYearAndMonth(yearMonth, pageable);
+        Page<Task> tasks = taskRepository.getTasksByYearAndMonth(date, pageable);
+        return tasks.stream()
+                .map(task -> new TaskDTO(
+                        task.getId()
+                        ,task.getContent()
+                        ,task.getDate()
+                )).collect(Collectors.toList());
+    }
+
+    public List<TaskDTO> getAllByDay(int page, String date) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
+        Page<Task> tasks = taskRepository.getTasksByDay(date, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()

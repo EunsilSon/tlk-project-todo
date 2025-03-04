@@ -7,14 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import project.crud.todo.domain.entity.Task;
 
-import java.util.List;
-
-
 @Repository
 public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Task getTaskById(Long id);
 
-    @Query(nativeQuery = true, value = "select * from Task where date_format(date, '%Y-%m') like :yearMonth")
-    Page<Task> getTaskByYearAndMonth(String yearMonth, Pageable pageable);
+    @Query(nativeQuery = true, value = "select * from Task where date_format(date, '%Y-%m') like :date")
+    Page<Task> getTasksByYearAndMonth(String date, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select * from Task where date_format(date, '%Y-%m-%d') like :date")
+    Page<Task> getTasksByDay(String date, Pageable pageable);
 }

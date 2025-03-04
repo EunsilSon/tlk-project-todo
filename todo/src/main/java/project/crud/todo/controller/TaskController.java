@@ -1,6 +1,7 @@
 package project.crud.todo.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.sqm.mutation.internal.TableKeyExpressionCollector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,6 +11,7 @@ import project.crud.todo.response.ApiResponse;
 import project.crud.todo.response.ResponseUtil;
 import project.crud.todo.service.TaskService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -66,10 +68,18 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/tasks/{yearMonth}/{page}")
-    public ApiResponse<List<TaskDTO>> getAllByMonth(@PathVariable int page, @PathVariable String yearMonth) {
+    @GetMapping("/tasks/{date}/{page}")
+    public ApiResponse<List<TaskDTO>> getAllByDate(@PathVariable int page, @PathVariable String date) {
+        List<TaskDTO> tasks = new ArrayList<>();
         try {
-            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getAllByMonth(page, yearMonth));
+            if (date.length() == 7) { // yyyy-mm
+                tasks = taskService.getAllByYearAndMonth(page, date);
+            }
+
+            if (date.length() == 10) { // yyyy-mm-dd
+                tasks = taskService.getAllByDay(page, date);
+            }
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", tasks);
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
