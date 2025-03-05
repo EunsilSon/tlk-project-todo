@@ -1,32 +1,34 @@
 package project.crud.todo.controller;
 
-import lombok.extern.slf4j.Slf4j;
+import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import project.crud.todo.domain.dto.TaskDTO;
 import project.crud.todo.domain.vo.TaskVO;
-import project.crud.todo.response.ApiResponse;
-import project.crud.todo.response.ResponseUtil;
-import project.crud.todo.service.TaskService;
+import project.crud.todo.global.response.ApiResponse;
+import project.crud.todo.global.response.ResponseUtil;
+import project.crud.todo.service.TaskServiceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Slf4j
 @RestController
 public class TaskController {
-    public final TaskService taskService;
+    public final Logger log = LoggerFactory.getLogger(TaskController.class);
+    public final TaskServiceImpl taskServiceImpl;
 
     @Autowired
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
+    public TaskController(TaskServiceImpl taskServiceImpl) {
+        this.taskServiceImpl = taskServiceImpl;
     }
 
     @PostMapping("/task")
-    public ApiResponse<String> create(@RequestBody TaskVO taskVO) {
+    public ApiResponse<String> create(@Valid @RequestBody TaskVO taskVO) {
         try {
-            taskService.create(taskVO);
+            taskServiceImpl.create(taskVO);
             return ResponseUtil.createSuccessResponse("Successes Create Task");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -35,9 +37,9 @@ public class TaskController {
     }
 
     @PutMapping("/task")
-    public ApiResponse<String> update(@RequestBody TaskVO taskVO) {
+    public ApiResponse<String> update(@Valid @RequestBody TaskVO taskVO) {
         try {
-            taskService.update(taskVO);
+            taskServiceImpl.update(taskVO);
             return ResponseUtil.createSuccessResponse("Successes Update Task");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -46,9 +48,9 @@ public class TaskController {
     }
 
     @DeleteMapping("/task/{id}")
-    public ApiResponse<String> delete(@PathVariable Long id) {
+    public ApiResponse<String> delete(@Valid @PathVariable Long id) {
         try {
-            taskService.delete(id);
+            taskServiceImpl.delete(id);
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
         } catch (Exception e) {
             log.error(e.getMessage());
@@ -59,7 +61,7 @@ public class TaskController {
     @GetMapping("/task/{id}")
     public ApiResponse<TaskDTO> get(@PathVariable Long id) {
         try {
-            return ResponseUtil.createSuccessResponse("Successes Get Task", taskService.get(id));
+            return ResponseUtil.createSuccessResponse("Successes Get Task", taskServiceImpl.get(id));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
@@ -71,11 +73,11 @@ public class TaskController {
         List<TaskDTO> tasks = new ArrayList<>();
         try {
             if (date.length() == 7) { // yyyy-mm
-                tasks = taskService.getAllByYearAndMonth(page, date);
+                tasks = taskServiceImpl.getAllByYearAndMonth(page, date);
             }
 
             if (date.length() == 10) { // yyyy-mm-dd
-                tasks = taskService.getAllByDay(page, date);
+                tasks = taskServiceImpl.getAllByDay(page, date);
             }
             return ResponseUtil.createSuccessResponse("Success Get Tasks", tasks);
         } catch (Exception e) {
