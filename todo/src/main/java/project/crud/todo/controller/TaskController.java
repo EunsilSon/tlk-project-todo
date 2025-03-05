@@ -12,7 +12,6 @@ import project.crud.todo.global.response.ApiResponse;
 import project.crud.todo.global.response.ResponseUtil;
 import project.crud.todo.service.TaskServiceImpl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -68,18 +67,20 @@ public class TaskController {
         }
     }
 
-    @GetMapping("/tasks/{date}/{page}")
-    public ApiResponse<List<TaskDTO>> getAllByDate(@PathVariable int page, @PathVariable String date) {
-        List<TaskDTO> tasks = new ArrayList<>();
+    @GetMapping("/tasks/monthly")
+    public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month) {
         try {
-            if (date.length() == 7) { // yyyy-mm
-                tasks = taskServiceImpl.getAllByYearAndMonth(page, date);
-            }
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getAllByYearAndMonth(page, year, month));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
+        }
+    }
 
-            if (date.length() == 10) { // yyyy-mm-dd
-                tasks = taskServiceImpl.getAllByDay(page, date);
-            }
-            return ResponseUtil.createSuccessResponse("Success Get Tasks", tasks);
+    @GetMapping("/tasks/daily")
+    public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+        try {
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getAllByDay(page, year, month, day));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());

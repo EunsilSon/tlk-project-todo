@@ -12,9 +12,9 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     Task getTaskById(Long id);
 
-    @Query(nativeQuery = true, value = "select * from Task where date_format(date, '%Y-%m') like :date")
-    Page<Task> getTasksByYearAndMonth(String date, Pageable pageable);
+    @Query(nativeQuery = true, value = "select * from Task where year(date) = :year and month(date) = :month")
+    Page<Task> getTasksByYearAndMonth(int year, int month, Pageable pageable);
 
-    @Query(nativeQuery = true, value = "select * from Task where date_format(date, '%Y-%m-%d') like :date")
-    Page<Task> getTasksByDay(String date, Pageable pageable);
+    @Query(nativeQuery = true, value = "select * from Task where year(date) = :year and month(date) = :month and day(date) = :day")
+    Page<Task> getTasksByDay(int year, int month, int day, Pageable pageable);
 }

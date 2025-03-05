@@ -14,7 +14,8 @@ public interface TaskService {
 
     TaskDTO get(Long id);
 
-    List<TaskDTO> getAllByYearAndMonth(int page, String date);
+    List<TaskDTO> getAllByYearAndMonth(int page, int year, int month);
 
-    List<TaskDTO> getAllByDay(int page, String date);
+    List<TaskDTO> getAllByDay(int page, int year, int month, int day);
+
 }

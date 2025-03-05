@@ -12,6 +12,7 @@ import project.crud.todo.domain.entity.Task;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -30,7 +31,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public void create(TaskVO taskVO) {
-        taskRepository.save(new Task(taskVO.getContent()));
+        taskRepository.save(new Task(taskVO.getContent(), taskVO.getDate()));
     }
 
     @Override
@@ -68,27 +69,27 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByYearAndMonth(int page, String date) {
+    public List<TaskDTO> getAllByYearAndMonth(int page, int year, int month) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByYearAndMonth(date, pageable);
+        Page<Task> tasks = taskRepository.getTasksByYearAndMonth(year, month, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()
-                        ,task.getContent()
-                        ,task.getDate()
+                        , task.getContent()
+                        , task.getDate()
                 )).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByDay(int page, String date) {
+    public List<TaskDTO> getAllByDay(int page, int year, int month, int day) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByDay(date, pageable);
+        Page<Task> tasks = taskRepository.getTasksByDay(year, month, day, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()
-                        ,task.getContent()
-                        ,task.getDate()
+                        , task.getContent()
+                        , task.getDate()
                 )).collect(Collectors.toList());
     }
 }
