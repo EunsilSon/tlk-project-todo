@@ -92,4 +92,27 @@ public class TaskServiceImpl implements TaskService {
                         , task.getDate()
                 )).collect(Collectors.toList());
     }
+
+    @Override
+    public int[] getTaskCountByYearAndMonth(int year, int month) {
+        int lastDay;
+        if (month == 2) {
+            if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                lastDay = 29;
+            } else {
+                lastDay = 28;
+            }
+        } else if (month == 1 || month == 4 || month == 6 || month == 9 || month == 11) {
+            lastDay = 31;
+        } else {
+            lastDay = 30;
+        }
+
+        int[] countArr = new int[lastDay + 1];
+        countArr[0] = -1;
+        for (int i = 1; i <= lastDay; i++) {
+            countArr[i] = taskRepository.countByYearAndMonthAndDay(year, month, i);
+        }
+        return countArr;
+    }
 }

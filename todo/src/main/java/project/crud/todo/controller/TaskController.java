@@ -87,4 +87,13 @@ public class TaskController {
         }
     }
 
+    @GetMapping("/task/count")
+    public ApiResponse<int[]> getCount(@RequestParam int year, @RequestParam int month) {
+        try {
+            return ResponseUtil.createSuccessResponse("Successes Get Task Counts", taskServiceImpl.getTaskCountByYearAndMonth(year, month));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task Counts: " + e.getMessage());
+        }
+    }
 }

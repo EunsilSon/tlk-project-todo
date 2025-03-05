@@ -18,4 +18,5 @@ public interface TaskService {
 
     List<TaskDTO> getAllByDay(int page, int year, int month, int day);
 
+    int[] getTaskCountByYearAndMonth(int year, int month);
 }

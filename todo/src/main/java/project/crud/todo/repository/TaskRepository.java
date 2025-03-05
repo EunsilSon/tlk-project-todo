@@ -17,4 +17,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @Query(nativeQuery = true, value = "select * from Task where year(date) = :year and month(date) = :month and day(date) = :day")
     Page<Task> getTasksByDay(int year, int month, int day, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select count(*) from Task where year(date) = :year and month(date) = :month and day(date) = :day")
+    int countByYearAndMonthAndDay(int year, int month, int day);
 }
