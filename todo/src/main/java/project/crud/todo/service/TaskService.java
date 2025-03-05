@@ -13,7 +13,6 @@ import project.crud.todo.domain.entity.Task;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,8 +36,9 @@ public class TaskService {
 
     @Transactional
     public void update(TaskVO taskVO) {
-        Task task = taskRepository.findById(taskVO.getId()).orElseThrow(() -> new NoSuchElementException("Task not found"));
-        task.setContent(taskVO.getContent());
+        Task task = taskRepository.findById(taskVO.getId())
+                .orElseThrow(() -> new NoSuchElementException("Task not found"));
+        task.updateContent(taskVO.getContent());
     }
 
     @Transactional
@@ -50,6 +50,7 @@ public class TaskService {
         }
     }
 
+    @Transactional(readOnly = true)
     public TaskDTO get(Long id) {
         Optional<Task> task = Optional.ofNullable(taskRepository.getTaskById(id));
         if (task.isPresent()) {
@@ -63,6 +64,7 @@ public class TaskService {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<TaskDTO> getAllByYearAndMonth(int page, String date) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
         Page<Task> tasks = taskRepository.getTasksByYearAndMonth(date, pageable);
@@ -74,6 +76,7 @@ public class TaskService {
                 )).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<TaskDTO> getAllByDay(int page, String date) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
         Page<Task> tasks = taskRepository.getTasksByDay(date, pageable);
