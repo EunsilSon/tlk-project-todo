@@ -94,6 +94,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public int[] getTaskCountByYearAndMonth(int year, int month) {
         int lastDay;
         if (month == 2) {

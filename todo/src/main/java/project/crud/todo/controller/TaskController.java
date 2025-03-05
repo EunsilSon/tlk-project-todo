@@ -47,7 +47,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/task/{id}")
-    public ApiResponse<String> delete(@Valid @PathVariable Long id) {
+    public ApiResponse<String> delete(@PathVariable Long id) {
         try {
             taskServiceImpl.delete(id);
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
