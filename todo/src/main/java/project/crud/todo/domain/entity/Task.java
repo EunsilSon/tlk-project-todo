@@ -19,9 +19,9 @@ public class Task {
 
     }
 
-    public Task(String content) {
+    public Task(String content, String date) {
         this.content = content;
-        this.date = LocalDate.now();
+        this.date = LocalDate.parse(date);
     }
 
     public Long getId() {

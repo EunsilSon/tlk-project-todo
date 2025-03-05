@@ -1,4 +1,4 @@
-package project.crud.todo.response;
+package project.crud.todo.global.response;
 
 import org.springframework.http.HttpStatusCode;
 
