@@ -1,6 +1,11 @@
 body {
-    background-color: #eeeeee;
+    background-color: #dddddd;
     overflow: hidden;
+}
+
+button {
+    border: 0px;
+    font-size: 15px;
 }
 
 #main-div {
@@ -19,60 +24,87 @@ body {
 }
 
 #cal-div {
-    background-color: #9e9e9e;
     width: 600px;
-    height: 300px;
-    margin: 10px 0px 10px 0px;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    background-color: #ffffff
 }
 
 #cal-navigation {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #dddddd;
+}
+
+#cal-date {
+    font-size: 20px;
 }
 
 #cal-navigation button {
-    margin: 10px;
+    margin: 10px 20px 10px 20px;
+    background-color: #ffffff;
+    font-size: 25px;
+}
+
+#day-navigation {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 10px;
+}
+
+#day-navigation li {
+    list-style: none;
 }
 
 #task-div {
-    display: flex;
-    justify-content: center;
-    width: 600px;
-    height: 250px;
-    padding: 10px 0px 10px 0px;
-    background-color: #9e9e9e;
+    width: 600px; /*스크롤 생기면 width 줄이기*/
 }
 
 #task-item {
-    width: 550px;
-    height: 50px;
+    padding: 10px;
+    margin: 5px 0px 5px 0px;
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    background-color: white;
 }
 
 #task-detail {
     display: flex;
     flex-direction: column;
-    margin-right: 10px;
-    padding: 5px;
-    width: 550px;
-    background-color: white;
+    width: 500px;
+    padding-right: 10px;
+    margin: 0px 5px 0px 5px;
+}
+
+#task-delete-btn {
+    padding: 0px 15px 0px 15px;
 }
 
 #input-div {
-    width: 600px;
-    height: 50px;
+    margin-top: 5px;
+}
+
+#input-div div {
+    display: flex;
+    justify-content: center;
 }
 
 #input-div p {
-    margin: 10px 0px 5px 0px;
+    margin: 0px 0px 5px 0px;
 }
 
 #input-div input {
-    width: 500px;
-    height: 30px;
+    width: 525px;
+    padding: 5px;
     border: 0px;
-    background-color: #9e9e9e;
+    font-size: 18px;
+    background-color: #ffffff;
+}
+
+#task-create-btn {
+    margin-left: 10px;
+    padding: 14px;
+    background-color: #ffffff;
 }
