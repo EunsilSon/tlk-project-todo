@@ -1,4 +1,4 @@
-import { renderCalendar } from "../utils/calenderRenderUtils.js";
+import { renderCalenderDate, renderCalendar } from "../utils/calenderRenderUtils.js";
 
 document.addEventListener('DOMContentLoaded', () => {
     let date = new Date();
@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     let firstDayIdx = getFirstDay(year, month);
     let lastDay = getLastDay(year, month);
     let weekCount = getWeekCount(year, month, lastDay);
+
+    renderCalenderDate(year, month);
     renderCalendar(weekCount, firstDayIdx, lastDay);
 })
 
