@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width" , initial-scale="1.0">
     <title>TODO</title>
     <link rel="stylesheet" href="../../css/index.css">
-    <script type="module" src="../../dist/index.js"></script>
+    <script type="module" src="../../dist/components/calenderForm.js"></script>
 </head>
 <body>
     <div id="main-div">
@@ -16,7 +16,7 @@
                     <p id="cal-date">yyyy-mm</p>
                     <button id="next-btn">></button>
                 </div>
-                <div id="day-navigation">
+                <ul class="day-navigation">
                     <li>일</li>
                     <li>월</li>
                     <li>화</li>
@@ -24,9 +24,8 @@
                     <li>목</li>
                     <li>금</li>
                     <li>토</li>
-                </div>
-                <div id="day">
-                    <!--'day-navigation' li랑 같은 코드로 숫자 출력-->
+                </ul>
+                <div id="day-div">
                 </div>
             </div>
             <div id="task-div">
