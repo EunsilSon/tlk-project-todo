@@ -96,6 +96,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public int[] getTaskCountByYearAndMonth(int year, int month) {
+        int[] lastDayByMonth = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         int lastDay;
         if (month == 2) {
             if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
@@ -103,10 +104,8 @@ public class TaskServiceImpl implements TaskService {
             } else {
                 lastDay = 28;
             }
-        } else if (month == 1 || month == 4 || month == 6 || month == 9 || month == 11) {
-            lastDay = 31;
         } else {
-            lastDay = 30;
+            lastDay = lastDayByMonth[month-1];
         }
 
         int[] countArr = new int[lastDay + 1];
