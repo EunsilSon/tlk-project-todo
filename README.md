@@ -11,7 +11,7 @@
 <br>
 
 # API 명세 (완료된 기능)
-![api](https://github.com/user-attachments/assets/0f9b8e83-0254-4a69-ab69-468034849e10)
+![api](https://github.com/user-attachments/assets/fbf041dc-c37b-43dc-bee3-476731eba4fa)
 
 <br>
 
