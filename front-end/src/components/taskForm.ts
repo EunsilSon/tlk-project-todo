@@ -1,4 +1,12 @@
-import { createTask } from "../services/taskService.js";
+import { createTask, getMonthlyTaskList } from "../services/taskService.js";
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Service에서 받아오기
+    const response = getMonthlyTaskList(2025, 2, 0);
+    console.log(response);
+    // render
+})
+
 
 const createBtn = document.getElementById('create');
 
