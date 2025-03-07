@@ -6,15 +6,17 @@
     <title>TODO</title>
     <link rel="stylesheet" href="../../css/index.css">
     <script type="module" src="../../dist/components/calenderForm.js"></script>
+    <script type="module" src="../../dist/components/taskForm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
     <div id="main-div">
         <div id="sub-div">
             <div id="cal-div">
                 <div id="cal-navigation">
-                    <button id="prev-btn"><</button>
+                    <button id="prev"><</button>
                     <p id="cal-date">yyyy-mm</p>
-                    <button id="next-btn">></button>
+                    <button id="next">></button>
                 </div>
                 <table id="calender">
                     <tr id="day-navigation">
@@ -26,52 +28,25 @@
                         <th>금</th>
                         <th>토</th>
                     </tr>
-                    <!--일자 생성-->
                 </table>
             </div>
             <div id="task-div">
                 <!--스크롤 생성-->
-                <div id="task-item">
-                    <div id="task-detail">
-                        <div id="date">yyyy. mm. dd</div>
-                        <div id="content">내용</div>        
+                <div class="task-item">
+                    <!--
+                    <div class="task-detail">
+                        <div class="date">yyyy. mm. dd</div>
+                        <div class="content">내용</div>        
                     </div>
-                    <button id="task-delete-btn">삭제</button>
-                </div>
-                <div id="task-item">
-                    <div id="task-detail">
-                        <div id="date">yyyy. mm. dd</div>
-                        <div id="content">내용</div>        
-                    </div>
-                    <button id="task-delete-btn">삭제</button>
-                </div>
-                <div id="task-item">
-                    <div id="task-detail">
-                        <div id="date">yyyy. mm. dd</div>
-                        <div id="content">내용</div>        
-                    </div>
-                    <button id="task-delete-btn">삭제</button>
-                </div>
-                <div id="task-item">
-                    <div id="task-detail">
-                        <div id="date">yyyy. mm. dd</div>
-                        <div id="content">내용</div>        
-                    </div>
-                    <button id="task-delete-btn">삭제</button>
-                </div>
-                <div id="task-item">
-                    <div id="task-detail">
-                        <div id="date">yyyy. mm. dd</div>
-                        <div id="content">내용</div>        
-                    </div>
-                    <button id="task-delete-btn">삭제</button>
+                    <button class="delete" id="10">삭제</button>
+                    -->
                 </div>
             </div>
             <div id="input-div">
                 <p id="input-date">yyyy. mm. dd</p>
                 <div>
-                    <input type="text" id="task-create" placeholder="최소 1자, 최대 100자 입력 가능합니다.">
-                    <button id="task-create-btn">등록</button>
+                    <input type="text" id="task-input" placeholder="최소 1자, 최대 100자 입력 가능합니다.">
+                    <button id="create">등록</button>
                 </div>
             </div>
         <div>
