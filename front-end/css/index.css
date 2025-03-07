@@ -1,6 +1,12 @@
 body {
-    background-color: #eeeeee;
+    background-color: #dddddd;
     overflow: hidden;
+}
+
+button {
+    border: 0px;
+    font-size: 15px;
+    cursor: pointer;
 }
 
 #main-div {
@@ -9,7 +15,7 @@ body {
     align-items: center;
 }
 
-#todo-div {
+#sub-div {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,60 +25,116 @@ body {
 }
 
 #cal-div {
-    background-color: #9e9e9e;
     width: 600px;
-    height: 300px;
-    margin: 10px 0px 10px 0px;
+    padding-bottom: 10px;
+    background-color: #ffffff
 }
 
 #cal-navigation {
     display: flex;
-    flex-direction: row;
     justify-content: space-between;
+    border-bottom: 1px solid #dddddd;
+}
+
+#cal-date {
+    font-size: 20px;
 }
 
 #cal-navigation button {
-    margin: 10px;
+    margin: 10px 20px 10px 20px;
+    background-color: #ffffff;
+    font-size: 25px;
+}
+
+#cal-navigation button:hover {
+    color: #979797;
+}
+
+table tbody {
+    margin-bottom: -30px;
+}
+
+.not-now {
+    color: rgb(145, 145, 145);
+    cursor: default;
+}
+
+table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-spacing: 60px 35px;
+}
+
+td {
+    cursor: pointer;
 }
 
 #task-div {
-    display: flex;
-    justify-content: center;
-    width: 600px;
-    height: 250px;
-    padding: 10px 0px 10px 0px;
-    background-color: #9e9e9e;
+    width: 600px; /*스크롤 생기면 width 줄이기*/
 }
 
-#task-item {
-    width: 550px;
-    height: 50px;
+.task-item {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#task-detail {
-    display: flex;
-    flex-direction: column;
-    margin-right: 10px;
-    padding: 5px;
-    width: 550px;
+    align-items: center;
+    padding: 0px 10px 0px 10px;
+    margin: 5px 0px 5px 0px;
     background-color: white;
 }
 
+.task-detail {
+    width: 500px;
+    margin: 0px 5px 0px 5px;
+}
+
+.task-detail p {
+    font-size: 17px;
+}
+
+.task-detail div:first-child {
+    margin-bottom: 10px;
+}
+
+.delete {
+    margin: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    border: 1px solid #afafaf;
+}
+
+.delete:hover {
+    background-color: #dddddd;
+}
+
 #input-div {
-    width: 600px;
-    height: 50px;
+    margin-top: 5px;
+}
+
+#input-div div {
+    display: flex;
+    justify-content: center;
 }
 
 #input-div p {
-    margin: 10px 0px 5px 0px;
+    margin: 0px 0px 5px 0px;
 }
 
 #input-div input {
-    width: 500px;
-    height: 30px;
+    width: 510px;
+    padding: 10px;
     border: 0px;
-    background-color: #9e9e9e;
+    font-size: 18px;
+    background-color: #ffffff;
+}
+
+#create {
+    margin-left: 10px;
+    padding: 14px;
+    background-color: #ffffff;
+}
+
+#create:hover {
+    background-color: #cccccc;
 }
