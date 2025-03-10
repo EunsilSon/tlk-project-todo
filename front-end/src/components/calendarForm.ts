@@ -1,7 +1,7 @@
-import { renderCalender } from "../utils/calenderRenderUtils.js";
+import { renderCalender } from "../utils/calendarRenderUtils.js";
 import { renderTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
-import { getMonthlyTaskProcess } from "../components/taskForm.js";
+import { getMonthlyTaskProcess } from "./taskForm.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     let year: number;

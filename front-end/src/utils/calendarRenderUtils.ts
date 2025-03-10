@@ -1,4 +1,4 @@
-import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth } from "../components/calenderForm.js";
+import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth } from "../components/calendarForm.js";
 import { getTaskCountProcess, getDailyTaskProcess } from "../components/taskForm.js";
 
 function renderTitle(year: number, month: number) {
