@@ -23,8 +23,8 @@
     font-size: 17px;
 }
 
-.task-detail div:first-child {
-    margin-bottom: 10px;
+.task-item:last-child {
+    margin-bottom: 0px;
 }
 
 .delete {
