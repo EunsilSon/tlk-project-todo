@@ -26,7 +26,6 @@ button {
 
 #cal-div {
     width: 600px;
-    height: 640px;
     padding-bottom: 10px;
     background-color: #ffffff
 }
@@ -38,13 +37,13 @@ button {
 }
 
 #cal-date {
-    font-size: 20px;
+    font-size: 30px;
 }
 
 #cal-navigation button {
-    margin: 10px 20px 10px 20px;
+    margin: 0px 20px 0px 20px;
     background-color: #ffffff;
-    font-size: 25px;
+    font-size: 40px;
 }
 
 #cal-navigation button:hover {
@@ -60,7 +59,8 @@ table {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    border-spacing: 60px 35px;
+    border-spacing: 55px 29px;
+    font-size: 18px;
 }
 
 .not-now {

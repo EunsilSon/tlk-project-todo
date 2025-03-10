@@ -11,8 +11,8 @@ export async function getTaskCountProcess(year: number, month: number) {
 }
 
 export function getDailyTaskProcess(day: string, page: number) {
-    let seletedDate: number[] = getSelectedDate();
-    getDaliyTaskList(seletedDate[0], seletedDate[1], day, page);
+    //let seletedDate: number[] = getSelectedDate();
+    //getDaliyTaskList(seletedDate[0], seletedDate[1], day, page);
 }
 
 // yyyy.mm.dd -> yyyy-mm-dd
