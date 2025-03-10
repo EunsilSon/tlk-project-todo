@@ -2,10 +2,6 @@ import { getTaskCount, createTask, getMonthlyTaskList, getDaliyTaskList } from "
 import { getSelectedDate } from "./calenderForm.js";
 import { renderTasks } from "../utils/taskRenderUtils.js";
 
-document.addEventListener('DOMContentLoaded', async () => {
-    renderTasks(await getMonthlyTaskProcess(0));
-})
-
 export async function getMonthlyTaskProcess(page: number) {
     let seletedDate: number[] = getSelectedDate();
     return await getMonthlyTaskList(seletedDate[0], seletedDate[1], page);
@@ -39,12 +35,17 @@ if (createBtn) {
                 date: formatDate(Number(splitDate[0]), Number(splitDate[1]), Number(splitDate[2]))
             };
 
-            await createTask(task);
-
-            alert("등록이 완료 되었습니다.");
-            localStorage.setItem("year", splitDate[0]);
-            localStorage.setItem("month", splitDate[1]);
-            window.location.reload();
+            await createTask(task)
+            .then((response: any) => {
+                if (response.status === 200) {
+                    alert("등록이 완료 되었습니다.");
+                    localStorage.setItem("year", splitDate[0]);
+                    localStorage.setItem("month", splitDate[1]);
+                    window.location.reload();
+                } else {
+                    alert(response.message);
+                }
+            })
         } catch (error) {
             console.log(error);
         }
