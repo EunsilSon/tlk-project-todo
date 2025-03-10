@@ -1,8 +1,9 @@
 import { renderCalender } from "../utils/calenderRenderUtils.js";
+import { renderTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
-import { getMonthlyTaskProcess, getTaskCountProcess } from "../components/taskForm.js";
+import { getMonthlyTaskProcess } from "../components/taskForm.js";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     let year: number;
     let month: number;
 
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     renderCalender(year, month);
-    getMonthlyTaskProcess(0);
+    renderTasks(await getMonthlyTaskProcess(0));
 })
 
 // 현재 선택된 날짜
@@ -68,7 +69,7 @@ export function getLastDayOfPrevMonth(year: number, month: number) {
 }
 
 // 이전 달
-function moveToPrevCalender() {
+async function moveToPrevCalender() {
     let seletedDate: number[] = getSelectedDate();
     let year = seletedDate[0];
     let month = seletedDate[1];
@@ -78,11 +79,11 @@ function moveToPrevCalender() {
         month = 12;
     }
     renderCalender(year, month-1);
-    getMonthlyTaskList(year, month, 0);
+    renderTasks(await getMonthlyTaskList(year, month, 0));
 }
 
 // 다음 달 {
-function moveToNextCalender() {
+    async function moveToNextCalender() {
     let seletedDate: number[] = getSelectedDate();
     let year = seletedDate[0];
     let month = seletedDate[1];
@@ -92,7 +93,7 @@ function moveToNextCalender() {
         month = 1;
     }
     renderCalender(year, month-1);
-    getMonthlyTaskList(year, month, 0);
+    renderTasks(await getMonthlyTaskList(year, month, 0));
 }
 
 /*

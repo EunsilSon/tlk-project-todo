@@ -1,12 +1,16 @@
 #task-div {
-    width: 600px; /*스크롤 생기면 width 줄이기*/
+    width: 600px;
+    height: 300px;
+    margin: 5px 0px 5px 0px;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 .task-item {
     display: flex;
     align-items: center;
     padding: 0px 10px 0px 10px;
-    margin: 5px 0px 5px 0px;
+    margin: 0px 5px 5px 0px;
     background-color: white;
 }
 

@@ -5,7 +5,7 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-export const createTask = async (task: Task) => {
+export const createTask = async (task: NewTask) => {
     try {
         const response = await instance.post(`task`, task);
         console.log(response.data);

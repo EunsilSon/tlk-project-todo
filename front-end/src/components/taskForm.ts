@@ -1,13 +1,18 @@
 import { getTaskCount, createTask, getMonthlyTaskList, getDaliyTaskList } from "../services/taskService.js";
 import { getSelectedDate } from "./calenderForm.js";
+import { renderTasks } from "../utils/taskRenderUtils.js";
 
-export async function getTaskCountProcess(year: number, month: number) {
-    return await getTaskCount(year, month+1);
-}
+document.addEventListener('DOMContentLoaded', async () => {
+    renderTasks(await getMonthlyTaskProcess(0));
+})
 
 export async function getMonthlyTaskProcess(page: number) {
     let seletedDate: number[] = getSelectedDate();
-    await getMonthlyTaskList(seletedDate[0], seletedDate[1], page);
+    return await getMonthlyTaskList(seletedDate[0], seletedDate[1], page);
+}
+
+export async function getTaskCountProcess(year: number, month: number) {
+    return await getTaskCount(year, month+1);
 }
 
 export function getDailyTaskProcess(day: string, page: number) {
@@ -15,6 +20,7 @@ export function getDailyTaskProcess(day: string, page: number) {
     getDaliyTaskList(seletedDate[0], seletedDate[1], day, page);
 }
 
+// yyyy.mm.dd -> yyyy-mm-dd
 function formatDate(year: number, month: number, day: number): string {
     const date = new Date(year, month-1, day+1);
     return date.toISOString().split("T")[0];
