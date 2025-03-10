@@ -1,4 +1,5 @@
 import { deleteTask } from "../services/taskService.js";
+import { getSelectedDate } from "../components/calendarForm.js"
 
 export const renderTasks = (taskList: Task[]) => {
     const taskItemDiv = document.getElementById('task-div') as HTMLElement;
@@ -32,6 +33,9 @@ export const renderTasks = (taskList: Task[]) => {
                     .then((response: any) => {
                         if (response.status === 200) {
                             alert("삭제 완료되었습니다.");
+                            let splitDate: number[] = getSelectedDate();
+                            localStorage.setItem("year", splitDate[0] + "");
+                            localStorage.setItem("month", splitDate[1] + "");
                             window.location.reload();
                         } else {
                             alert("삭제 실패했습니다.");
