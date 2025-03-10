@@ -1,0 +1,72 @@
+#task-div {
+    width: 600px; /*스크롤 생기면 width 줄이기*/
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    padding: 0px 10px 0px 10px;
+    margin: 5px 0px 5px 0px;
+    background-color: white;
+}
+
+.task-detail {
+    width: 500px;
+    margin: 0px 5px 0px 5px;
+}
+
+.task-detail p {
+    font-size: 17px;
+}
+
+.task-detail div:first-child {
+    margin-bottom: 10px;
+}
+
+.delete {
+    margin: 10px;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    border: 1px solid #afafaf;
+}
+
+.delete:hover {
+    background-color: #dddddd;
+}
+
+#input-date {
+    font-size: 17px;
+    font-weight: bold;
+}
+
+#input-div {
+    margin-top: 5px;
+}
+
+#input-div div {
+    display: flex;
+    justify-content: center;
+}
+
+#input-div p {
+    margin: 0px 0px 5px 0px;
+}
+
+#input-div input {
+    width: 510px;
+    padding: 10px;
+    border: 0px;
+    font-size: 18px;
+    background-color: #ffffff;
+}
+
+#create {
+    margin-left: 10px;
+    padding: 14px;
+    background-color: #ffffff;
+}
+
+#create:hover {
+    background-color: #cccccc;
+}

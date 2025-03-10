@@ -1,0 +1,77 @@
+body {
+    background-color: #dddddd;
+    overflow: hidden;
+    cursor: default;
+}
+
+button {
+    border: 0px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#main-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#sub-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+    height: 800px;
+    margin-top: 25px;
+}
+
+#cal-div {
+    width: 600px;
+    height: 640px;
+    padding-bottom: 10px;
+    background-color: #ffffff
+}
+
+#cal-navigation {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #dddddd;
+}
+
+#cal-date {
+    font-size: 20px;
+}
+
+#cal-navigation button {
+    margin: 10px 20px 10px 20px;
+    background-color: #ffffff;
+    font-size: 25px;
+}
+
+#cal-navigation button:hover {
+    color: #979797;
+}
+
+table tbody {
+    margin-bottom: -30px;
+}
+
+table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-spacing: 60px 35px;
+}
+
+.not-now {
+    color: rgb(145, 145, 145);
+}
+
+.now {
+    cursor: pointer;
+}
+
+.count {
+    color: #002fff;
+}

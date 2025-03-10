@@ -1,10 +1,32 @@
-import { renderDateInit, renderCalender } from "../utils/calenderRenderUtils.js";
+import { renderCalender } from "../utils/calenderRenderUtils.js";
+import { getMonthlyTaskList } from "../services/taskService.js";
+import { getMonthlyTaskProcess, getTaskCountProcess } from "../components/taskForm.js";
 
 document.addEventListener('DOMContentLoaded', () => {
-    let date = new Date();
-    renderDateInit(date.getFullYear(), date.getMonth());
-    renderCalender(date.getFullYear(), date.getMonth()); // 처음 로드될 때는 현재 날짜의 달력
+    let year: number;
+    let month: number;
+
+    if (localStorage.length === 0) {
+        let date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth();
+    } else {
+        year = Number(localStorage.getItem("year"));
+        month = Number(localStorage.getItem("month"))-1;
+        localStorage.clear(); 
+    }
+
+    renderCalender(year, month);
+    getMonthlyTaskProcess(0);
 })
+
+// 현재 선택된 날짜
+export function getSelectedDate() {
+    let calDate = document.getElementById('cal-date') as HTMLElement;
+    let year: number = Number(calDate.innerText.substring(0, 4));
+    let month: number = Number(calDate.innerText.substring(5, 7));
+    return [year, month];
+}
 
 // 주 수
 export function getWeekCount(year: number, month: number, lastDay: number) {
@@ -47,42 +69,44 @@ export function getLastDayOfPrevMonth(year: number, month: number) {
 
 // 이전 달
 function moveToPrevCalender() {
-    let calDate = document.getElementById('cal-date') as HTMLElement;
-    let year: number = Number(calDate.innerText.substring(0, 4));
-    let month: number = Number(calDate.innerText.substring(5, 7));
-
+    let seletedDate: number[] = getSelectedDate();
+    let year = seletedDate[0];
+    let month = seletedDate[1];
     month--;
     if (month <= 0) {
         year--;
         month = 12;
     }
-
     renderCalender(year, month-1);
+    getMonthlyTaskList(year, month, 0);
 }
 
-// 다음 달
+// 다음 달 {
 function moveToNextCalender() {
-    let calDate = document.getElementById('cal-date') as HTMLElement;
-    let year: number = Number(calDate.innerText.substring(0, 4));
-    let month: number = Number(calDate.innerText.substring(5, 7));
-
+    let seletedDate: number[] = getSelectedDate();
+    let year = seletedDate[0];
+    let month = seletedDate[1];
     month++;
     if (month > 12) {
         year++;
         month = 1;
     }
-
-    renderCalender(year, month-1);    
+    renderCalender(year, month-1);
+    getMonthlyTaskList(year, month, 0);
 }
 
-// 버튼
+/*
+이전, 다음 버튼
+*/
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
 
 if (prevBtn) {
-    prevBtn.addEventListener('click', moveToPrevCalender);
-}
+    prevBtn.addEventListener('click', function() {
+        moveToPrevCalender();
+})};
 
 if (nextBtn) {
-    nextBtn.addEventListener('click', moveToNextCalender);
-}
+    nextBtn.addEventListener('click', function() {
+        moveToNextCalender();
+})};
