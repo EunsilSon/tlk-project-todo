@@ -6,7 +6,7 @@ function renderTitle(year: number, month: number) {
     calDate.innerText = year + "." + (month + 1);
 }
 
-export async function renderCalender(year: number, month: number) {
+export async function renderCalendar(year: number, month: number) {
     let firstDayIdx = getFirstDay(year, month);
     let lastDay = getLastDay(year, month);
     let weekCount = getWeekCount(year, month, lastDay);

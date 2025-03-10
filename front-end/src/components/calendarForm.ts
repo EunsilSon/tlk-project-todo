@@ -1,4 +1,4 @@
-import { renderCalender } from "../utils/calendarRenderUtils.js";
+import { renderCalendar } from "../utils/calendarRenderUtils.js";
 import { renderTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
 import { getMonthlyTaskProcess } from "./taskForm.js";
@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.clear(); 
     }
 
-    renderCalender(year, month);
+    renderCalendar(year, month);
     renderTasks(await getMonthlyTaskProcess(0));
 })
 
@@ -69,7 +69,7 @@ export function getLastDayOfPrevMonth(year: number, month: number) {
 }
 
 // 이전 달
-async function moveToPrevCalender() {
+async function moveToPrevCalendar() {
     let seletedDate: number[] = getSelectedDate();
     let year = seletedDate[0];
     let month = seletedDate[1];
@@ -78,12 +78,12 @@ async function moveToPrevCalender() {
         year--;
         month = 12;
     }
-    renderCalender(year, month-1);
+    renderCalendar(year, month-1);
     renderTasks(await getMonthlyTaskList(year, month, 0));
 }
 
 // 다음 달 {
-    async function moveToNextCalender() {
+    async function moveToNextCalendar() {
     let seletedDate: number[] = getSelectedDate();
     let year = seletedDate[0];
     let month = seletedDate[1];
@@ -92,7 +92,7 @@ async function moveToPrevCalender() {
         year++;
         month = 1;
     }
-    renderCalender(year, month-1);
+    renderCalendar(year, month-1);
     renderTasks(await getMonthlyTaskList(year, month, 0));
 }
 
@@ -104,10 +104,10 @@ const nextBtn = document.getElementById('next');
 
 if (prevBtn) {
     prevBtn.addEventListener('click', function() {
-        moveToPrevCalender();
+        moveToPrevCalendar();
 })};
 
 if (nextBtn) {
     nextBtn.addEventListener('click', function() {
-        moveToNextCalender();
+        moveToNextCalendar();
 })};
