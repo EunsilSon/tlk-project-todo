@@ -1,7 +1,7 @@
 body {
     background-color: #dddddd;
-    overflow: hidden;
     cursor: default;
+    overflow-x: hidden;
 }
 
 button {
@@ -26,13 +26,16 @@ button {
 
 #cal-div {
     width: 600px;
+    height: 620px;
     padding-bottom: 10px;
     background-color: #ffffff
 }
 
 #cal-navigation {
+    height: 80px;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid #dddddd;
 }
 
@@ -73,4 +76,6 @@ table {
 
 .count {
     color: #002fff;
+    margin: 10px 0px -10px 0px;
+    font-size: 14px;
 }
