@@ -38,9 +38,7 @@ export const deleteTask = async (id: string) => {
     }
 }
 
-/*
-달력 렌더링 될 때
-*/
+/* 특정 달력의 모든 task 조회 */
 export const getMonthlyTaskList = async (year: number, month: number, page: number) => {
     try {
         const response = await instance.get(`/tasks/monthly?year=${year}&month=${month}&page=${page}`);
@@ -57,14 +55,11 @@ export const getMonthlyTaskList = async (year: number, month: number, page: numb
     }
 }
 
-/* 
-일자 선택할 때
-*/
+/* 특정 날짜의 task 조회 */
 export const getDaliyTaskList = async (year: number, month: number, day: string, page: number) => {
     try {
         const response = await instance.get(`/tasks/daily?year=${year}&month=${month}&day=${day}&page=${page}`);
         if (response.data.status == 200) {
-            console.log(response.data.data);
             return response.data.data;
         } else {
             return response.data.message;
@@ -75,9 +70,7 @@ export const getDaliyTaskList = async (year: number, month: number, day: string,
     }
 }
 
-/* 
-단일 task 조회
-*/
+/*  단일 task 조회 */
 export const getTaskDetail = async (id: string) => {
     try {
         const response = await instance.get(`/task/${id}`);
@@ -93,9 +86,7 @@ export const getTaskDetail = async (id: string) => {
     }
 }
 
-/*
-task 개수 조회
-*/
+/* task 개수 조회 */
 export const getTaskCount = async (year: number, month: number) => {
     try {
         const response = await instance.get(`/task/count?year=${year}&month=${month}`);

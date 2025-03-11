@@ -4,7 +4,7 @@ import { renderTasks } from "./taskRenderUtils.js";
 
 export function renderCalendar(year: number, month: number) {
     renderTitle(year, month);
-    renderCalendarInner(year, month);
+    renderInner(year, month);
 }
 
 function renderTitle(year: number, month: number) {
@@ -12,7 +12,7 @@ function renderTitle(year: number, month: number) {
     calDate.innerText = year + "." + (month + 1);
 }
 
-async function renderCalendarInner(year: number, month: number) {
+async function renderInner(year: number, month: number) {
     let firstDayIdx = getFirstDay(year, month);
     let lastDay = getLastDay(year, month);
     let weekCount = getWeekCount(year, month, lastDay);
@@ -59,16 +59,17 @@ async function renderCalendarInner(year: number, month: number) {
             }
 
             day.addEventListener("click", async () => {
-                // 선택된 날짜 css표시
-                document.querySelectorAll(".now.selected").forEach(d => d.classList.remove("selected")); // 이전에 선택된 요소의 selected 속성 제거거
+                /* 선택된 날짜 표시 */
+                document.querySelectorAll(".now.selected").forEach(d => d.classList.remove("selected")); // 이전에 선택된 요소의 selected 속성 제거
                 if (day.classList.contains("now")) {
                     day.classList.add("selected");
                 }
 
+                /* task 조회를 위한 상태값 */
+                
                 renderSelectedDay(year, month+1, day.innerText);
-                renderTasks(await getDaliyTaskList(year, month+1, day.innerText || "", 0));
+                renderTasks(await getDaliyTaskList(year, month+1, day.innerText, 0), day.innerText); // 날짜 변경될 때마다 해당 일의 task 조회
             });
-    
             row.appendChild(dayItem);
         }
         calInnerDiv.appendChild(row);

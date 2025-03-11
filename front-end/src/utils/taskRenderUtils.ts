@@ -1,9 +1,21 @@
 import { deleteTask, getTaskDetail } from "../services/taskService.js";
 import { getCurrentCalendar } from "../components/calendarForm.js"
 
-export const renderTasks = (taskList: Task[]) => {
+export const renderTasks = (taskList: Task[], day: string) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
-    taskDiv.innerHTML = '';
+    let currentCalendar: number[] = getCurrentCalendar();
+    
+    if (day === "none") {
+        if (localStorage.getItem("pageM") != currentCalendar[1]+"") { // 달력 넘겼을 때
+            localStorage.setItem("pageM", currentCalendar[1]+"");
+            taskDiv.innerHTML = '';
+        }
+    } else {
+        if (localStorage.getItem("pageD") != day) { // 다른 날짜 선택했을 때
+            localStorage.setItem("pageD", day);
+            taskDiv.innerHTML = '';
+        }
+    }
 
     renderTask(taskList);
 };
@@ -60,7 +72,7 @@ const renderTask = (taskList: Task[]) => {
             }
         });
     
-        taskItem.addEventListener('click', async () => {
+        taskDetail.addEventListener('click', async () => {
             const isConfirmed = confirm("이동하시겠습니까?");
             if (isConfirmed) {
                 window.location.href = `/html/detail.html?id=${task.id}`;
