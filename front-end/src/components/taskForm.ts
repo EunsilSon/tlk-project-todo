@@ -1,19 +1,49 @@
-import { getTaskCount, createTask, getMonthlyTaskList, getDaliyTaskList } from "../services/taskService.js";
-import { getSelectedDate } from "./calendarForm.js";
+import { getTaskCount, createTask, getMonthlyTaskList, getDaliyTaskList, getTaskDetail } from "../services/taskService.js";
+import { renderTaskDetail } from "../utils/taskRenderUtils.js"
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const path = window.location.pathname;
+    
+    if (path.endsWith('detail.html')) {
+        const taskId: string = new URLSearchParams(window.location.search).get('id') || '';
+        renderTaskDetail(await getTaskDetail(taskId));
+    }
+
+    const taskDiv = document.getElementById("task-div");
+    taskDiv?.addEventListener('scroll', () => {
+        if (taskDiv.scrollTop + taskDiv.clientHeight >= taskDiv.scrollHeight) {
+            const inputDate = document.getElementById("input-date") as HTMLParagraphElement;
+            if (inputDate.innerText === "") {
+                //getMonthlyTaskProcess();
+                console.log("없음");
+            } else {
+                //getDailyTaskProcess();
+                console.log("있음");
+            }
+        }
+    })
+})
+
+/* 
+DB 호출을 FORM에서 해야하는지, RENDERING CODE에서 바로 해도 되는지 불확실함
+
+export async function getTaskCountProcess(year: number, month: number) {
+    return await getTaskCount(year, month+1);
+}
 
 export async function getMonthlyTaskProcess(page: number) {
     let seletedDate: number[] = getSelectedDate();
     return await getMonthlyTaskList(seletedDate[0], seletedDate[1], page);
 }
 
-export async function getTaskCountProcess(year: number, month: number) {
-    return await getTaskCount(year, month+1);
+export function getDailyTaskProcess(year: number, month: number, day: string, page: number) {
+    getDaliyTaskList(year, month, day, page);
 }
 
-export function getDailyTaskProcess(day: string, page: number) {
-    //let seletedDate: number[] = getSelectedDate();
-    //getDaliyTaskList(seletedDate[0], seletedDate[1], day, page);
+async function getTaskDetailProcess(taskId: string) {
+    return await getTaskDetail(taskId);
 }
+*/
 
 // yyyy.mm.dd -> yyyy-mm-dd
 function formatDate(year: number, month: number, day: number): string {
@@ -22,16 +52,17 @@ function formatDate(year: number, month: number, day: number): string {
 }
 
 const createBtn = document.getElementById('create') as HTMLButtonElement;
-
 const taskInput = document.getElementById('task-input') as HTMLInputElement;
-taskInput.addEventListener("input", function () {
-    createBtn.disabled = taskInput.value.trim() === "";
-});
+const content = document.getElementById('task-input') as HTMLInputElement;
+
+if (taskInput) {
+    taskInput.addEventListener('input', function () {
+            createBtn.disabled = taskInput.value.trim() === "";
+    });
+}
 
 if (createBtn) {
     createBtn.addEventListener('click', async () => {
-        const content = document.getElementById('task-input') as HTMLInputElement;
-
         try {
             const isConfirmed = confirm("등록하시겠습니까?");
             if (isConfirmed) {

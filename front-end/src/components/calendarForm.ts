@@ -1,7 +1,6 @@
 import { renderCalendar } from "../utils/calendarRenderUtils.js";
 import { renderTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
-import { getMonthlyTaskProcess } from "./taskForm.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     let year: number;
@@ -11,19 +10,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         let date = new Date();
         year = date.getFullYear();
         month = date.getMonth();
-    } else {
+    } else { // task 생성 후 렌더링
         year = Number(localStorage.getItem("year"));
         month = Number(localStorage.getItem("month"))-1;
         localStorage.clear(); 
     }
 
     renderCalendar(year, month);
-    renderTasks(await getMonthlyTaskProcess(0));
+    let currentCalendar: number[] = getCurrentCalendar();
+    renderTasks(await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], 0));
+
 })
 
-// 현재 선택된 날짜
-export function getSelectedDate() {
-    let calDate = document.getElementById('cal-date') as HTMLElement;
+// 현재 선택된 달력
+export function getCurrentCalendar() {
+    const calDate = document.getElementById('cal-date') as HTMLElement;
     let year: number = Number(calDate.innerText.substring(0, 4));
     let month: number = Number(calDate.innerText.substring(5, 7));
     return [year, month];
@@ -70,7 +71,7 @@ export function getLastDayOfPrevMonth(year: number, month: number) {
 
 // 이전 달
 async function moveToPrevCalendar() {
-    let seletedDate: number[] = getSelectedDate();
+    let seletedDate: number[] = getCurrentCalendar();
     let year = seletedDate[0];
     let month = seletedDate[1];
     month--;
@@ -84,7 +85,7 @@ async function moveToPrevCalendar() {
 
 // 다음 달 {
     async function moveToNextCalendar() {
-    let seletedDate: number[] = getSelectedDate();
+    let seletedDate: number[] = getCurrentCalendar();
     let year = seletedDate[0];
     let month = seletedDate[1];
     month++;
@@ -96,11 +97,9 @@ async function moveToPrevCalendar() {
     renderTasks(await getMonthlyTaskList(year, month, 0));
 }
 
-/*
-이전, 다음 버튼
-*/
 const prevBtn = document.getElementById('prev');
 const nextBtn = document.getElementById('next');
+// task button 추가가
 
 if (prevBtn) {
     prevBtn.addEventListener('click', function() {
