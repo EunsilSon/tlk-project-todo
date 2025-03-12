@@ -1,0 +1,89 @@
+body {
+    background-color: #dddddd;
+    cursor: default;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+}
+
+button {
+    border: 0px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+#main-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#sub-div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+    margin-top: 25px;
+}
+
+#cal-div {
+    width: 600px;
+    height: 620px;
+    padding-bottom: 10px;
+    background-color: #ffffff;
+}
+
+#cal-navigation {
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dddddd;
+}
+
+#cal-date {
+    font-size: 30px;
+}
+
+#cal-navigation button {
+    margin: 0px 20px 0px 20px;
+    background-color: #ffffff;
+    font-size: 40px;
+}
+
+#cal-navigation button:hover {
+    color: #979797;
+}
+
+table tbody {
+    margin-bottom: -30px;
+}
+
+table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    border-spacing: 50px 25px;
+    font-size: 18px;
+}
+
+.not-now {
+    color: rgb(145, 145, 145);
+}
+
+.now {
+    cursor: pointer;
+    font-weight: bold;
+    color:#464646;
+}
+
+.now.selected {
+    border: 3px solid #002fff;
+    border-radius: 50%;
+}
+
+.count {
+    color: #002fff;
+    margin: 10px 0px -10px 0px;
+    font-size: 14px;
+}

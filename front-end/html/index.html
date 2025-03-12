@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width" , initial-scale="1.0">
     <title>TODO</title>
-    <link rel="stylesheet" href="../../css/index.css">
-    <script type="module" src="../../dist/components/calenderForm.js"></script>
+    <link rel="stylesheet" href="../../css/calendar.css">
+    <link rel="stylesheet" href="../../css/task.css">
+    <script type="module" src="../../dist/components/calendarForm.js"></script>
     <script type="module" src="../../dist/components/taskForm.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 <body>
     <div id="main-div">
@@ -15,11 +17,11 @@
             <div id="cal-div">
                 <div id="cal-navigation">
                     <button id="prev"><</button>
-                    <p id="cal-date">yyyy-mm</p>
+                    <p id="cal-date"></p>
                     <button id="next">></button>
                 </div>
                 <table id="calender">
-                    <tr id="day-navigation">
+                    <div id="day-navigation">
                         <th>일</th>
                         <th>월</th>
                         <th>화</th>
@@ -27,26 +29,16 @@
                         <th>목</th>
                         <th>금</th>
                         <th>토</th>
-                    </tr>
+                    </div>
+                    
                 </table>
             </div>
-            <div id="task-div">
-                <!--스크롤 생성-->
-                <div class="task-item">
-                    <!--
-                    <div class="task-detail">
-                        <div class="date">yyyy. mm. dd</div>
-                        <div class="content">내용</div>        
-                    </div>
-                    <button class="delete" id="10">삭제</button>
-                    -->
-                </div>
-            </div>
+            <div id="task-div"></div>
             <div id="input-div">
-                <p id="input-date">yyyy. mm. dd</p>
+                <p id="input-date"></p>
                 <div>
                     <input type="text" id="task-input" placeholder="최소 1자, 최대 100자 입력 가능합니다.">
-                    <button id="create">등록</button>
+                    <button id="create" disabled>등록</button>
                 </div>
             </div>
         <div>
