@@ -2,7 +2,26 @@ import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail } from 
 import { renderTasks, renderTaskDetail } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
-let taskPage = 1;
+let taskPage: number = 1;
+
+const createBtn = document.getElementById('create') as HTMLButtonElement;
+const taskInput = document.getElementById('task-input') as HTMLInputElement;
+const content = document.getElementById('task-input') as HTMLInputElement;
+const inputDate = document.getElementById('input-date') as HTMLElement;
+
+taskInput?.addEventListener('input', function () { 
+    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
+        createBtn.disabled = true; // 공백 입력 시 input 비활성화
+        inputDate.innerText = "날짜를 선택하세요.";
+        taskInput.value = "";
+    } else {
+        createBtn.disabled = false;
+    }
+});
+
+createBtn?.addEventListener('click', async () => {
+    createTaskProcess();
+});
 
 document.addEventListener('DOMContentLoaded', async () => {
     const path = window.location.pathname;
@@ -19,7 +38,7 @@ export function setTaskPage() {
     taskPage = 1;
 }
 
-/* 스크롤을 이용해 task 조회 */
+/* task 조회를 위한 스크롤 */
 function scrollForTask() {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     taskDiv.addEventListener("scroll", () => {
@@ -46,7 +65,7 @@ async function monthlyTaskProcess() {
     }
 }
 
-/* 특정 일자의 모든 task 조회회 */
+/* 특정 일자의 모든 task 조회 */
 async function dailyTaskProcess() {
     const inputDate = document.getElementById('input-date') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
@@ -59,50 +78,32 @@ async function dailyTaskProcess() {
     }
 }
 
+/* task 생성 */
+async function createTaskProcess() {
+    const inputDate = document.getElementById('input-date') as HTMLElement;
+    let splitDate = inputDate.innerText.split(". ");
+
+    const task = {
+        content: content.value,
+        date: formatDate(Number(splitDate[0]), Number(splitDate[1]), Number(splitDate[2]))
+    };
+
+    await createTask(task)
+    .then((response: any) => {
+        if (response.status === 200) {
+            alert("등록이 완료되었습니다.");
+            localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
+            localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
+            localStorage.setItem("updated", "true");
+            window.location.reload();
+        } else {
+            alert(response.message);
+        }
+    })
+}
+
 /* yyyy.mm.dd -> yyyy-mm-dd */
 function formatDate(year: number, month: number, day: number): string {
     const date = new Date(year, month-1, day+1);
     return date.toISOString().split("T")[0];
 }
-
-const createBtn = document.getElementById('create') as HTMLButtonElement;
-const taskInput = document.getElementById('task-input') as HTMLInputElement;
-const content = document.getElementById('task-input') as HTMLInputElement;
-
-/* 공백 입력 시 input 비활성화 */
-taskInput?.addEventListener('input', function () { 
-    createBtn.disabled = taskInput.value.trim() === "";
-});
-
-/* task 생성 */
-createBtn?.addEventListener('click', async () => {
-    try {
-        const isConfirmed = confirm("등록하시겠습니까?");
-        if (isConfirmed) {
-            const date = document.getElementById('input-date') as HTMLElement;
-            let splitDate = date.innerText.split(". ");
-
-            const task = {
-                content: content.value,
-                date: formatDate(Number(splitDate[0]), Number(splitDate[1]), Number(splitDate[2]))
-            };
-
-            await createTask(task)
-            .then((response: any) => {
-                if (response.status === 200) {
-                    alert("등록이 완료되었습니다.");
-                    localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
-                    localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
-                    localStorage.setItem("updated", "true");
-                    window.location.reload();
-                } else {
-                    alert(response.message);
-                }
-            })
-        } else {
-            content.value = "";
-        }
-    } catch (error: any) {
-        console.log(error.message);
-    }
-});

@@ -3,6 +3,25 @@ import { renderNewTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
 import { setTaskPage } from "./taskForm.js";
 
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+    clearSelectedDate();
+    moveToPrevCalendar();
+    setScrollTop();
+    setTaskPage();
+})};
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+    clearSelectedDate();
+    moveToNextCalendar();
+    setScrollTop();
+    setTaskPage();
+})};
+
 document.addEventListener('DOMContentLoaded', async () => {
     // 달력 전환할 때 기존 값 비우기
     localStorage.setItem("currentMonth", "");
@@ -120,22 +139,3 @@ async function moveToPrevCalendar() {
     renderCalendar(year, month-1);
     renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
-
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-
-if (prevBtn) {
-    prevBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToPrevCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
-
-if (nextBtn) {
-    nextBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToNextCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
