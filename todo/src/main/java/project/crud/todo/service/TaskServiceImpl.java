@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.crud.todo.domain.dto.TaskDTO;
 import project.crud.todo.domain.entity.Task;
+import project.crud.todo.domain.vo.TaskUpdateVO;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
@@ -36,10 +37,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void update(TaskVO taskVO) {
-        Task task = taskRepository.findById(taskVO.getId())
+    public void update(TaskUpdateVO taskUpdateVO) {
+        Task task = taskRepository.findById(taskUpdateVO.getId())
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
-        task.updateContent(taskVO.getContent());
+        task.updateContent(taskUpdateVO.getContent());
     }
 
     @Override

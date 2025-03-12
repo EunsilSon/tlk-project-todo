@@ -1,6 +1,7 @@
 package project.crud.todo.service;
 
 import project.crud.todo.domain.dto.TaskDTO;
+import project.crud.todo.domain.vo.TaskUpdateVO;
 import project.crud.todo.domain.vo.TaskVO;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface TaskService {
     void create(TaskVO taskVO);
 
-    void update(TaskVO taskVO);
+    void update(TaskUpdateVO taskUpdateVO);
 
     void delete(Long id);
 
