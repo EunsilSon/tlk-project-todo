@@ -2,6 +2,7 @@ body {
     background-color: #dddddd;
     cursor: default;
     overflow-x: hidden;
+    scroll-behavior: smooth;
 }
 
 button {
@@ -28,7 +29,7 @@ button {
     width: 600px;
     height: 620px;
     padding-bottom: 10px;
-    background-color: #ffffff
+    background-color: #ffffff;
 }
 
 #cal-navigation {
