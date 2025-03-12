@@ -43,6 +43,7 @@ export const getMonthlyTaskList = async (year: number, month: number, page: numb
     try {
         const response = await instance.get(`/tasks/monthly?year=${year}&month=${month}&page=${page}`);
         if (response.status == 200) {
+            console.log(response.data.data);
             return response.data.data;
         } else {
             console.log(response.data.message);
@@ -55,7 +56,7 @@ export const getMonthlyTaskList = async (year: number, month: number, page: numb
 }
 
 /* 특정 날짜의 task 조회 */
-export const getDaliyTaskList = async (year: number, month: number, day: string, page: number) => {
+export const getDailyTaskList = async (year: number, month: number, day: string, page: number) => {
     try {
         const response = await instance.get(`/tasks/daily?year=${year}&month=${month}&day=${day}&page=${page}`);
         if (response.data.status == 200) {

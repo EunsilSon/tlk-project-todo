@@ -1,20 +1,25 @@
 import { renderCalendar } from "../utils/calendarRenderUtils.js";
-import { renderTasks } from "../utils/taskRenderUtils.js";
+import { renderNewTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
+import { setTaskPage } from "./taskForm.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // 달력 전환할 때 기존 값 비우기
+    localStorage.setItem("currentMonth", "");
+    localStorage.setItem("currentDay", "");
+
     const currentPath = window.location.pathname;
     let year: number = 0;
     let month: number = 0;
 
-    if (localStorage.getItem("deleted") === "true") { // 삭제 후 reload
-        year = Number(localStorage.getItem("year"));
-        month = Number(localStorage.getItem("month"));
-        localStorage.setItem("deleted", "false");
+    if (localStorage.getItem("updated") === "true") { // 삭제 후 reload
+        year = Number(localStorage.getItem("updatedYear"));
+        month = Number(localStorage.getItem("updatedMonth")) - 1;
+        localStorage.setItem("updated", "completed");
     } else if (currentPath.endsWith('index.html')) { // 상세 페이지
         const urlParams = new URLSearchParams(window.location.search);
-        year = Number(urlParams.get('year'));
-        month = Number(urlParams.get('month'));
+        year = Number(urlParams.get('updatedYear'));
+        month = Number(urlParams.get('updatedMonth'));
     } else { // 메인 페이지
         let date = new Date();
         year = date.getFullYear();
@@ -22,8 +27,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     renderCalendar(year, month);
-    renderTasks(await getMonthlyTaskList(year, month+1, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month+1, 0), "none");
 })
+
+/* 달력 넘길 때 스크롤 상단 고정 */
+function setScrollTop() {
+    const taskDiv = document.getElementById('task-div') as HTMLElement;
+    taskDiv.scrollTop = 0;
+}
 
 /* 달력 넘길 때 선택된 날짜 지우기 */
 function clearSelectedDate() {
@@ -91,7 +102,7 @@ async function moveToPrevCalendar() {
     }
 
     renderCalendar(year, month-1);
-    renderTasks(await getMonthlyTaskList(year, month, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
 
 /* 다음 달 */
@@ -107,7 +118,7 @@ async function moveToPrevCalendar() {
     }
     
     renderCalendar(year, month-1);
-    renderTasks(await getMonthlyTaskList(year, month, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
 
 const prevBtn = document.getElementById('prev');
@@ -117,10 +128,14 @@ if (prevBtn) {
     prevBtn.addEventListener('click', function() {
     clearSelectedDate();
     moveToPrevCalendar();
+    setScrollTop();
+    setTaskPage();
 })};
 
 if (nextBtn) {
     nextBtn.addEventListener('click', function() {
     clearSelectedDate();
     moveToNextCalendar();
+    setScrollTop();
+    setTaskPage();
 })};
