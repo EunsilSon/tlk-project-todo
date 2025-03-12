@@ -1,4 +1,4 @@
-import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth } from "../components/calendarForm.js";
+import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth, setScrollTop } from "../components/calendarForm.js";
 import { setTaskPage } from "../components/taskForm.js";
 import { getDailyTaskList, getTaskCount } from "../services/taskService.js";
 import { renderNewTasks } from "./taskRenderUtils.js";
@@ -66,7 +66,10 @@ async function renderInner(year: number, month: number) {
                     day.classList.add("selected");
                 }
 
-                setTaskPage(); // task 조회 전 page 초기화
+                // task 조회 전 page 초기화
+                setScrollTop();
+                setTaskPage();
+                
                 renderSelectedDay(year, month+1, day.innerText);
                 renderNewTasks(await getDailyTaskList(year, month+1, day.innerText, 0), day.innerText); // 날짜 변경될 때마다 해당 일의 task 조회
             });

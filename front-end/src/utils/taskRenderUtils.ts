@@ -1,5 +1,7 @@
-import { deleteTask, getTaskDetail } from "../services/taskService.js";
+declare var swal: any;
+
 import { getCurrentCalendar } from "../components/calendarForm.js"
+import { deleteTaskProcess } from "../components/taskForm.js";
 
 export const renderNewTasks = (taskList: Task[], day: string) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
@@ -52,22 +54,16 @@ export const renderTasks = (taskList: Task[]) => {
 
         deleteBtn.addEventListener('click', async () => {
             try {
-                const isConfirmed = confirm("삭제하시겠습니까?");
-                if (isConfirmed) {
-                    await deleteTask(task.id)
-                    .then((response: any) => {
-                        if (response.status === 200) {
-                            alert("삭제 완료되었습니다.");
-                            let currentCalendar: number[] = getCurrentCalendar();
-                            localStorage.setItem("updatedYear", currentCalendar[0] + "");
-                            localStorage.setItem("updatedMonth", currentCalendar[1] + "");
-                            localStorage.setItem("updated", "true");
-                            window.location.reload();
-                        } else {
-                            alert("삭제 실패했습니다.");
-                        }
-                    })
-                }
+                swal({
+                    title: "삭제하시겠습니까?",
+                    icon: "info",
+                    buttons: true,
+                })
+                .then(async (confirm: any) => {
+                    if (confirm) {
+                        deleteTaskProcess(task.id);
+                    }
+                })
             } catch (error: any) {
                 console.log(error.message);
             }

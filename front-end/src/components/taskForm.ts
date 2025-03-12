@@ -1,4 +1,6 @@
-import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail } from "../services/taskService.js";
+declare var swal: any;
+
+import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail, deleteTask } from "../services/taskService.js";
 import { renderTasks, renderTaskDetail } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
@@ -59,7 +61,12 @@ async function monthlyTaskProcess() {
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], taskPage++);
     
     if (newTasks.length == 0) {
-        alert('마지막 기록입니다.');
+        swal({
+            position: "top-end",
+            icon: "info",
+            title: "마지막 기록입니다.",
+            timer: 650
+        })
     } else {
         renderTasks(newTasks);
     }
@@ -69,10 +76,15 @@ async function monthlyTaskProcess() {
 async function dailyTaskProcess() {
     const inputDate = document.getElementById('input-date') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
-    let newTasks: Task[] = await getDailyTaskList(currentCalendar[0], currentCalendar[1], inputDate.innerText.substring(9, 10), taskPage++);
-    
+
+    let newTasks: Task[] = await getDailyTaskList(currentCalendar[0], currentCalendar[1], inputDate.innerText.substring(9, 11), taskPage++);
     if (newTasks.length == 0) {
-        alert('마지막 기록입니다.');
+        swal({
+            position: "top-end",
+            icon: "info",
+            title: "마지막 기록입니다.",
+            timer: 650
+        })
     } else {
         renderTasks(newTasks);
     }
@@ -91,15 +103,48 @@ async function createTaskProcess() {
     await createTask(task)
     .then((response: any) => {
         if (response.status === 200) {
-            alert("등록이 완료되었습니다.");
-            localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
-            localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
-            localStorage.setItem("updated", "true");
-            window.location.reload();
-        } else {
-            alert(response.message);
+            swal({
+                position: "top-end",
+                icon: "success",
+                title: "등록 완료",
+                timer: 750
+            })
+            .then(() => {
+                localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
+                localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
+                localStorage.setItem("updated", "true");
+                window.location.reload();
+            })
         }
     })
+}
+
+export async function deleteTaskProcess(taskId: string) {
+    await deleteTask(taskId)
+    .then((response: any) => {
+        if (response.status === 200) {
+            swal({
+                position: "top-end",
+                icon: "success",
+                title: "삭제 완료",
+                timer: 650
+            })
+            .then(() => {
+                let currentCalendar: number[] = getCurrentCalendar();
+                localStorage.setItem("updatedYear", currentCalendar[0] + "");
+                localStorage.setItem("updatedMonth", currentCalendar[1] + "");
+                localStorage.setItem("updated", "true");
+                window.location.reload();
+            })
+        } else {
+            swal({
+                position: "top-end",
+                icon: "fail",
+                title: "삭제 실패",
+                timer: 650
+            })
+        }
+    });
 }
 
 /* yyyy.mm.dd -> yyyy-mm-dd */

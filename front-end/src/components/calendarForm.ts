@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 })
 
 /* 달력 넘길 때 스크롤 상단 고정 */
-function setScrollTop() {
+export function setScrollTop() {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     taskDiv.scrollTop = 0;
 }

@@ -60,6 +60,7 @@ export const getDailyTaskList = async (year: number, month: number, day: string,
     try {
         const response = await instance.get(`/tasks/daily?year=${year}&month=${month}&day=${day}&page=${page}`);
         if (response.data.status == 200) {
+            console.log(response.data.data);
             return response.data.data;
         } else {
             return response.data.message;
