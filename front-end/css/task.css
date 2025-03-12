@@ -9,10 +9,6 @@ body {
     overflow: auto;
 }
 
-#task-div::webkit-scrollbar {
-    margin-left: 5px;
-}
-
 .task-item {
     display: flex;
     align-items: center;

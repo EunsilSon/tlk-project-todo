@@ -27,19 +27,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     localStorage.setItem("currentMonth", "");
     localStorage.setItem("currentDay", "");
 
-    const currentPath = window.location.pathname;
     let year: number = 0;
     let month: number = 0;
 
     if (localStorage.getItem("updated") === "true") { // 삭제 후 reload
         year = Number(localStorage.getItem("updatedYear"));
         month = Number(localStorage.getItem("updatedMonth")) - 1;
-        localStorage.setItem("updated", "completed");
-    } else if (currentPath.endsWith('index.html')) { // 상세 페이지
-        const urlParams = new URLSearchParams(window.location.search);
-        year = Number(urlParams.get('updatedYear'));
-        month = Number(urlParams.get('updatedMonth'));
-    } else { // 메인 페이지
+        localStorage.clear();
+    } else { 
         let date = new Date();
         year = date.getFullYear();
         month = date.getMonth();

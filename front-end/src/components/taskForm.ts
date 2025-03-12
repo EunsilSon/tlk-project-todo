@@ -1,7 +1,7 @@
 declare var swal: any;
 
 import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail, deleteTask } from "../services/taskService.js";
-import { renderTasks, renderTaskDetail } from "../utils/taskRenderUtils.js"
+import { renderTasks } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
 let taskPage: number = 1;
@@ -26,13 +26,6 @@ createBtn?.addEventListener('click', async () => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const path = window.location.pathname;
-    
-    if (path.endsWith('detail.html')) {
-        const taskId: string = new URLSearchParams(window.location.search).get('id') || '';
-        renderTaskDetail(await getTaskDetail(taskId));
-    }
-
     scrollForTask();
 })
 
@@ -115,6 +108,13 @@ async function createTaskProcess() {
                 localStorage.setItem("updated", "true");
                 window.location.reload();
             })
+        } else {
+            swal({
+                position: "top-end",
+                icon: "fail",
+                title: "등록 실패",
+                timer: 650
+            })
         }
     })
 }
@@ -127,7 +127,7 @@ export async function deleteTaskProcess(taskId: string) {
                 position: "top-end",
                 icon: "success",
                 title: "삭제 완료",
-                timer: 650
+                timer: 750
             })
             .then(() => {
                 let currentCalendar: number[] = getCurrentCalendar();
@@ -143,6 +143,7 @@ export async function deleteTaskProcess(taskId: string) {
                 title: "삭제 실패",
                 timer: 650
             })
+            
         }
     });
 }

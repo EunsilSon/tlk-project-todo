@@ -14,6 +14,19 @@ function renderTitle(year: number, month: number) {
 }
 
 async function renderInner(year: number, month: number) {
+
+    /*
+    현재 시간 가져오기
+    인자의 year, month와 비교
+    같으면 isCurrnetCal = true;
+    */
+
+    let isCurrentYearAndMonth: boolean = false;
+    let date = new Date();
+    if (date.getFullYear() == year && date.getMonth() == month) {
+        isCurrentYearAndMonth = true;
+    }
+
     let firstDayIdx = getFirstDay(year, month);
     let lastDay = getLastDay(year, month);
     let weekCount = getWeekCount(year, month, lastDay);
@@ -44,7 +57,6 @@ async function renderInner(year: number, month: number) {
             let day = document.createElement("div");
             let count = document.createElement("div");
             count.className = "count"
-            dayItem.appendChild(day);
             
             if (i === 0 && j < firstDayIdx) { // 이전
                 day.textContent = ++prevDay + "";
@@ -53,7 +65,11 @@ async function renderInner(year: number, month: number) {
                 day.textContent = dayCount++ + "";
                 day.className = "now";
                 count.textContent = countArr[countIdx++] + "";
-                dayItem.appendChild(count);
+
+                // 현재 날짜 표시
+                if (isCurrentYearAndMonth === true && dayCount == date.getDate()+1) {
+                    day.id = "current-date";
+                }
             } else if (dayCount > lastDay) { // 다음
                 day.textContent = nextDay++ + "";
                 day.className = "not-now";
@@ -73,6 +89,9 @@ async function renderInner(year: number, month: number) {
                 renderSelectedDay(year, month+1, day.innerText);
                 renderNewTasks(await getDailyTaskList(year, month+1, day.innerText, 0), day.innerText); // 날짜 변경될 때마다 해당 일의 task 조회
             });
+
+            dayItem.appendChild(day);
+            dayItem.appendChild(count);
             row.appendChild(dayItem);
         }
         calInnerDiv.appendChild(row);
