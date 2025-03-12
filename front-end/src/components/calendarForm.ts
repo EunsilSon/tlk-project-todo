@@ -3,21 +3,24 @@ import { renderTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    let year: number;
-    let month: number;
+    const currentPath = window.location.pathname;
+    let year: number = 0;
+    let month: number = 0;
 
-    if (localStorage.length === 1) { // task 페이징을 위해 localStorage에 item이 항상 1개 있음
+    if (localStorage.getItem("deleted") === "true") { // 삭제 후 reload
+        year = Number(localStorage.getItem("year"));
+        month = Number(localStorage.getItem("month"));
+        localStorage.setItem("deleted", "false");
+    } else if (currentPath.endsWith('index.html')) { // 상세 페이지
+        const urlParams = new URLSearchParams(window.location.search);
+        year = Number(urlParams.get('year'));
+        month = Number(urlParams.get('month'));
+    } else { // 메인 페이지
         let date = new Date();
         year = date.getFullYear();
         month = date.getMonth();
-    } else { // task 생성 후 + item 2
-        year = Number(localStorage.getItem("year"));
-        month = Number(localStorage.getItem("month"))-1;
-        localStorage.clear(); 
     }
 
-    console.log(year);
-    console.log(month);
     renderCalendar(year, month);
     renderTasks(await getMonthlyTaskList(year, month+1, 0), "none");
 })

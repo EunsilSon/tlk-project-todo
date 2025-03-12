@@ -43,7 +43,6 @@ export const getMonthlyTaskList = async (year: number, month: number, page: numb
     try {
         const response = await instance.get(`/tasks/monthly?year=${year}&month=${month}&page=${page}`);
         if (response.status == 200) {
-            console.log(response.data.data);
             return response.data.data;
         } else {
             console.log(response.data.message);
@@ -91,7 +90,6 @@ export const getTaskCount = async (year: number, month: number) => {
     try {
         const response = await instance.get(`/task/count?year=${year}&month=${month}`);
         if (response.data.status == 200) {
-            console.log(response.data.data);
             return response.data.data;
         } else {
             return response.data.message;

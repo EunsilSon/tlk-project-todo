@@ -58,9 +58,10 @@ const renderTask = (taskList: Task[]) => {
                     .then((response: any) => {
                         if (response.status === 200) {
                             alert("삭제 완료되었습니다.");
-                            let splitDate: number[] = getCurrentCalendar();
-                            localStorage.setItem("year", splitDate[0] + "");
-                            localStorage.setItem("month", splitDate[1] + "");
+                            let currentCalendar: number[] = getCurrentCalendar();
+                            localStorage.setItem("year", currentCalendar[0] + "");
+                            localStorage.setItem("month", currentCalendar[1] + "");
+                            localStorage.setItem("deleted", "true");
                             window.location.reload();
                         } else {
                             alert("삭제 실패했습니다.");
