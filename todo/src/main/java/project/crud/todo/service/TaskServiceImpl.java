@@ -13,15 +13,13 @@ import project.crud.todo.domain.vo.TaskUpdateVO;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    public final int DEFAULT_TASK_SIZE = 5;
+    public final int DEFAULT_TASK_SIZE = 20;
     public final TaskRepository taskRepository;
 
     @Autowired
@@ -31,89 +29,81 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public void create(TaskVO taskVO) {
-        taskRepository.save(new Task(taskVO.getContent(), taskVO.getDate()));
+    public boolean create(TaskVO taskVO) {
+        try {
+            taskRepository.save(new Task(taskVO.getContent(), taskVO.getYear(), taskVO.getMonth(), taskVO.getDay()));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     @Override
     @Transactional
-    public void update(TaskUpdateVO taskUpdateVO) {
+    public boolean update(TaskUpdateVO taskUpdateVO) {
         Task task = taskRepository.findById(taskUpdateVO.getId())
                 .orElseThrow(() -> new NoSuchElementException("Task not found"));
         task.updateContent(taskUpdateVO.getContent());
+        return true;
     }
 
     @Override
     @Transactional
-    public void delete(Long id) {
-        if (taskRepository.existsById(id)) {
-            taskRepository.deleteById(id);
-        } else {
-            throw new NoSuchElementException("Task not found");
-        }
+    public boolean delete(Long id) {
+        taskRepository.deleteById(id);
+        return !taskRepository.existsById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public TaskDTO get(Long id) {
-        Optional<Task> task = Optional.ofNullable(taskRepository.getTaskById(id));
-        if (task.isPresent()) {
-            return new TaskDTO(
-                    task.get().getId()
-                    , task.get().getContent()
-                    , task.get().getDate()
-            );
-        } else {
-            throw new NoSuchElementException("Task not found");
-        }
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByYearAndMonth(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByYearAndMonth(year, month, pageable);
+    public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()
                         , task.getContent()
-                        , task.getDate()
+                        , task.getYear()
+                        , task.getMonth()
+                        , task.getDay()
                 )).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByDay(int page, int year, int month, int day) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByDay(year, month, day, pageable);
+    public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()
                         , task.getContent()
-                        , task.getDate()
+                        , task.getYear()
+                        , task.getMonth()
+                        , task.getDay()
                 )).collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public int[] getTaskCountByYearAndMonth(int year, int month) {
-        int[] lastDayByMonth = {31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        int lastDay;
-        if (month == 2) {
-            if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-                lastDay = 29;
-            } else {
-                lastDay = 28;
-            }
-        } else {
-            lastDay = lastDayByMonth[month-1];
-        }
-
+    public int[] getTaskCount(int year, int month) {
+        int lastDay = getLastDay(year, month);
         int[] countArr = new int[lastDay + 1];
         countArr[0] = -1;
         for (int i = 1; i <= lastDay; i++) {
             countArr[i] = taskRepository.countByYearAndMonthAndDay(year, month, i);
         }
         return countArr;
+    }
+
+    public int getLastDay(int year, int month) {
+        int[] lastDayByMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+        if (month == 2) {
+            if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
+                lastDayByMonth[1] = 29;
+            }
+        }
+        return lastDayByMonth[month-1];
     }
 }
