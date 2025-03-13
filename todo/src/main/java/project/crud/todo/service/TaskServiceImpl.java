@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    public final int DEFAULT_TASK_SIZE = 20;
+    public final int DEFAULT_TASK_SIZE = 20; //Private로 변경
     public final TaskRepository taskRepository;
 
     @Autowired
@@ -31,7 +31,10 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean create(TaskVO taskVO) {
         try {
-            taskRepository.save(new Task(taskVO.getContent(), taskVO.getYear(), taskVO.getMonth(), taskVO.getDay()));
+            // 이런거 만들 때 귀찮자나
+            // 이런 식으로 바꾸면 좀 맛있음
+            // 클린 코드에 나오는 기법 중 하난데, 한번 공부해볼 것
+            taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {
             return false;
@@ -42,9 +45,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public boolean update(TaskUpdateVO taskUpdateVO) {
-        Task task = taskRepository.findById(taskUpdateVO.getId())
-                .orElseThrow(() -> new NoSuchElementException("Task not found"));
-        task.updateContent(taskUpdateVO.getContent());
+        taskRepository.findById(taskUpdateVO.getId())
+                .ifPresentOrElse(
+                        t -> t.updateContent(taskUpdateVO.getContent()),
+                        () -> {
+                            throw new NoSuchElementException("Task not found");
+                        }
+                );
         return true;
     }
 
@@ -58,10 +65,10 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id")); // 그거 알아 ? Pageable 자체도 Controller에서 받을 수 있다?
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return tasks.stream()
-                .map(task -> new TaskDTO(
+                .map(task -> new TaskDTO( // 이것도 FROM 쓸 수 있을듯
                         task.getId()
                         , task.getContent()
                         , task.getYear()
@@ -76,7 +83,7 @@ public class TaskServiceImpl implements TaskService {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return tasks.stream()
-                .map(task -> new TaskDTO(
+                .map(task -> new TaskDTO(// 이것도 FROM 쓸 수 있을듯
                         task.getId()
                         , task.getContent()
                         , task.getYear()
@@ -104,6 +111,6 @@ public class TaskServiceImpl implements TaskService {
                 lastDayByMonth[1] = 29;
             }
         }
-        return lastDayByMonth[month-1];
+        return lastDayByMonth[month - 1];
     }
 }

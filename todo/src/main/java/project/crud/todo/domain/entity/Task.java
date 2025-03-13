@@ -1,6 +1,7 @@
 package project.crud.todo.domain.entity;
 
 import jakarta.persistence.*;
+import project.crud.todo.domain.vo.TaskVO;
 
 /**
  * @Table은..?
@@ -30,6 +31,10 @@ public class Task {
         this.year = year;
         this.month = month;
         this.day = day;
+    }
+
+    public static Task from(TaskVO taskVO) {
+        return new Task(taskVO.getContent(), taskVO.getYear(), taskVO.getMonth(), taskVO.getDay());
     }
 
     public Long getId() {

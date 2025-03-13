@@ -60,6 +60,7 @@ public class TaskController {
         return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task: Task Not Found");
     }
 
+    // 이거 검색조건 따라 API 뜯은 거 같은 느낌인데, Condition같은 객체 만들어서 한번에 받을 수 있도록도 구성할 수 있음
     @GetMapping("/monthly")
     public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month) {
         try {
@@ -80,6 +81,9 @@ public class TaskController {
         }
     }
 
+    // 이거 느낌이 한 페이지에서 count 갯수 찾아서 주는거같은데 맞나 ?
+    // 그런거라면, paging API에서 한번에 찾아 주는게 나을 수 있음
+    // front 입장에서 여러 번 쿼리 날리는건 UX 측면에서도 좋지 않기에, 한 쿼리에 다 담아서 줄 수 있으면 그게 베스트
     @GetMapping("/count")
     public ApiResponse<int[]> getCount(@RequestParam int year, @RequestParam int month) {
         try {
