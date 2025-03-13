@@ -3,22 +3,26 @@ declare var swal: any;
 import { getCurrentCalendar } from "../components/calendarForm.js"
 import { deleteTaskProcess } from "../components/taskForm.js";
 
+
+/* 달력을 넘기거나 다른 날을 선택했을 때 지우고 새로 그리기 */
 export const renderNewTasks = (taskList: Task[], day: string) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
     
-    if (day === "none") { // 달력 넘겼을 때
+    if (day === "none") { // 다른 달력력
         if (localStorage.getItem("currentMonth") != currentCalendar[1]+"") { 
             localStorage.setItem("currentMonth", currentCalendar[1]+"");
             taskDiv.innerHTML = '';
         }
-    } else { // 일자 변경했을 때
+    } else { // 일자 변경
        taskDiv.innerHTML = '';
     }
 
     renderTasks(taskList);
 };
 
+
+/* 기존의 달력/날짜에서 이어서 그리기 */
 export const renderTasks = (taskList: Task[]) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
 

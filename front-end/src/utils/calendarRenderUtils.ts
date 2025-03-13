@@ -15,12 +15,6 @@ function renderTitle(year: number, month: number) {
 
 async function renderInner(year: number, month: number) {
 
-    /*
-    현재 시간 가져오기
-    인자의 year, month와 비교
-    같으면 isCurrnetCal = true;
-    */
-
     let isCurrentYearAndMonth: boolean = false;
     let date = new Date();
     if (date.getFullYear() == year && date.getMonth() == month) {

@@ -71,22 +71,6 @@ export const getDailyTaskList = async (year: number, month: number, day: string,
     }
 }
 
-/*  단일 task 조회 */
-export const getTaskDetail = async (id: string) => {
-    try {
-        const response = await instance.get(`/task/${id}`);
-        if (response.data.status == 200) {
-            console.log(response.data.data);
-            return response.data.data;
-        } else {
-            return response.data.message;
-        }
-    } catch (error: any) {
-        console.log(error.response);
-        return error;
-    }
-}
-
 /* task 개수 조회 */
 export const getTaskCount = async (year: number, month: number) => {
     try {

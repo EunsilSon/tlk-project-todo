@@ -3,30 +3,7 @@ import { renderNewTasks } from "../utils/taskRenderUtils.js";
 import { getMonthlyTaskList } from "../services/taskService.js";
 import { setTaskPage } from "./taskForm.js";
 
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-
-if (prevBtn) {
-    prevBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToPrevCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
-
-if (nextBtn) {
-    nextBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToNextCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
-
 document.addEventListener('DOMContentLoaded', async () => {
-    // 달력 전환할 때 기존 값 비우기
-    localStorage.setItem("currentMonth", "");
-    localStorage.setItem("currentDay", "");
-
     let year: number = 0;
     let month: number = 0;
 
@@ -44,35 +21,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderNewTasks(await getMonthlyTaskList(year, month+1, 0), "none");
 })
 
-/* 달력 넘길 때 스크롤 상단 고정 */
-export function setScrollTop() {
-    const taskDiv = document.getElementById('task-div') as HTMLElement;
-    taskDiv.scrollTop = 0;
-}
-
-/* 달력 넘길 때 선택된 날짜 지우기 */
-function clearSelectedDate() {
-    const selectedDate = document.getElementById('input-date') as HTMLInputElement;
-    selectedDate.innerText = "";
-}
-
-/* 현재 선택된 달력 */
-export function getCurrentCalendar() {
-    const calDate = document.getElementById('cal-date') as HTMLElement;
-    let year: number = Number(calDate.innerText.substring(0, 4));
-    let month: number = Number(calDate.innerText.substring(5, 7));
-    return [year, month];
-}
-
 /* 주 수 */
 export function getWeekCount(year: number, month: number, lastDay: number) {
     return Math.ceil((new Date(year, month, 1).getDay() + lastDay) / 7); // 시작 요일 위치 + 마지막 일자 / 7
 }
 
+
 /* 시작 요일 */
 export function getFirstDay (year: number, month: number) {
     return new Date(year, month, 1).getDay();
 }
+
 
 /* 말일 */
 export function getLastDay(year: number, month: number) {
@@ -85,6 +44,7 @@ export function getLastDay(year: number, month: number) {
 
     return monthLastDays[month];
 }
+
 
 /* 이전 달의 말일 */
 export function getLastDayOfPrevMonth(year: number, month: number) {
@@ -103,6 +63,29 @@ export function getLastDayOfPrevMonth(year: number, month: number) {
     return getLastDay(year, month);
 }
 
+/* 달력 넘길 때 스크롤 상단 고정 */
+export function setScrollTop() {
+    const taskDiv = document.getElementById('task-div') as HTMLElement;
+    taskDiv.scrollTop = 0;
+}
+
+
+/* 달력 넘길 때 선택된 날짜 지우기 */
+function clearSelectedDate() {
+    const selectedDate = document.getElementById('input-date') as HTMLInputElement;
+    selectedDate.innerText = "";
+}
+
+
+/* 현재 선택된 달력 */
+export function getCurrentCalendar() {
+    const calDate = document.getElementById('cal-date') as HTMLElement;
+    let year: number = Number(calDate.innerText.substring(0, 4));
+    let month: number = Number(calDate.innerText.substring(5, 7));
+    return [year, month];
+}
+
+
 /* 이전 달 */
 async function moveToPrevCalendar() {
     let seletedDate: number[] = getCurrentCalendar();
@@ -119,6 +102,7 @@ async function moveToPrevCalendar() {
     renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
 
+
 /* 다음 달 */
     async function moveToNextCalendar() {
     let seletedDate: number[] = getCurrentCalendar();
@@ -134,3 +118,23 @@ async function moveToPrevCalendar() {
     renderCalendar(year, month-1);
     renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
+
+
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', function() {
+    clearSelectedDate();
+    moveToPrevCalendar();
+    setScrollTop();
+    setTaskPage();
+})};
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', function() {
+    clearSelectedDate();
+    moveToNextCalendar();
+    setScrollTop();
+    setTaskPage();
+})};
