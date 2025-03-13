@@ -6,29 +6,6 @@ import { getCurrentCalendar } from "./calendarForm.js";
 
 let taskPage: number = 1;
 
-const createBtn = document.getElementById('create') as HTMLButtonElement;
-const taskInput = document.getElementById('task-input') as HTMLInputElement;
-const content = document.getElementById('task-input') as HTMLInputElement;
-const inputDate = document.getElementById('input-date') as HTMLElement;
-
-taskInput?.addEventListener('input', function () { 
-    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
-        createBtn.disabled = true; // 공백 입력 시 input 비활성화
-        inputDate.innerText = "날짜를 선택하세요.";
-        taskInput.value = "";
-    } else {
-        createBtn.disabled = false;
-    }
-});
-
-createBtn?.addEventListener('click', async () => {
-    createTaskProcess();
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    scrollForTask();
-})
-
 export function setTaskPage() {
     taskPage = 1;
 }
@@ -153,3 +130,26 @@ function formatDate(year: number, month: number, day: number): string {
     const date = new Date(year, month-1, day+1);
     return date.toISOString().split("T")[0];
 }
+
+const createBtn = document.getElementById('create') as HTMLButtonElement;
+const taskInput = document.getElementById('task-input') as HTMLInputElement;
+const content = document.getElementById('task-input') as HTMLInputElement;
+const inputDate = document.getElementById('input-date') as HTMLElement;
+
+taskInput?.addEventListener('input', function () { 
+    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
+        createBtn.disabled = true; // 공백 입력 시 input 비활성화
+        inputDate.innerText = "날짜를 선택하세요.";
+        taskInput.value = "";
+    } else {
+        createBtn.disabled = false;
+    }
+});
+
+createBtn?.addEventListener('click', async () => {
+    createTaskProcess();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    scrollForTask();
+})
