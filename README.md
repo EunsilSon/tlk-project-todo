@@ -45,9 +45,9 @@
 <br>
 
 # API 명세 (완료된 기능)
-![api](https://github.com/user-attachments/assets/fbf041dc-c37b-43dc-bee3-476731eba4fa)
+![api](https://github.com/user-attachments/assets/39007413-3a7a-42fa-8445-b90bea898769)
 
 <br>
 
 # ERD
-![erd](https://github.com/user-attachments/assets/f46efa4d-163f-4464-84c4-26b03e18321c)
+![erd](https://github.com/user-attachments/assets/35dd3bff-4e9b-421a-b4fa-d059d27d6d1c)
