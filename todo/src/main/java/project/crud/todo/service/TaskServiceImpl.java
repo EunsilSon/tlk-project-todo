@@ -51,19 +51,15 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public boolean delete(Long id) {
-        try {
-            taskRepository.deleteById(id);
-            return true;
-        } catch (Exception e) {
-            throw new NoSuchElementException("Task not found");
-        }
+        taskRepository.deleteById(id);
+        return !taskRepository.existsById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByYearAndMonth(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByYearAndMonth(year, month, pageable);
+    public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()
@@ -76,9 +72,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<TaskDTO> getAllByDay(int page, int year, int month, int day) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("date"));
-        Page<Task> tasks = taskRepository.getTasksByDay(year, month, day, pageable);
+    public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return tasks.stream()
                 .map(task -> new TaskDTO(
                         task.getId()

@@ -28,18 +28,22 @@ public class TaskController {
 
     @PostMapping
     public ApiResponse<String> create(@Valid @RequestBody TaskVO taskVO) {
-        if (taskServiceImpl.create(taskVO)) {
+        try {
+            taskServiceImpl.create(taskVO);
             return ResponseUtil.createSuccessResponse("Successes Create Task");
+        } catch (Exception e) {
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
     }
 
     @PutMapping
     public ApiResponse<String> update(@Valid @RequestBody TaskUpdateVO taskUpdateVO) {
-        if (taskServiceImpl.update(taskUpdateVO)) {
+        try {
+            taskServiceImpl.update(taskUpdateVO);
             return ResponseUtil.createSuccessResponse("Successes Update Task");
+        } catch (Exception e) {
+            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Update Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Update Task");
     }
 
     @DeleteMapping("/{id}")
@@ -47,13 +51,13 @@ public class TaskController {
         if (taskServiceImpl.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task");
+        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task: Task Not Found");
     }
 
     @GetMapping("/monthly")
     public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month) {
         try {
-            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getAllByYearAndMonth(page, year, month));
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getMonthlyTask(page, year, month));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());
@@ -63,7 +67,7 @@ public class TaskController {
     @GetMapping("/daily")
     public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
         try {
-            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getAllByDay(page, year, month, day));
+            return ResponseUtil.createSuccessResponse("Success Get Tasks", taskServiceImpl.getDailyTask(page, year, month, day));
         } catch (Exception e) {
             log.error(e.getMessage());
             return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Get Task: " + e.getMessage());

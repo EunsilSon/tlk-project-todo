@@ -13,9 +13,9 @@ public interface TaskService {
 
     boolean delete(Long id);
 
-    List<TaskDTO> getAllByYearAndMonth(int page, int year, int month);
+    List<TaskDTO> getMonthlyTask(int page, int year, int month);
 
-    List<TaskDTO> getAllByDay(int page, int year, int month, int day);
+    List<TaskDTO> getDailyTask(int page, int year, int month, int day);
 
     int[] getTaskCount(int year, int month);
 
