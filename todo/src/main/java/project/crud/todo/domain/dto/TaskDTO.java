@@ -1,5 +1,8 @@
 package project.crud.todo.domain.dto;
 
+/**
+ * record 객체로 변경 추천
+ */
 public class TaskDTO {
     private Long id;
     private String content;

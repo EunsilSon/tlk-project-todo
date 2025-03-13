@@ -2,6 +2,9 @@ package project.crud.todo.domain.entity;
 
 import jakarta.persistence.*;
 
+/**
+ * @Table은..?
+ */
 @Entity
 public class Task {
     @Id
