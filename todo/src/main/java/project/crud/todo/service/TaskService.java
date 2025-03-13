@@ -7,17 +7,17 @@ import project.crud.todo.domain.vo.TaskVO;
 import java.util.List;
 
 public interface TaskService {
-    void create(TaskVO taskVO);
+    boolean create(TaskVO taskVO);
 
-    void update(TaskUpdateVO taskUpdateVO);
+    boolean update(TaskUpdateVO taskUpdateVO);
 
-    void delete(Long id);
-
-    TaskDTO get(Long id);
+    boolean delete(Long id);
 
     List<TaskDTO> getAllByYearAndMonth(int page, int year, int month);
 
     List<TaskDTO> getAllByDay(int page, int year, int month, int day);
 
-    int[] getTaskCountByYearAndMonth(int year, int month);
+    int[] getTaskCount(int year, int month);
+
+    int getLastDay(int year, int month);
 }

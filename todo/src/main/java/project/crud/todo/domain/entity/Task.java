@@ -2,8 +2,6 @@ package project.crud.todo.domain.entity;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDate;
-
 @Entity
 public class Task {
     @Id
@@ -13,29 +11,39 @@ public class Task {
     @Column(nullable = false, length = 100)
     private String content;
 
-    private LocalDate date;
+    @Column(nullable = false)
+    private Integer year;
 
-    public Task() {
+    @Column(nullable = false)
+    private Integer month;
 
-    }
+    @Column(nullable = false)
+    private Integer day;
 
-    public Task(String content, String date) {
+    public Task() { }
+
+    public Task(String content, Integer year, Integer month, Integer day) {
         this.content = content;
-        this.date = LocalDate.parse(date);
+        this.year = year;
+        this.month = month;
+        this.day = day;
     }
 
     public Long getId() {
         return id;
     }
-
     public String getContent() {
         return content;
     }
-
-    public LocalDate getDate() {
-        return date;
+    public Integer getYear() {
+        return year;
     }
-
+    public Integer getMonth() {
+        return month;
+    }
+    public Integer getDay() {
+        return day;
+    }
     public void updateContent(String content) {
         this.content = content;
     }

@@ -1,15 +1,33 @@
 package project.crud.todo.domain.dto;
 
-import java.time.LocalDate;
-
 public class TaskDTO {
-    public Long id;
-    public String content;
-    public LocalDate date;
+    private Long id;
+    private String content;
+    private Integer year;
+    private Integer month;
+    private Integer day;
 
-    public TaskDTO(Long id, String content, LocalDate date) {
+    public TaskDTO(Long id, String content, Integer year, Integer month, Integer day) {
         this.id = id;
         this.content = content;
-        this.date = date;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public String getContent() {
+        return content;
+    }
+    public Integer getYear() {
+        return year;
+    }
+    public Integer getMonth() {
+        return month;
+    }
+    public Integer getDay() {
+        return day;
     }
 }
