@@ -9,10 +9,6 @@ body {
     overflow: auto;
 }
 
-#task-div::webkit-scrollbar {
-    margin-left: 5px;
-}
-
 .task-item {
     display: flex;
     align-items: center;
@@ -64,8 +60,9 @@ body {
 }
 
 #input-div p {
-    margin: 0px 0px 5px 0px;
+    margin: 0px 0px 10px 0px;
     height: 20px;
+    font-size: 20px;
 }
 
 #input-div input {

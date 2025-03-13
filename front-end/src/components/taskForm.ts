@@ -1,40 +1,10 @@
 declare var swal: any;
 
 import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail, deleteTask } from "../services/taskService.js";
-import { renderTasks, renderTaskDetail } from "../utils/taskRenderUtils.js"
+import { renderTasks } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
 let taskPage: number = 1;
-
-const createBtn = document.getElementById('create') as HTMLButtonElement;
-const taskInput = document.getElementById('task-input') as HTMLInputElement;
-const content = document.getElementById('task-input') as HTMLInputElement;
-const inputDate = document.getElementById('input-date') as HTMLElement;
-
-taskInput?.addEventListener('input', function () { 
-    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
-        createBtn.disabled = true; // 공백 입력 시 input 비활성화
-        inputDate.innerText = "날짜를 선택하세요.";
-        taskInput.value = "";
-    } else {
-        createBtn.disabled = false;
-    }
-});
-
-createBtn?.addEventListener('click', async () => {
-    createTaskProcess();
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    const path = window.location.pathname;
-    
-    if (path.endsWith('detail.html')) {
-        const taskId: string = new URLSearchParams(window.location.search).get('id') || '';
-        renderTaskDetail(await getTaskDetail(taskId));
-    }
-
-    scrollForTask();
-})
 
 export function setTaskPage() {
     taskPage = 1;
@@ -115,6 +85,13 @@ async function createTaskProcess() {
                 localStorage.setItem("updated", "true");
                 window.location.reload();
             })
+        } else {
+            swal({
+                position: "top-end",
+                icon: "fail",
+                title: "등록 실패",
+                timer: 650
+            })
         }
     })
 }
@@ -127,7 +104,7 @@ export async function deleteTaskProcess(taskId: string) {
                 position: "top-end",
                 icon: "success",
                 title: "삭제 완료",
-                timer: 650
+                timer: 750
             })
             .then(() => {
                 let currentCalendar: number[] = getCurrentCalendar();
@@ -143,6 +120,7 @@ export async function deleteTaskProcess(taskId: string) {
                 title: "삭제 실패",
                 timer: 650
             })
+            
         }
     });
 }
@@ -152,3 +130,26 @@ function formatDate(year: number, month: number, day: number): string {
     const date = new Date(year, month-1, day+1);
     return date.toISOString().split("T")[0];
 }
+
+const createBtn = document.getElementById('create') as HTMLButtonElement;
+const taskInput = document.getElementById('task-input') as HTMLInputElement;
+const content = document.getElementById('task-input') as HTMLInputElement;
+const inputDate = document.getElementById('input-date') as HTMLElement;
+
+taskInput?.addEventListener('input', function () { 
+    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
+        createBtn.disabled = true; // 공백 입력 시 input 비활성화
+        inputDate.innerText = "날짜를 선택하세요.";
+        taskInput.value = "";
+    } else {
+        createBtn.disabled = false;
+    }
+});
+
+createBtn?.addEventListener('click', async () => {
+    createTaskProcess();
+});
+
+document.addEventListener('DOMContentLoaded', async () => {
+    scrollForTask();
+})

@@ -27,7 +27,7 @@ button {
 
 #cal-div {
     width: 600px;
-    height: 620px;
+    height: 625px;
     padding-bottom: 10px;
     background-color: #ffffff;
 }
@@ -64,7 +64,7 @@ table {
     align-items: center;
     text-align: center;
     border-spacing: 50px 25px;
-    font-size: 18px;
+    font-size: 25px;
 }
 
 .not-now {
@@ -77,13 +77,23 @@ table {
     color:#464646;
 }
 
+.now:hover {
+    background-color: #e2e2e2;
+    border-radius: 50%;
+}
+
 .now.selected {
-    border: 3px solid #002fff;
+    border: solid 3px #002fff;
     border-radius: 50%;
 }
 
 .count {
     color: #002fff;
     margin: 10px 0px -10px 0px;
-    font-size: 14px;
+    font-size: 15px;
+}
+
+#current-date {
+    background-color: #4466ff;
+    border-radius: 50%;
 }
