@@ -21,7 +21,6 @@ export const renderNewTasks = (taskList: Task[], day: string) => {
     renderTasks(taskList);
 };
 
-
 /* 기존의 달력, 날짜에서 이어서 그리기 */
 export const renderTasks = (taskList: Task[]) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;

@@ -21,6 +21,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderNewTasks(await getMonthlyTaskList(year, month+1, 0), "none");
 })
 
+<<<<<<< HEAD
+=======
+
+/*
+1. 한 달에 필요한 주 수 구하기
+2. 1일의 요일을 구해서 날짜 출력할 위치 잡기
+3. 마지막 날을 구해서 날짜를 몇개 출력해야 하는지
+4. 이전 달의 말일을 구해서 1일 전에 몇부터 역순으로 찍어야 하는지
+*/
+
+>>>>>>> f0ff39476ecbd059198d913e55f3574cff8b79aa
 /* 주 수 */
 export function getWeekCount(year: number, month: number, lastDay: number) {
     return Math.ceil((new Date(year, month, 1).getDay() + lastDay) / 7); // 시작 요일 위치 + 마지막 일자 / 7
