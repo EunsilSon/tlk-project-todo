@@ -9,17 +9,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import project.crud.todo.domain.dto.TaskDTO;
 import project.crud.todo.domain.entity.Task;
-import project.crud.todo.domain.vo.TaskUpdateVO;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.repository.TaskRepository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    public final int DEFAULT_TASK_SIZE = 20; //Private로 변경
+    private final int DEFAULT_TASK_SIZE = 20;
     public final TaskRepository taskRepository;
 
     @Autowired
@@ -91,7 +89,7 @@ public class TaskServiceImpl implements TaskService {
         return countArr;
     }
 
-    public int getLastDay(int year, int month) {
+    private int getLastDay(int year, int month) {
         int[] lastDayByMonth = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
         if (month == 2) {
             if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
