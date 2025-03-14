@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import project.crud.todo.domain.dto.TaskDTO;
-import project.crud.todo.domain.vo.TaskUpdateVO;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.global.response.ApiResponse;
 import project.crud.todo.global.response.ResponseUtil;
