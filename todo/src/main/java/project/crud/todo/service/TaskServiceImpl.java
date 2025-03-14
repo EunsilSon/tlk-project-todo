@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
     private final int DEFAULT_TASK_SIZE = 20;
-    public final TaskRepository taskRepository;
+    private final TaskRepository taskRepository;
 
     @Autowired
     public TaskServiceImpl(TaskRepository taskRepository) {
