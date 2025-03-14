@@ -1,11 +1,31 @@
 # CRUD 과제 - 투두리스트
-![img](https://github.com/user-attachments/assets/1d5feb15-c805-439a-8021-332a6c611feb)
+<img src="https://github.com/user-attachments/assets/1d5feb15-c805-439a-8021-332a6c611feb" width="30%" />
+
+<br>
+
+# **코드 리뷰 피드백 수정 사항** (2025.03.13)  
+### Back-end
+
+| 구분              | 작업 내용 |
+|------------------|------------------------------------------------|
+| API 및 데이터 처리 | - 페이징 처리 시 데이터 개수 변경 (5 → 20) <br> - REST API URI 복수형 사용 <br> - 클래스 단위의 @RequestMapping 적용 <br> - Service 메서드 반환값 void → boolean (오류 파악 용이) |
+| DTO 및 데이터 구조 | - DTO 접근제어자 private <br> - LocalDate → year, month, day (3개 컬럼 분리) <br> - nativeQuery 제거 → JPA 메서드 활용 |
+
+### Front-end
+
+| 구분      | 작업 내용 |
+|----------|------------------------------------------------|
+| 데이터 조회 | - 달력의 날짜 선택 시 해당 달력의 전체 데이터 조회 |
+| UI 개선   | - 저장된 데이터가 없을 때 '0' 대신 공백 표시 |
 
 <br>
 
 # 개발 환경
-### Back-end : `Spring Boot 3` `Java 17` `MySQL 8.0`
-### Front-end : `TypeScript` `Axios`
+| 구분      | 기술 스택        |
+|----------|------------------|
+| Back-end | Spring Boot 3, Java 17 |
+| DB | MySQL 8.0 |
+| Front-end | TypeScript, Axios |
 
 <br>
 
@@ -45,7 +65,13 @@
 <br>
 
 # API 명세 (완료된 기능)
-![api](https://github.com/user-attachments/assets/39007413-3a7a-42fa-8445-b90bea898769)
+| 기능                 | HTTP  | 경로 |
+|----------------------|------|-------------------------------------------|
+| task 생성          | POST  | /tasks |
+| task 삭제          | DELETE | /tasks/{id} |
+| 일일 모든 task 조회 | GET   | /tasks/daily?year={}&month={}&day={}&page={} |
+| 한 달 모든 task 조회 | GET   | /tasks/monthly?year={}&month={}&page={} |
+| task 개수 조회     | GET   | /tasks/count?year={}&month={} |
 
 <br>
 
