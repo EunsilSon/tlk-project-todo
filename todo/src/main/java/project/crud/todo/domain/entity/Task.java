@@ -3,9 +3,6 @@ package project.crud.todo.domain.entity;
 import jakarta.persistence.*;
 import project.crud.todo.domain.vo.TaskVO;
 
-/**
- * @Table은..?
- */
 @Entity
 public class Task {
     @Id
