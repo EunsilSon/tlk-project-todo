@@ -1,10 +1,14 @@
 interface Task {
     id: string,
     content: string,
-    date: string,
+    year: string,
+    month: string,
+    day: string,
 }
 
 interface NewTask {
     content: string,
-    date: string,
+    year: string,
+    month: string,
+    day: string,
 }

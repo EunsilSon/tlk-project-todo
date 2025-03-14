@@ -22,7 +22,7 @@ export const renderNewTasks = (taskList: Task[], day: string) => {
 };
 
 
-/* 기존의 달력/날짜에서 이어서 그리기 */
+/* 기존의 달력, 날짜에서 이어서 그리기 */
 export const renderTasks = (taskList: Task[]) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
 
@@ -35,7 +35,7 @@ export const renderTasks = (taskList: Task[]) => {
 
         const dateDiv = document.createElement('div');
         dateDiv.className = 'date';
-        dateDiv.textContent = task.date;
+        dateDiv.textContent = task.year + ". " + task.month + ". " + task.day;
 
         const contentDiv = document.createElement('div');
         contentDiv.className = 'content';
