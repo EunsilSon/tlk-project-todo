@@ -49,8 +49,5 @@ public class Task {
     public Integer getDay() {
         return day;
     }
-    public void updateContent(String content) {
-        this.content = content;
-    }
 
 }
