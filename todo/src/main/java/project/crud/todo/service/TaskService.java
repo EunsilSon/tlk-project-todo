@@ -11,8 +11,6 @@ public interface TaskService {
     // 자바스크립트 스타일인데, 우리쪽 컨벤션은 void를 기본 정책으로 삼고, 반환해주지 않으면 모르는 값이 생길 경우에만 값을 반환해주고 있음
     boolean create(TaskVO taskVO);
 
-    boolean update(TaskUpdateVO taskUpdateVO);
-
     boolean delete(Long id);
 
     List<TaskDTO> getMonthlyTask(int page, int year, int month);

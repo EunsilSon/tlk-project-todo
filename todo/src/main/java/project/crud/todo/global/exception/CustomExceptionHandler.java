@@ -15,7 +15,13 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("Failed Create Task: {}", e.getMessage());
+        log.error("Failed Validation: {}", e.getMessage());
         return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, e.getAllErrors().get(0).getDefaultMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<String> handleException(Exception e) {
+        log.error("Failed: {}", e.getMessage());
+        return ResponseUtil.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 }

@@ -44,22 +44,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public boolean update(TaskUpdateVO taskUpdateVO) {
-        taskRepository.findById(taskUpdateVO.getId())
-                .ifPresentOrElse(
-                        t -> t.updateContent(taskUpdateVO.getContent()),
-                        () -> {
-                            throw new NoSuchElementException("Task not found");
-                        }
-                );
-        return true;
-    }
-
-    @Override
-    @Transactional
     public boolean delete(Long id) {
         taskRepository.deleteById(id);
-        return !taskRepository.existsById(id);
+        return true;
     }
 
     @Override
