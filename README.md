@@ -3,20 +3,39 @@
 
 <br><br>
 
-## **코드 리뷰 피드백 수정 사항** (2025.03.13)  
-### Back-end
+## **코드 리뷰 피드백 반영 및 추가 수정 사항** (2025.03.14)  
+## Back-end
+1. API 및 응답
+    - REST API URI 복수형 사용
+    - 클래스 단위의 @RequestMapping 적용
+    - 잦은 try-catch 제거 -> ExceptionHandler 처리
 
-| 구분              | 작업 내용 |
-|------------------|------------------------------------------------|
-| API 및 데이터 처리 | - 페이징 처리 시 데이터 개수 변경 (5 → 20) <br> - REST API URI 복수형 사용 <br> - 클래스 단위의 @RequestMapping 적용 <br> - Service 메서드 반환값 void → boolean (오류 파악 용이) |
-| DTO 및 DB 최적화 | - DTO 접근제어자 private <br> - LocalDate → year, month, day (3개 컬럼 분리) <br> - nativeQuery 제거 → JPA 메서드 활용 |
+2. 데이터 처리
+    - 페이징 처리 시 데이터 개수 변경 (5 → 20)
+    - Service 메서드 반환값 void → boolean (오류 파악 용이)
+    - 모든 필드 Validation 적용
+    - DTO 접근제어자 private
+    - Record 객체로 변경
 
-### Front-end
+    <br>
 
-| 구분      | 작업 내용 |
-|----------|------------------------------------------------|
-| 데이터 조회 | 달력의 날짜 선택 시 해당 달력의 전체 데이터 조회 |
-| UI 개선   | 저장된 데이터가 없을 때 '0' 대신 공백 표시 |
+    >Java의 Record  
+    >    - Java 14에서 업데이트 됨
+    >    - 모든 멤버변수 private final을 선언해 불변성 보장
+    >    - 모든 멤버변수를 인수로 가지는 생성자 자동 생성
+    >    - getter, eqauls, toString 등 기본 메서드 제공
+
+    <br>
+
+3. DB 최적화
+    - LocalDate → year, month, day (3개 컬럼 분리)
+    - nativeQuery 제거 → JPA 메서드 활용    
+
+<br>
+
+## Front-end
+- 달력의 날짜 선택 시 해당 달력의 전체 데이터 조회
+- 저장된 데이터가 없을 때 '0' 대신 공백 표시
 
 <br>
 
