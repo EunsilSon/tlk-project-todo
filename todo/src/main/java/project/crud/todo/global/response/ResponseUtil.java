@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 
 public class ResponseUtil {
-
     public static ApiResponse<String> createSuccessResponse(String message) {
         return new ApiResponse<>(HttpStatus.OK, message);
     }
