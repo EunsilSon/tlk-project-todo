@@ -42,6 +42,7 @@ button {
 
 #cal-date {
     font-size: 30px;
+    cursor: pointer;
 }
 
 #cal-navigation button {
@@ -90,7 +91,7 @@ table {
 .count {
     color: #002fff;
     margin: 10px 0px -10px 0px;
-    font-size: 15px;
+    font-size: 20px;
 }
 
 #current-date {

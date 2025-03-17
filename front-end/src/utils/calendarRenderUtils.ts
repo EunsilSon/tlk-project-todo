@@ -1,5 +1,5 @@
 import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth, setScrollTop } from "../components/calendarForm.js";
-import { setTaskPage } from "../components/taskForm.js";
+import { setTaskPage, monthlyTaskProcess } from "../components/taskForm.js";
 import { getDailyTaskList, getTaskCount } from "../services/taskService.js";
 import { renderNewTasks } from "./taskRenderUtils.js";
 
@@ -11,6 +11,10 @@ export function renderCalendar(year: number, month: number) {
 function renderTitle(year: number, month: number) {
     const calDate = document.getElementById("cal-date") as HTMLElement;
     calDate.innerText = year + "." + (month + 1);
+
+    calDate.addEventListener('click', () => {
+        monthlyTaskProcess();
+    })
 }
 
 async function renderInner(year: number, month: number) {
@@ -58,7 +62,11 @@ async function renderInner(year: number, month: number) {
             } else if (dayCount <= lastDay) { // 현재
                 day.textContent = dayCount++ + "";
                 day.className = "now";
-                count.textContent = countArr[countIdx++] + "";
+
+                if (countArr[countIdx] > 0) {
+                    count.textContent = countArr[countIdx] + "";
+                }
+                countIdx++;
 
                 // 현재 날짜 표시
                 if (isCurrentYearAndMonth === true && dayCount == date.getDate()+1) {

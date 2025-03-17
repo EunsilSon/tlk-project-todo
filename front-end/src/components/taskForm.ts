@@ -1,6 +1,6 @@
 declare var swal: any;
 
-import { createTask, getMonthlyTaskList, getDailyTaskList, getTaskDetail, deleteTask } from "../services/taskService.js";
+import { createTask, getMonthlyTaskList, getDailyTaskList, deleteTask } from "../services/taskService.js";
 import { renderTasks } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
@@ -26,7 +26,7 @@ function scrollForTask() {
 }
 
 /* 특정 월의 모든 task 조회 */
-async function monthlyTaskProcess() {
+export async function monthlyTaskProcess() {
     let currentCalendar: number[] = getCurrentCalendar();
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], taskPage++);
     
@@ -67,7 +67,9 @@ async function createTaskProcess() {
 
     const task = {
         content: content.value,
-        date: formatDate(Number(splitDate[0]), Number(splitDate[1]), Number(splitDate[2]))
+        year: splitDate[0],
+        month: splitDate[1],
+        day: splitDate[2],
     };
 
     await createTask(task)

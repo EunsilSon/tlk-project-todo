@@ -19,10 +19,7 @@ body {
 
 .task-detail {
     width: 500px;
-}
-
-.task-detail p {
-    font-size: 17px;
+    font-size: 20px;
 }
 
 .task-item:last-child {
