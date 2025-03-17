@@ -3,7 +3,7 @@
 
 <br><br>
 
-## **코드 리뷰 피드백 반영 및 추가 수정 사항** (2025.03.14)  
+## **코드 리뷰 피드백 반영 및 추가 수정 사항** (2025.03.17)  
 ## Back-end
 1. API 및 응답
     - REST API URI 복수형 사용
@@ -11,11 +11,11 @@
     - 잦은 try-catch 제거 -> ExceptionHandler 처리
 
 2. 데이터 처리
-    - 페이징 처리 시 데이터 개수 변경 (5 → 20)
+    - 페이징 처리 시 데이터 개수 변경 (20개)
     - Service 메서드 반환값 void → boolean (오류 파악 용이)
     - 모든 필드 Validation 적용
-    - DTO 접근제어자 private
     - Record 객체로 변경
+    - Entity <-> DTO 변환 시 정적 팩토리 메서드 from 활용
 
     <br>
 
