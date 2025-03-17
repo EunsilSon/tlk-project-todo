@@ -1,6 +1,7 @@
 package project.crud.todo.domain.entity;
 
 import jakarta.persistence.*;
+import project.crud.todo.domain.vo.TaskVO;
 
 @Entity
 public class Task {
@@ -29,23 +30,31 @@ public class Task {
         this.day = day;
     }
 
+    public static Task from(TaskVO taskVO) {
+        return new Task(taskVO.getContent()
+                , Integer.parseInt(taskVO.getYear())
+                , Integer.parseInt(taskVO.getMonth())
+                , Integer.parseInt(taskVO.getDay()));
+    }
+
     public Long getId() {
         return id;
     }
+
     public String getContent() {
         return content;
     }
+
     public Integer getYear() {
         return year;
     }
+
     public Integer getMonth() {
         return month;
     }
+
     public Integer getDay() {
         return day;
-    }
-    public void updateContent(String content) {
-        this.content = content;
     }
 
 }
