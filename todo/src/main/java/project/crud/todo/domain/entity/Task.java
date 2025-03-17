@@ -31,21 +31,28 @@ public class Task {
     }
 
     public static Task from(TaskVO taskVO) {
-        return new Task(taskVO.getContent(), Integer.parseInt(taskVO.getYear()), Integer.parseInt(taskVO.getMonth()), Integer.parseInt(taskVO.getDay()));
+        return new Task(taskVO.getContent()
+                , Integer.parseInt(taskVO.getYear())
+                , Integer.parseInt(taskVO.getMonth())
+                , Integer.parseInt(taskVO.getDay()));
     }
 
     public Long getId() {
         return id;
     }
+
     public String getContent() {
         return content;
     }
+
     public Integer getYear() {
         return year;
     }
+
     public Integer getMonth() {
         return month;
     }
+
     public Integer getDay() {
         return day;
     }

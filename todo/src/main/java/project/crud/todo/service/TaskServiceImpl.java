@@ -29,9 +29,6 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean create(TaskVO taskVO) {
         try {
-            // 이런거 만들 때 귀찮자나
-            // 이런 식으로 바꾸면 좀 맛있음
-            // 클린 코드에 나오는 기법 중 하난데, 한번 공부해볼 것
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {
@@ -50,16 +47,11 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id")); // 그거 알아 ? Pageable 자체도 Controller에서 받을 수 있다?
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return tasks.stream()
-                .map(task -> new TaskDTO( // 이것도 FROM 쓸 수 있을듯
-                        task.getId()
-                        , task.getContent()
-                        , task.getYear()
-                        , task.getMonth()
-                        , task.getDay()
-                )).collect(Collectors.toList());
+                .map(TaskDTO::from)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -68,13 +60,8 @@ public class TaskServiceImpl implements TaskService {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return tasks.stream()
-                .map(task -> new TaskDTO(// 이것도 FROM 쓸 수 있을듯
-                        task.getId()
-                        , task.getContent()
-                        , task.getYear()
-                        , task.getMonth()
-                        , task.getDay()
-                )).collect(Collectors.toList());
+                .map(TaskDTO::from)
+                .collect(Collectors.toList());
     }
 
     @Override
