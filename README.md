@@ -1,10 +1,18 @@
 # CRUD 과제 - 투두리스트
-<img src="https://github.com/user-attachments/assets/1d5feb15-c805-439a-8021-332a6c611feb" width="30%" />
+<img src="https://github.com/user-attachments/assets/661094c8-7dab-4ad7-bb8e-d435739334a2" width="80%" />
 
 <br><br>
 
-## **코드 리뷰 피드백 반영 및 추가 수정 사항** (2025.03.17)  
-## Back-end
+## **추가 과제 (2025. 03. 20)**
+- [ ] 파일 첨부 기능 추가
+- [ ] 최대 5개, 개당 2MB 제한 (최대 10MB)
+- [ ] 입력 필드 섬네일 추가
+- [ ] 데이터 조회 시 이미지 5개 미리보기 추가
+
+<br>
+
+## **코드 리뷰 피드백 반영 및 추가 수정 사항** (2025. 03. 17)  
+### Back-end
 1. API 및 응답
     - REST API URI 복수형 사용
     - 클래스 단위의 @RequestMapping 적용
@@ -33,7 +41,7 @@
 
 <br>
 
-## Front-end
+### Front-end
 - 달력의 날짜 선택 시 해당 달력의 전체 데이터 조회
 - 저장된 데이터가 없을 때 '0' 대신 공백 표시
 
@@ -45,6 +53,22 @@
 | Back-end | Spring Boot 3, Java 17 |
 | DB | MySQL 8.0 |
 | Front-end | TypeScript, Axios |
+
+<br>
+
+## API 명세
+| 기능                 | HTTP  | 경로 |
+|----------------------|------|-------------------------------------------|
+| task 생성          | POST  | /tasks |
+| task 삭제          | DELETE | /tasks/{id} |
+| 일일 모든 task 조회 | GET   | /tasks/daily?year={}&month={}&day={}&page={} |
+| 한 달 모든 task 조회 | GET   | /tasks/monthly?year={}&month={}&page={} |
+| task 개수 조회     | GET   | /tasks/count?year={}&month={} |
+
+<br>
+
+## ERD
+![erd](https://github.com/user-attachments/assets/35dd3bff-4e9b-421a-b4fa-d059d27d6d1c)
 
 <br>
 
@@ -79,20 +103,3 @@
 |  | 5번 내용 입력 시 활성화 | ✅ | |
 |  | 클릭 시 등록 컨펌 팝업 후 등록 | ✅ | |
 |  | 등록 후 목록에 노출됨 | ✅ | |
-
-
-<br>
-
-## API 명세
-| 기능                 | HTTP  | 경로 |
-|----------------------|------|-------------------------------------------|
-| task 생성          | POST  | /tasks |
-| task 삭제          | DELETE | /tasks/{id} |
-| 일일 모든 task 조회 | GET   | /tasks/daily?year={}&month={}&day={}&page={} |
-| 한 달 모든 task 조회 | GET   | /tasks/monthly?year={}&month={}&page={} |
-| task 개수 조회     | GET   | /tasks/count?year={}&month={} |
-
-<br>
-
-## ERD
-![erd](https://github.com/user-attachments/assets/35dd3bff-4e9b-421a-b4fa-d059d27d6d1c)
