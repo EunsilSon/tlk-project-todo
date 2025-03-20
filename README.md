@@ -70,8 +70,8 @@
 
 <br>
 
-## ERD
-![erd](https://github.com/user-attachments/assets/35dd3bff-4e9b-421a-b4fa-d059d27d6d1c)
+## ERD)
+<img src="https://github.com/user-attachments/assets/35dd3bff-4e9b-421a-b4fa-d059d27d6d1c" width="40%" />
 
 <br>
 
