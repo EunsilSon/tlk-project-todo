@@ -67,7 +67,6 @@ body {
     padding: 10px;
     border: 0px;
     font-size: 18px;
-    background-color: #ffffff;
 }
 
 #create {
@@ -83,4 +82,8 @@ body {
 #create:disabled {
     cursor: default;
     background-color: #cccccc;
+}
+
+#file-upload {
+    background-color: #dddddd;
 }
