@@ -19,7 +19,7 @@ public class CustomExceptionHandler {
         return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, e.getAllErrors().get(0).getDefaultMessage());
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     public ApiResponse<String> handleException(Exception e) {
         log.error("Failed: {}", e.getMessage());
         return ResponseUtil.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());

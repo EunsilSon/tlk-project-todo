@@ -3,6 +3,8 @@ package project.crud.todo.domain.entity;
 import jakarta.persistence.*;
 import project.crud.todo.domain.vo.TaskVO;
 
+import java.time.LocalDate;
+
 @Entity
 public class Task {
     @Id
@@ -20,6 +22,15 @@ public class Task {
 
     @Column(nullable = false)
     private Integer day;
+
+    @Column(nullable = false)
+    private LocalDate updatedAt;
+
+    @Column(nullable = false)
+    private LocalDate createdAt;
+
+    @Column(nullable = false)
+    private Long createdBy;
 
     public Task() { }
 
