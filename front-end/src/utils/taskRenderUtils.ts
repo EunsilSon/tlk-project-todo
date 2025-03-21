@@ -1,8 +1,7 @@
-declare var swal: any;
-
 import { getCurrentCalendar } from "../components/calendarForm.js"
 import { deleteTaskProcess } from "../components/taskForm.js";
 
+declare var swal: any;
 
 /* 달력을 넘기거나 다른 날을 선택했을 때 지우고 새로 그리기 */
 export const renderNewTasks = (taskList: Task[], day: string) => {
@@ -69,4 +68,26 @@ export const renderTasks = (taskList: Task[]) => {
             }
         }); 
     });
+}
+
+export const renderImgPreview = (src: string) => {
+    const preview = document.getElementById("preview-div") as HTMLImageElement;
+    const img = document.createElement('img');
+    img.src = src;
+    img.style.display = "block";
+
+    img.addEventListener('click', () => {
+        swal({
+            title: "삭제하시겠습니까?",
+            icon: "info",
+            buttons: true,
+        })
+        .then((confirm: any) => {
+            if (confirm) {
+                img.remove();
+            }
+        })
+    })
+
+    preview.appendChild(img);
 }

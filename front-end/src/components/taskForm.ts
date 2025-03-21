@@ -1,10 +1,83 @@
-declare var swal: any;
-
 import { createTask, getMonthlyTaskList, getDailyTaskList, deleteTask } from "../services/taskService.js";
-import { renderTasks } from "../utils/taskRenderUtils.js"
+import { renderTasks, renderImgPreview } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
+declare var swal: any;
+var MAX_FILE_SIZE = 2 * 1024 * 1024;
 let taskPage: number = 1;
+let fileList: File[] = [];
+
+document.addEventListener('DOMContentLoaded', async () => {
+    scrollForTask();
+})
+
+const createBtn = document.getElementById('create') as HTMLButtonElement;
+const taskInput = document.getElementById('task-input') as HTMLInputElement;
+const content = document.getElementById('task-input') as HTMLInputElement;
+const inputDate = document.getElementById('input-date') as HTMLElement;
+const fileUploadBtn = document.getElementById('file-upload') as HTMLElement;
+
+taskInput?.addEventListener('input', function () { 
+    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
+        createBtn.disabled = true; // 공백 입력 시 input 비활성화
+        inputDate.innerText = "날짜를 선택하세요.";
+        taskInput.value = "";
+    } else {
+        createBtn.disabled = false;
+    }
+});
+
+createBtn?.addEventListener('click', async () => {
+    createTaskProcess();
+});
+
+fileUploadBtn?.addEventListener('change', (event) => {
+    const inputFile = event.target as HTMLInputElement;
+
+    if (inputFile.files) {
+        const f = inputFile.files[0];
+        console.log("업로드 파일 정보: " + typeof f, f);
+        /*console.log(f.size);
+        console.log(f.name);
+        console.log(f.type);*/
+
+        /*const file = {
+            originName: f.name,
+            size: Number(f.size),
+            type: f.type,
+            groupId: "img-file-group-id-test",
+        };
+        fileList.push(file);*/
+        
+        if (f.size >= MAX_FILE_SIZE) {
+            swal({
+                position: "top-end",
+                icon: "info",
+                title: "최대 2MB 크기까지 업로드 가능합니다.",
+                timer: 800
+            })
+            inputFile.value = '';
+            return;
+        }
+
+        const previewDiv = document.getElementById('preview-div');
+        if (previewDiv && previewDiv.children.length < 5) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                renderImgPreview(reader.result as string);
+            };
+            reader.readAsDataURL(f);
+        } else {
+            inputFile.value = '';
+            swal({
+                position: "top-end",
+                icon: "info",
+                title: "최대 5개까지 업로드 가능합니다.",
+                timer: 800
+            })
+        }
+    }
+});
 
 export function setTaskPage() {
     taskPage = 1;
@@ -126,32 +199,3 @@ export async function deleteTaskProcess(taskId: string) {
         }
     });
 }
-
-/* yyyy.mm.dd -> yyyy-mm-dd */
-function formatDate(year: number, month: number, day: number): string {
-    const date = new Date(year, month-1, day+1);
-    return date.toISOString().split("T")[0];
-}
-
-const createBtn = document.getElementById('create') as HTMLButtonElement;
-const taskInput = document.getElementById('task-input') as HTMLInputElement;
-const content = document.getElementById('task-input') as HTMLInputElement;
-const inputDate = document.getElementById('input-date') as HTMLElement;
-
-taskInput?.addEventListener('input', function () { 
-    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
-        createBtn.disabled = true; // 공백 입력 시 input 비활성화
-        inputDate.innerText = "날짜를 선택하세요.";
-        taskInput.value = "";
-    } else {
-        createBtn.disabled = false;
-    }
-});
-
-createBtn?.addEventListener('click', async () => {
-    createTaskProcess();
-});
-
-document.addEventListener('DOMContentLoaded', async () => {
-    scrollForTask();
-})

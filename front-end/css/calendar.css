@@ -98,3 +98,13 @@ table {
     background-color: #4466ff;
     border-radius: 50%;
 }
+
+#file-upload {
+    background-color: #dddddd;
+}
+
+#preview-div img {
+    width: 110px;
+    margin: 5px;
+    cursor: pointer;
+}
