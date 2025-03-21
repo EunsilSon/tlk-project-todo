@@ -11,6 +11,7 @@ import project.crud.todo.global.response.ResponseUtil;
 import project.crud.todo.service.TaskService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
@@ -22,8 +23,9 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    // TODO: File 객체 받기
     @PostMapping
-    public ApiResponse<String> create(@Valid @RequestBody TaskVO taskVO) {
+    public ApiResponse<String> create(@Valid @RequestBody TaskVO taskVO, UUID groupId) {
         if (taskService.create(taskVO)) {
             return ResponseUtil.createSuccessResponse("Successes Create Task");
         }

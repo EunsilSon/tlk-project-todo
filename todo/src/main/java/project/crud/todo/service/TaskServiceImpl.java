@@ -29,6 +29,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean create(TaskVO taskVO) {
         try {
+            // TODO: 파일 업로드
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {
@@ -40,6 +41,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public boolean delete(Long id) {
+        // TODO: 파일 삭제
         taskRepository.deleteById(id);
         return true;
     }
@@ -49,6 +51,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
+        // TODO: 파일 리스트
         return tasks.stream()
                 .map(TaskDTO::from)
                 .collect(Collectors.toList());
@@ -59,6 +62,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
+        // TODO: 파일 리스트
         return tasks.stream()
                 .map(TaskDTO::from)
                 .collect(Collectors.toList());

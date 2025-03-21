@@ -14,7 +14,10 @@ public class File {
     private String path;
 
     @Column(nullable = false, length = 100)
-    private String name;
+    private String savedName;
+
+    @Column(nullable = false, length = 100)
+    private String originName;
 
     @Column(nullable = false, length = 100)
     private String content_type;
