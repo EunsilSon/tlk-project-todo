@@ -70,11 +70,12 @@ export const renderTasks = (taskList: Task[]) => {
     });
 }
 
-export const renderImgPreview = (src: string) => {
+export const renderImgPreview = (src: string, file: File, fileArray: File[]) => {
     const preview = document.getElementById("preview-div") as HTMLImageElement;
     const img = document.createElement('img');
     img.src = src;
     img.style.display = "block";
+    img.alt = file.name;
 
     img.addEventListener('click', () => {
         swal({
@@ -84,6 +85,10 @@ export const renderImgPreview = (src: string) => {
         })
         .then((confirm: any) => {
             if (confirm) {
+                const index = fileArray.indexOf(file);
+                if (index !== -1) {
+                    fileArray.splice(index, 1);
+                }
                 img.remove();
             }
         })

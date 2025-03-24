@@ -5,26 +5,16 @@ const instance = axios.create({
     withCredentials: true,
 })
 
-export const createTask = async (task: NewTask) => {
+export const createTask = async (formData: FormData) => {
     try {
-        const response = await instance.post(``, task);
-        console.log(response.data);
+        const response = await instance.post("", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
         return response.data;
-    } catch (error: any) {
-        console.log(error.response);
-        return error;
-    }
-}
-
-export const updateTask = async (task: Task) => {
-    try {
-        const response = await instance.put(``, task);
-        console.log(response);
-        return response;
-    } catch (error: any) {
-        console.log(error.response);
-        return error;
-    }
+        } catch (error: any) {
+            console.log(error.response);
+            return error;
+        }
 }
 
 export const deleteTask = async (id: string) => {

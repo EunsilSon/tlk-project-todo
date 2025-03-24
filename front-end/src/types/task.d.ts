@@ -11,4 +11,6 @@ interface NewTask {
     year: string,
     month: string,
     day: string,
+    createdBy: string,
+    groupId: string,
 }

@@ -5,25 +5,25 @@ import { getCurrentCalendar } from "./calendarForm.js";
 declare var swal: any;
 var MAX_FILE_SIZE = 2 * 1024 * 1024;
 let taskPage: number = 1;
-let fileList: File[] = [];
-
-document.addEventListener('DOMContentLoaded', async () => {
-    scrollForTask();
-})
+let fileArray: File[] = [];
 
 const createBtn = document.getElementById('create') as HTMLButtonElement;
 const taskInput = document.getElementById('task-input') as HTMLInputElement;
 const content = document.getElementById('task-input') as HTMLInputElement;
 const inputDate = document.getElementById('input-date') as HTMLElement;
-const fileUploadBtn = document.getElementById('file-upload') as HTMLElement;
+const fileUploadBtn = document.getElementById('file-upload') as HTMLButtonElement;
+
+document.addEventListener('DOMContentLoaded', async () => {
+    scrollForTask();
+})
 
 taskInput?.addEventListener('input', function () { 
-    if (taskInput.value.trim() === "" || inputDate.innerText === "") {
-        createBtn.disabled = true; // 공백 입력 시 input 비활성화
+    if (taskInput.value.trim() === "" || inputDate.innerText === "") { 
         inputDate.innerText = "날짜를 선택하세요.";
         taskInput.value = "";
     } else {
         createBtn.disabled = false;
+        fileUploadBtn.disabled = false;
     }
 });
 
@@ -35,21 +35,9 @@ fileUploadBtn?.addEventListener('change', (event) => {
     const inputFile = event.target as HTMLInputElement;
 
     if (inputFile.files) {
-        const f = inputFile.files[0];
-        console.log("업로드 파일 정보: " + typeof f, f);
-        /*console.log(f.size);
-        console.log(f.name);
-        console.log(f.type);*/
-
-        /*const file = {
-            originName: f.name,
-            size: Number(f.size),
-            type: f.type,
-            groupId: "img-file-group-id-test",
-        };
-        fileList.push(file);*/
+        const uploadFile = inputFile.files[0];
         
-        if (f.size >= MAX_FILE_SIZE) {
+        if (uploadFile.size >= MAX_FILE_SIZE) {
             swal({
                 position: "top-end",
                 icon: "info",
@@ -64,9 +52,13 @@ fileUploadBtn?.addEventListener('change', (event) => {
         if (previewDiv && previewDiv.children.length < 5) {
             const reader = new FileReader();
             reader.onload = () => {
-                renderImgPreview(reader.result as string);
+                renderImgPreview(reader.result as string, uploadFile, fileArray);
             };
-            reader.readAsDataURL(f);
+            reader.readAsDataURL(uploadFile);
+
+            Array.from(inputFile.files).forEach((file) => {
+                fileArray.push(file);
+            })
         } else {
             inputFile.value = '';
             swal({
@@ -138,37 +130,40 @@ async function createTaskProcess() {
     const inputDate = document.getElementById('input-date') as HTMLElement;
     let splitDate = inputDate.innerText.split(". ");
 
-    const task = {
-        content: content.value,
-        year: splitDate[0],
-        month: splitDate[1],
-        day: splitDate[2],
-    };
+    const formData = new FormData();
+    fileArray.forEach((file) => {
+        formData.append("images", file);
+    });
+    
+    formData.append("content", content.value);
+    formData.append("year", splitDate[0]);
+    formData.append("month", splitDate[1]);
+    formData.append("day", splitDate[2]);
+    formData.append("createdBy", "1");
+    formData.append("groupId", "img-file-group-id-test");
 
-    await createTask(task)
-    .then((response: any) => {
-        if (response.status === 200) {
-            swal({
-                position: "top-end",
-                icon: "success",
-                title: "등록 완료",
-                timer: 750
-            })
-            .then(() => {
-                localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
-                localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
-                localStorage.setItem("updated", "true");
-                window.location.reload();
-            })
-        } else {
-            swal({
-                position: "top-end",
-                icon: "fail",
-                title: "등록 실패",
-                timer: 650
-            })
-        }
-    })
+    const response = await createTask(formData);
+    if (response.status === 200) {
+        swal({
+            position: "top-end",
+            icon: "success",
+            title: "등록 완료",
+            timer: 750
+        })
+        .then(() => {
+            localStorage.setItem("updatedYear", Number(splitDate[0]) + "");
+            localStorage.setItem("updatedMonth", Number(splitDate[1]) + "");
+            localStorage.setItem("updated", "true");
+            window.location.reload();
+        })
+    } else {
+        swal({
+            position: "top-end",
+            icon: "fail",
+            title: "등록 실패",
+            timer: 650
+        })
+    }
 }
 
 export async function deleteTaskProcess(taskId: string) {
