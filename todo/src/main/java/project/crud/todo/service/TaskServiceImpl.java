@@ -7,12 +7,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.dto.TaskDTO;
+import project.crud.todo.domain.entity.Image;
 import project.crud.todo.domain.entity.Task;
 import project.crud.todo.domain.vo.TaskVO;
+import project.crud.todo.repository.ImageRepository;
 import project.crud.todo.repository.TaskRepository;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,11 +26,13 @@ public class TaskServiceImpl implements TaskService {
     private final int DEFAULT_TASK_SIZE = 20;
     private final TaskRepository taskRepository;
     private final ImageService imageService;
+    private final ImageRepository imageRepository;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, ImageService imageService) {
+    public TaskServiceImpl(TaskRepository taskRepository, ImageService imageService, ImageRepository imageRepository) {
         this.taskRepository = taskRepository;
         this.imageService = imageService;
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -43,7 +51,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional
     public boolean delete(Long id) {
-        // TODO: 파일 삭제
+        Task task = taskRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Task not found"));
+        imageRepository.deleteByGroupId(task.getGroupId());
         taskRepository.deleteById(id);
         return true;
     }
@@ -53,10 +62,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
-        // TODO: 파일 리스트
-        return tasks.stream()
-                .map(TaskDTO::from)
-                .collect(Collectors.toList());
+        return getTaskDtoList(tasks);
     }
 
     @Override
@@ -64,10 +70,16 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
-        // TODO: 파일 리스트
-        return tasks.stream()
-                .map(TaskDTO::from)
-                .collect(Collectors.toList());
+        return getTaskDtoList(tasks);
+    }
+
+    private List<TaskDTO> getTaskDtoList(Page<Task> tasks) {
+        List<TaskDTO> list = new ArrayList<>();
+        for (Task task : tasks) {
+            List<Image> images = imageRepository.findByGroupId(task.getGroupId());
+            list.add(new TaskDTO(task, images));
+        }
+        return list;
     }
 
     @Override

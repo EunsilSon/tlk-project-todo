@@ -45,29 +45,28 @@ public class Image {
         this.createdAt = LocalDateTime.now();
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public Long getId() {
+        return id;
     }
-
-    public void setOriginName(String originName) {
-        this.originName = originName;
+    public String getPath() {
+        return path;
     }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
+    public String getOriginName() {
+        return originName;
     }
-
-    public void setSize(long size) {
-        this.size = size;
+    public String getContentType() {
+        return contentType;
     }
-
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
+    public long getSize() {
+        return size;
     }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
+    public String getGroupId() {
+        return groupId;
     }
-
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public Long getCreatedBy() {
+        return createdBy;
+    }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

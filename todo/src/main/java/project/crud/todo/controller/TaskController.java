@@ -1,6 +1,5 @@
 package project.crud.todo.controller;
 
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -42,7 +41,7 @@ public class TaskController {
         if (taskService.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task: Task Not Found");
+        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task");
     }
 
     @GetMapping("/monthly")

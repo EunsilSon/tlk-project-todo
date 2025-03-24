@@ -24,8 +24,8 @@ public class ImageServiceImpl implements ImageService {
     public boolean save(List<MultipartFile> files, String groupId, Long createdBy) {
         for (MultipartFile image : files) {
             try {
-                String path = saveLocal(image);
-                Image imageEntity = new Image(path
+                Image imageEntity = new Image(
+                        saveLocal(image)
                         , image.getOriginalFilename()
                         , image.getContentType()
                         , image.getSize()
@@ -37,14 +37,6 @@ public class ImageServiceImpl implements ImageService {
             }
         }
         return true;
-    }
-
-    @Transactional
-    @Override
-    public boolean delete(String groupId) {
-        //TODO: group id로 모두 삭제
-        //TODO: 특정 이미지만 삭제
-        return false;
     }
 
     @Transactional
@@ -68,10 +60,15 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     @Override
-    public Integer getCount(String groupId) {
-        return 0;
+    public boolean delete(Long id) {
+        try {
+            imageRepository.deleteById(id);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     @Transactional(readOnly = true)

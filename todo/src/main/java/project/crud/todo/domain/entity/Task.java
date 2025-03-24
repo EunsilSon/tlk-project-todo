@@ -29,15 +29,19 @@ public class Task {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private String groupId;
+
     public Task() { }
 
-    public Task(String content, Integer year, Integer month, Integer day, Long createdBy, LocalDateTime createdAt) {
+    public Task(String content, Integer year, Integer month, Integer day, Long createdBy, LocalDateTime createdAt, String groupId) {
         this.content = content;
         this.year = year;
         this.month = month;
         this.day = day;
         this.createdBy = createdBy;
         this.createdAt = createdAt;
+        this.groupId = groupId;
     }
 
     public static Task from(TaskVO taskVO) {
@@ -46,27 +50,26 @@ public class Task {
                 , Integer.parseInt(taskVO.getMonth())
                 , Integer.parseInt(taskVO.getDay())
                 , taskVO.getCreatedBy()
-                , LocalDateTime.now());
+                , LocalDateTime.now()
+                , taskVO.getGroupId());
     }
 
     public Long getId() {
         return id;
     }
-
     public String getContent() {
         return content;
     }
-
     public Integer getYear() {
         return year;
     }
-
     public Integer getMonth() {
         return month;
     }
-
     public Integer getDay() {
         return day;
     }
-
+    public String getGroupId() {
+        return groupId;
+    }
 }

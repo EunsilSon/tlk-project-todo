@@ -1,19 +1,43 @@
 package project.crud.todo.domain.dto;
 
+import project.crud.todo.domain.entity.Image;
 import project.crud.todo.domain.entity.Task;
 
-public record TaskDTO (
-    Long id,
-    String content,
-    Integer year,
-    Integer month,
-    Integer day
-) {
-    public static TaskDTO from(Task task) {
-        return new TaskDTO(task.getId()
-                , task.getContent()
-                , task.getYear()
-                , task.getMonth()
-                , task.getDay());
+import java.util.List;
+
+public class TaskDTO {
+    private Long id;
+    private String content;
+    private Integer year;
+    private Integer month;
+    private Integer day;
+    private List<Image> files;
+
+    public TaskDTO(Task task, List<Image> files) {
+        this.id = task.getId();
+        this.content = task.getContent();
+        this.year = task.getYear();
+        this.month = task.getMonth();
+        this.day = task.getDay();
+        this.files = files;
+    }
+
+    public Long getId() {
+        return id;
+    }
+    public String getContent() {
+        return content;
+    }
+    public Integer getYear() {
+        return year;
+    }
+    public Integer getMonth() {
+        return month;
+    }
+    public Integer getDay() {
+        return day;
+    }
+    public List<Image> getFiles() {
+        return files;
     }
 }

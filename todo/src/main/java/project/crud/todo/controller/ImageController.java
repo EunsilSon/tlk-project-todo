@@ -17,17 +17,12 @@ public class ImageController {
         this.imageService = imageService;
     }
 
-    @DeleteMapping("/{groupId}")
-    public ApiResponse<String> delete(@PathVariable String groupId) {
-        if (imageService.delete(groupId)) {
+    @DeleteMapping("/{id}")
+    public ApiResponse<String> delete(@PathVariable Long id) {
+        if (imageService.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Deleted file");
-        } else {
-            return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Deleted file");
         }
+        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Deleted file");
     }
 
-    /*@GetMapping("/{groupId}")
-    public ApiResponse<String> getCount(@PathVariable String groupId) {
-        return ResponseUtil.createSuccessResponse("Total files found: " + imageService.getCount((groupId)));
-    }*/
 }
