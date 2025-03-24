@@ -8,7 +8,7 @@ export const renderNewTasks = (taskList: Task[], day: string) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
     
-    if (day === "none") { // 다른 달력력
+    if (day === "none") { // 다른 달력
         if (localStorage.getItem("currentMonth") != currentCalendar[1]+"") { 
             localStorage.setItem("currentMonth", currentCalendar[1]+"");
             taskDiv.innerHTML = '';
@@ -48,7 +48,6 @@ export const renderTasks = (taskList: Task[]) => {
         taskDetail.appendChild(dateDiv);
         taskDetail.appendChild(contentDiv);
         taskItem.appendChild(taskDetail);
-        taskItem.appendChild(deleteBtn);
         taskDiv.appendChild(taskItem);
 
         deleteBtn.addEventListener('click', async () => {

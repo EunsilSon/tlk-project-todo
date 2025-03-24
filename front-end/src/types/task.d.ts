@@ -4,6 +4,7 @@ interface Task {
     year: string,
     month: string,
     day: string,
+    groupId: string,
 }
 
 interface NewTask {

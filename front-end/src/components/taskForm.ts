@@ -140,7 +140,7 @@ async function createTaskProcess() {
     formData.append("month", splitDate[1]);
     formData.append("day", splitDate[2]);
     formData.append("createdBy", "1");
-    formData.append("groupId", "img-file-group-id-test");
+    formData.append("groupId", crypto.randomUUID());
 
     const response = await createTask(formData);
     if (response.status === 200) {
