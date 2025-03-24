@@ -3,6 +3,8 @@ package project.crud.todo.domain.entity;
 import jakarta.persistence.*;
 import project.crud.todo.domain.vo.TaskVO;
 
+import java.time.LocalDateTime;
+
 @Entity
 public class Task {
     @Id
@@ -24,14 +26,18 @@ public class Task {
     @Column(nullable = false)
     private Long createdBy;
 
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
     public Task() { }
 
-    public Task(String content, Integer year, Integer month, Integer day, Long createdBy) {
+    public Task(String content, Integer year, Integer month, Integer day, Long createdBy, LocalDateTime createdAt) {
         this.content = content;
         this.year = year;
         this.month = month;
         this.day = day;
         this.createdBy = createdBy;
+        this.createdAt = createdAt;
     }
 
     public static Task from(TaskVO taskVO) {
@@ -39,7 +45,8 @@ public class Task {
                 , Integer.parseInt(taskVO.getYear())
                 , Integer.parseInt(taskVO.getMonth())
                 , Integer.parseInt(taskVO.getDay())
-                , taskVO.getCreatedBy());
+                , taskVO.getCreatedBy()
+                , LocalDateTime.now());
     }
 
     public Long getId() {

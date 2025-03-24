@@ -19,17 +19,19 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService {
     private final int DEFAULT_TASK_SIZE = 20;
     private final TaskRepository taskRepository;
+    private final ImageService imageService;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, ImageService imageService) {
         this.taskRepository = taskRepository;
+        this.imageService = imageService;
     }
 
     @Override
     @Transactional
     public boolean create(TaskVO taskVO) {
         try {
-            // TODO: 파일 업로드
+            imageService.save(taskVO.getFiles(), taskVO.getGroupId(), taskVO.getCreatedBy());
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {

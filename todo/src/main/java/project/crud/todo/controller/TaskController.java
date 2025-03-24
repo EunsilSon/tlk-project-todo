@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.dto.TaskDTO;
 import project.crud.todo.domain.vo.TaskVO;
 import project.crud.todo.global.response.ApiResponse;
@@ -11,7 +12,6 @@ import project.crud.todo.global.response.ResponseUtil;
 import project.crud.todo.service.TaskService;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/tasks")
@@ -23,10 +23,15 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    // TODO: File 객체 받기
     @PostMapping
-    public ApiResponse<String> create(@Valid @RequestBody TaskVO taskVO, UUID groupId) {
-        if (taskService.create(taskVO)) {
+    public ApiResponse<String> create(@RequestParam("images") List<MultipartFile> images,
+                                      @RequestParam("content") String content,
+                                      @RequestParam("year") String year,
+                                      @RequestParam("month") String month,
+                                      @RequestParam("day") String day,
+                                      @RequestParam("createdBy") Long createdBy,
+                                      @RequestParam("groupId") String groupId) {
+        if (taskService.create(new TaskVO(images, content, year, month, day, createdBy, groupId))) {
             return ResponseUtil.createSuccessResponse("Successes Create Task");
         }
         return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");

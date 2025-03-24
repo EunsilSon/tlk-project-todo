@@ -26,16 +26,8 @@ public class ImageController {
         }
     }
 
-    @GetMapping("/{groupId}")
+    /*@GetMapping("/{groupId}")
     public ApiResponse<String> getCount(@PathVariable String groupId) {
         return ResponseUtil.createSuccessResponse("Total files found: " + imageService.getCount((groupId)));
-    }
-
-    @PostMapping()
-    public ApiResponse<String> save(@RequestParam MultipartFile image, @RequestParam String groupId, @RequestParam Long createdBy) {
-        if (imageService.save(image, groupId, createdBy)) {
-            return ResponseUtil.createSuccessResponse("Successes saved image");
-        }
-        return ResponseUtil.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to save image");
-    }
+    }*/
 }

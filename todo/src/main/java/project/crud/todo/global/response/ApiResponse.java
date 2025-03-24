@@ -19,4 +19,14 @@ public class ApiResponse<T> {
         this.data = (data == null) ? (T) "empty" : data;
     }
 
+    public int getStatus() {
+        return status;
+    }
+    public String getMessage() {
+        return message;
+    }
+    public T getData() {
+        return data;
+    }
+
 }

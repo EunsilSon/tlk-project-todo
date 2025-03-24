@@ -1,9 +1,8 @@
 package project.crud.todo.domain.entity;
 
 import jakarta.persistence.*;
-import project.crud.todo.service.ImageServiceImpl;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 public class Image {
@@ -27,23 +26,23 @@ public class Image {
     private String groupId;
 
     @Column(nullable = false)
-    private LocalDate createdAt;
+    private Long createdBy;
 
     @Column(nullable = false)
-    private Long createdBy;
+    private LocalDateTime createdAt;
 
     public Image() {
 
     }
 
-    public Image(String path, String originName, String contentType, long size, String groupId, LocalDate createdAt, Long createdBy) {
+    public Image(String path, String originName, String contentType, long size, String groupId, Long createdBy) {
         this.path = path;
         this.originName = originName;
         this.contentType = contentType;
         this.size = size;
         this.groupId = groupId;
-        this.createdAt = createdAt;
         this.createdBy = createdBy;
+        this.createdAt = LocalDateTime.now();
     }
 
     public void setPath(String path) {
@@ -66,11 +65,9 @@ public class Image {
         this.groupId = groupId;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
+
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 }
