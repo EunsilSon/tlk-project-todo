@@ -11,6 +11,7 @@ public class TaskDTO {
     private Integer year;
     private Integer month;
     private Integer day;
+    private String groupId;
     private List<Image> files;
 
     public TaskDTO(Task task, List<Image> files) {
@@ -19,6 +20,7 @@ public class TaskDTO {
         this.year = task.getYear();
         this.month = task.getMonth();
         this.day = task.getDay();
+        this.groupId = task.getGroupId();
         this.files = files;
     }
 
@@ -37,6 +39,7 @@ public class TaskDTO {
     public Integer getDay() {
         return day;
     }
+    public String getGroupId() { return groupId; }
     public List<Image> getFiles() {
         return files;
     }

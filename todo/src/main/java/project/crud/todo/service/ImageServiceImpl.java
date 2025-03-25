@@ -1,22 +1,28 @@
 package project.crud.todo.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.entity.Image;
 import project.crud.todo.repository.ImageRepository;
 
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-    private final ImageRepository imageRepository;
+    Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
 
-    public ImageServiceImpl(ImageRepository imageRepository) {
+    private final ImageRepository imageRepository;
+    private final S3UploadService s3UploadService;
+
+    @Autowired
+    public ImageServiceImpl(ImageRepository imageRepository, S3UploadService s3UploadService) {
         this.imageRepository = imageRepository;
+        this.s3UploadService = s3UploadService;
     }
 
     @Transactional
@@ -24,25 +30,30 @@ public class ImageServiceImpl implements ImageService {
     public boolean save(List<MultipartFile> files, String groupId, Long createdBy) {
         for (MultipartFile image : files) {
             try {
+                String path = s3UploadService.saveFile(image);
                 Image imageEntity = new Image(
-                        saveLocal(image)
+                        path
                         , image.getOriginalFilename()
                         , image.getContentType()
                         , image.getSize()
                         , groupId
-                        , createdBy);
+                        , createdBy
+                );
                 imageRepository.save(imageEntity);
+                System.out.println("ImageServiceImpl: " + imageEntity.getS3Path());
             } catch (Exception e) {
+                logger.error(e.getMessage());
                 return false;
             }
         }
         return true;
     }
 
+    /*
     @Transactional
     protected String saveLocal(MultipartFile image) {
         try {
-            String fileName = image.getOriginalFilename(); //TODO: 파일명이 중복된다면?
+            String fileName = image.getOriginalFilename();
             String path = System.getProperty("user.dir")
                     + File.separator
                     + "image"
@@ -59,21 +70,18 @@ public class ImageServiceImpl implements ImageService {
             return null;
         }
     }
+    */
 
     @Transactional
     @Override
     public boolean delete(Long id) {
         try {
-            imageRepository.deleteById(id);
+            Image image = imageRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image not found"));
+            imageRepository.delete(image);
+            s3UploadService.deleteFile(image.getS3Path());
         } catch (Exception e) {
             return false;
         }
         return true;
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<File> getAll(String groupId) {
-        return List.of();
     }
 }
