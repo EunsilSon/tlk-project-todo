@@ -5,6 +5,7 @@ interface Task {
     month: string,
     day: string,
     groupId: string,
+    files: Image[]
 }
 
 interface NewTask {

@@ -21,17 +21,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderNewTasks(await getMonthlyTaskList(year, month+1, 0), "none");
 })
 
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+
+if (prevBtn) {
+    prevBtn.addEventListener('click', function () {
+        clearSelectedDate();
+        moveToPrevCalendar();
+        setScrollTop();
+        setTaskPage();
+    })
+};
+
+if (nextBtn) {
+    nextBtn.addEventListener('click', function () {
+        clearSelectedDate();
+        moveToNextCalendar();
+        setScrollTop();
+        setTaskPage();
+    })
+};
+
 /* 주 수 */
 export function getWeekCount(year: number, month: number, lastDay: number) {
     return Math.ceil((new Date(year, month, 1).getDay() + lastDay) / 7); // 시작 요일 위치 + 마지막 일자 / 7
 }
 
-
 /* 시작 요일 */
 export function getFirstDay (year: number, month: number) {
     return new Date(year, month, 1).getDay();
 }
-
 
 /* 말일 */
 export function getLastDay(year: number, month: number) {
@@ -44,7 +63,6 @@ export function getLastDay(year: number, month: number) {
 
     return monthLastDays[month];
 }
-
 
 /* 이전 달의 말일 */
 export function getLastDayOfPrevMonth(year: number, month: number) {
@@ -69,13 +87,11 @@ export function setScrollTop() {
     taskDiv.scrollTop = 0;
 }
 
-
 /* 달력 넘길 때 선택된 날짜 지우기 */
 function clearSelectedDate() {
     const selectedDate = document.getElementById('input-date') as HTMLInputElement;
     selectedDate.innerText = "";
 }
-
 
 /* 현재 선택된 달력 */
 export function getCurrentCalendar() {
@@ -84,7 +100,6 @@ export function getCurrentCalendar() {
     let month: number = Number(calDate.innerText.substring(5, 7));
     return [year, month];
 }
-
 
 /* 이전 달 */
 async function moveToPrevCalendar() {
@@ -102,7 +117,6 @@ async function moveToPrevCalendar() {
     renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
 
-
 /* 다음 달 */
     async function moveToNextCalendar() {
     let seletedDate: number[] = getCurrentCalendar();
@@ -118,23 +132,3 @@ async function moveToPrevCalendar() {
     renderCalendar(year, month-1);
     renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
 }
-
-
-const prevBtn = document.getElementById('prev');
-const nextBtn = document.getElementById('next');
-
-if (prevBtn) {
-    prevBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToPrevCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
-
-if (nextBtn) {
-    nextBtn.addEventListener('click', function() {
-    clearSelectedDate();
-    moveToNextCalendar();
-    setScrollTop();
-    setTaskPage();
-})};
