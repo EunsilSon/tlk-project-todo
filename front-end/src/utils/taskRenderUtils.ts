@@ -54,11 +54,11 @@ export const renderTasks = (taskList: Task[]) => {
                     icon: "info",
                     buttons: true,
                 })
-                .then(async (confirm: any) => {
-                    if (confirm) {
-                        deleteTaskProcess(task.id);
-                    }
-                })
+                    .then(async (confirm: any) => {
+                        if (confirm) {
+                            deleteTaskProcess(task.id);
+                        }
+                    })
             } catch (error: any) {
                 console.log(error.message);
             }
@@ -66,24 +66,24 @@ export const renderTasks = (taskList: Task[]) => {
 
         task.files.forEach(file => {
             const img = document.createElement("img");
-            img.src = file.path;
+            img.src = file.s3Path;
             img.id = file.id;
             img.alt = file.originName;
             imgDiv.appendChild(img);
 
             img.addEventListener('click', () => {
-                console.log(file.id);
+                console.log(file.s3Path);
                 try {
                     swal({
                         title: "삭제하시겠습니까?",
                         icon: "info",
                         buttons: true,
                     })
-                    .then(async (confirm: any) => {
-                        if (confirm) {
-                            deleteImageProcess(file.id);
-                        }
-                    })
+                        .then(async (confirm: any) => {
+                            if (confirm) {
+                                deleteImageProcess(file.id);
+                            }
+                        })
                 } catch (error: any) {
                     console.log(error.message);
                 }

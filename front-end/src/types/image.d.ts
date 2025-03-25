@@ -5,6 +5,6 @@ interface Image {
     groupId: string,
     id: string,
     originName: string,
-    path: string,
+    s3Path: string,
     size: number,
 }

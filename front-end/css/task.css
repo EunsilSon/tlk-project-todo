@@ -26,6 +26,8 @@ body {
 
 .task-item img {
     cursor: pointer;
+    width: 100px;
+    margin: 0px 5px 0px 5px;
 }
 
 .task-detail {
