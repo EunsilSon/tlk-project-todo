@@ -1,5 +1,7 @@
 package project.crud.todo.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,8 @@ import java.util.NoSuchElementException;
 
 @Service
 public class ImageServiceImpl implements ImageService {
+    Logger logger = LoggerFactory.getLogger(ImageServiceImpl.class);
+
     private final ImageRepository imageRepository;
     private final S3UploadService s3UploadService;
 
@@ -26,15 +30,19 @@ public class ImageServiceImpl implements ImageService {
     public boolean save(List<MultipartFile> files, String groupId, Long createdBy) {
         for (MultipartFile image : files) {
             try {
+                String path = s3UploadService.saveFile(image);
                 Image imageEntity = new Image(
-                        s3UploadService.saveFile(image)
+                        path
                         , image.getOriginalFilename()
                         , image.getContentType()
                         , image.getSize()
                         , groupId
-                        , createdBy);
+                        , createdBy
+                );
                 imageRepository.save(imageEntity);
+                System.out.println("ImageServiceImpl: " + imageEntity.getS3Path());
             } catch (Exception e) {
+                logger.error(e.getMessage());
                 return false;
             }
         }
