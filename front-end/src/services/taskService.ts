@@ -11,10 +11,10 @@ export const createTask = async (formData: FormData) => {
             headers: { "Content-Type": "multipart/form-data" },
         });
         return response.data;
-        } catch (error: any) {
-            console.log(error.response);
-            return error;
-        }
+    } catch (error: any) {
+        console.log(error.response);
+        return error;
+    }
 }
 
 export const deleteTask = async (id: string) => {
@@ -66,7 +66,6 @@ export const getTaskCount = async (year: number, month: number) => {
     try {
         const response = await instance.get(`/count?year=${year}&month=${month}`);
         if (response.data.status == 200) {
-            console.log(response.data.data);
             return response.data.data;
         } else {
             return response.data.message;

@@ -6,18 +6,33 @@ body {
     width: 600px;
     height: 330px;
     margin: 5px 0px 5px 0px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .task-item {
     display: flex;
+    flex-direction: column;
     align-items: center;
     padding: 0px 10px 0px 10px;
     margin-bottom: 5px;
     background-color: white;
 }
 
+.task-item div {
+    display: flex;
+    padding: 5px 0px 5px 5px;
+}
+
+.task-item img {
+    cursor: pointer;
+    width: 100px;
+    margin: 0px 5px 0px 5px;
+}
+
 .task-detail {
+    display: flex;
+    flex-direction: column;
     width: 500px;
     font-size: 20px;
 }

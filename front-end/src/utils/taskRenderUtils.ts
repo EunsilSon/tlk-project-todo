@@ -1,5 +1,5 @@
 import { getCurrentCalendar } from "../components/calendarForm.js"
-import { deleteTaskProcess } from "../components/taskForm.js";
+import { deleteTaskProcess, deleteImageProcess } from "../components/taskForm.js";
 
 declare var swal: any;
 
@@ -7,14 +7,14 @@ declare var swal: any;
 export const renderNewTasks = (taskList: Task[], day: string) => {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
-    
+
     if (day === "none") { // 다른 달력
-        if (localStorage.getItem("currentMonth") != currentCalendar[1]+"") { 
-            localStorage.setItem("currentMonth", currentCalendar[1]+"");
+        if (localStorage.getItem("currentMonth") != currentCalendar[1] + "") {
+            localStorage.setItem("currentMonth", currentCalendar[1] + "");
             taskDiv.innerHTML = '';
         }
     } else { // 일자 변경
-       taskDiv.innerHTML = '';
+        taskDiv.innerHTML = '';
     }
 
     renderTasks(taskList);
@@ -26,46 +26,80 @@ export const renderTasks = (taskList: Task[]) => {
 
     taskList.forEach(task => {
         const taskItem = document.createElement('div');
+        const contentDiv = document.createElement('div');
+        const imgDiv = document.createElement('div');
         taskItem.className = 'task-item';
 
         const taskDetail = document.createElement('div');
         taskDetail.className = 'task-detail';
 
-        const dateDiv = document.createElement('div');
-        dateDiv.className = 'date';
-        dateDiv.textContent = task.year + ". " + task.month + ". " + task.day;
+        const date = document.createElement('div');
+        date.className = 'date';
+        date.textContent = task.year + ". " + task.month + ". " + task.day;
 
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'content';
+        const content = document.createElement('div');
+        content.className = 'content';
         const shortContent = task.content.length > 17 ? task.content.substring(0, 17) + ' ------- 최대 100자' : task.content; // 글자 수 넘침 처리
-        contentDiv.textContent = shortContent; 
+        content.textContent = shortContent;
 
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete';
         deleteBtn.id = task.id.toString();
         deleteBtn.textContent = '삭제';
 
-        taskDetail.appendChild(dateDiv);
-        taskDetail.appendChild(contentDiv);
-        taskItem.appendChild(taskDetail);
-        taskDiv.appendChild(taskItem);
-
-        deleteBtn.addEventListener('click', async () => {
+        deleteBtn.addEventListener('click', () => {
             try {
                 swal({
                     title: "삭제하시겠습니까?",
                     icon: "info",
                     buttons: true,
                 })
-                .then(async (confirm: any) => {
-                    if (confirm) {
-                        deleteTaskProcess(task.id);
-                    }
-                })
+                    .then(async (confirm: any) => {
+                        if (confirm) {
+                            deleteTaskProcess(task.id);
+                        }
+                    })
             } catch (error: any) {
                 console.log(error.message);
             }
-        }); 
+        });
+
+        task.files.forEach(file => {
+            const img = document.createElement("img");
+            img.src = file.s3Path;
+            img.id = file.id;
+            img.alt = file.originName;
+            imgDiv.appendChild(img);
+
+            img.addEventListener('click', () => {
+                console.log(file.s3Path);
+                try {
+                    swal({
+                        title: "삭제하시겠습니까?",
+                        icon: "info",
+                        buttons: true,
+                    })
+                        .then(async (confirm: any) => {
+                            if (confirm) {
+                                deleteImageProcess(file.id);
+                            }
+                        })
+                } catch (error: any) {
+                    console.log(error.message);
+                }
+            })
+        })
+
+        taskDetail.appendChild(date);
+        taskDetail.appendChild(content);
+
+        contentDiv.appendChild(taskDetail);
+        contentDiv.appendChild(deleteBtn);
+
+        taskItem.appendChild(contentDiv);
+        taskItem.appendChild(imgDiv);
+
+        taskDiv.appendChild(taskItem);
     });
 }
 
@@ -82,15 +116,15 @@ export const renderImgPreview = (src: string, file: File, fileArray: File[]) => 
             icon: "info",
             buttons: true,
         })
-        .then((confirm: any) => {
-            if (confirm) {
-                const index = fileArray.indexOf(file);
-                if (index !== -1) {
-                    fileArray.splice(index, 1);
+            .then((confirm: any) => {
+                if (confirm) {
+                    const index = fileArray.indexOf(file);
+                    if (index !== -1) {
+                        fileArray.splice(index, 1);
+                    }
+                    img.remove();
                 }
-                img.remove();
-            }
-        })
+            })
     })
 
     preview.appendChild(img);
