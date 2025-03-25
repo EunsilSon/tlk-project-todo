@@ -8,6 +8,5 @@ import java.util.List;
 
 public interface ImageService {
     boolean save(List<MultipartFile> files, String groupId, Long createdBy);
-    boolean delete(Long groupId);
-    List<File> getAll(String groupId);
+    boolean delete(Long id);
 }

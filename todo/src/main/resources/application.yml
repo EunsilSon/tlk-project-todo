@@ -18,3 +18,14 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  cloud:
+    s3:
+      bucket: eunsil-uploaded-files
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: AKIAQ63VU6RUYBK2Q75E
+      secret-key: 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
+    stack:
+      auto: false

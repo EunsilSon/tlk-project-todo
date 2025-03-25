@@ -11,7 +11,7 @@ public class Image {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String path;
+    private String s3Path;
 
     @Column(nullable = false, length = 100)
     private String originName;
@@ -35,8 +35,8 @@ public class Image {
 
     }
 
-    public Image(String path, String originName, String contentType, long size, String groupId, Long createdBy) {
-        this.path = path;
+    public Image(String s3Path, String originName, String contentType, long size, String groupId, Long createdBy) {
+        this.s3Path = s3Path;
         this.originName = originName;
         this.contentType = contentType;
         this.size = size;
@@ -48,8 +48,8 @@ public class Image {
     public Long getId() {
         return id;
     }
-    public String getPath() {
-        return path;
+    public String getS3Path() {
+        return s3Path;
     }
     public String getOriginName() {
         return originName;
