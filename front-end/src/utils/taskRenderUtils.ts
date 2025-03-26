@@ -64,15 +64,15 @@ export const renderTasks = (taskList: Task[]) => {
             }
         });
 
-        task.files.forEach(file => {
+        task.attaches.forEach(attach => {
             const img = document.createElement("img");
-            img.src = file.s3Path;
-            img.id = file.id;
-            img.alt = file.originName;
+            img.src = attach.preSignedUrl;
+            img.id = attach.id;
+            img.alt = attach.originName;
             imgDiv.appendChild(img);
 
             img.addEventListener('click', () => {
-                console.log(file.s3Path);
+                console.log(attach.preSignedUrl);
                 try {
                     swal({
                         title: "삭제하시겠습니까?",
@@ -81,7 +81,7 @@ export const renderTasks = (taskList: Task[]) => {
                     })
                         .then(async (confirm: any) => {
                             if (confirm) {
-                                deleteImageProcess(file.id);
+                                deleteImageProcess(attach.id);
                             }
                         })
                 } catch (error: any) {
