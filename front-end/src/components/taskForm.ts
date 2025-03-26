@@ -133,7 +133,7 @@ async function createTaskProcess() {
 
     const formData = new FormData();
     fileArray.forEach((file) => {
-        formData.append("images", file);
+        formData.append("files", file);
     });
 
     formData.append("content", content.value);
