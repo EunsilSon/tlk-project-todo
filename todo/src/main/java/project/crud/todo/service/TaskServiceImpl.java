@@ -7,16 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import project.crud.todo.domain.dto.AttachDTO;
 import project.crud.todo.domain.dto.TaskDTO;
-import project.crud.todo.domain.entity.Image;
+import project.crud.todo.domain.entity.Attach;
 import project.crud.todo.domain.entity.Task;
 import project.crud.todo.domain.vo.TaskVO;
-import project.crud.todo.repository.ImageRepository;
+import project.crud.todo.repository.AttachRepository;
 import project.crud.todo.repository.TaskRepository;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -25,34 +26,35 @@ import java.util.stream.Collectors;
 public class TaskServiceImpl implements TaskService {
     private final int DEFAULT_TASK_SIZE = 20;
     private final TaskRepository taskRepository;
-    private final ImageService imageService;
-    private final ImageRepository imageRepository;
+    private final AttachService attachService;
+    private final AttachRepository attachRepository;
+    private final S3UploadService s3UploadService;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, ImageService imageService, ImageRepository imageRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, AttachService attachService, AttachRepository attachRepository, S3UploadService s3UploadService) {
         this.taskRepository = taskRepository;
-        this.imageService = imageService;
-        this.imageRepository = imageRepository;
+        this.attachService = attachService;
+        this.attachRepository = attachRepository;
+        this.s3UploadService = s3UploadService;
     }
 
     @Override
     @Transactional
-    public boolean create(TaskVO taskVO) {
+    public boolean create(List<MultipartFile> files, @RequestParam TaskVO taskVO) {
         try {
-            imageService.save(taskVO.getFiles(), taskVO.getGroupId(), taskVO.getCreatedBy());
+            attachService.save(files, taskVO.getGroupId(), taskVO.getCreatedBy());
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {
             return false;
         }
-
     }
 
     @Override
     @Transactional
     public boolean delete(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Task not found"));
-        imageRepository.deleteByGroupId(task.getGroupId());
+        attachRepository.deleteByGroupId(task.getGroupId());
         taskRepository.deleteById(id);
         return true;
     }
@@ -62,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
-        return getTaskDtoList(tasks);
+        return getTasks(tasks);
     }
 
     @Override
@@ -70,16 +72,27 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
         Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
-        return getTaskDtoList(tasks);
+        return getTasks(tasks);
     }
 
-    private List<TaskDTO> getTaskDtoList(Page<Task> tasks) {
-        List<TaskDTO> list = new ArrayList<>();
+    private List<TaskDTO> getTasks(Page<Task> tasks) {
+        List<TaskDTO> taskDTOList = new ArrayList<>();
         for (Task task : tasks) {
-            List<Image> images = imageRepository.findByGroupId(task.getGroupId());
-            list.add(new TaskDTO(task, images));
+            List<AttachDTO> attachDTOS = getAttaches(task);
+            taskDTOList.add(new TaskDTO(task, attachDTOS));
         }
-        return list;
+        return taskDTOList;
+    }
+
+    private List<AttachDTO> getAttaches(Task task) {
+        List<Attach> attaches = attachRepository.findByGroupId(task.getGroupId());
+        return attaches.stream()
+                .map(attach -> new AttachDTO(
+                        attach.getId(),
+                        attach.getOriginName(),
+                        s3UploadService.generatePreSignedUrl(attach.getS3Key())
+                ))
+                .collect(Collectors.toList());
     }
 
     @Override

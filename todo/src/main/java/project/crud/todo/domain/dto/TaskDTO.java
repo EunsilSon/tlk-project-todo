@@ -1,6 +1,5 @@
 package project.crud.todo.domain.dto;
 
-import project.crud.todo.domain.entity.Image;
 import project.crud.todo.domain.entity.Task;
 
 import java.util.List;
@@ -12,16 +11,16 @@ public class TaskDTO {
     private Integer month;
     private Integer day;
     private String groupId;
-    private List<Image> files;
+    private List<AttachDTO> attaches;
 
-    public TaskDTO(Task task, List<Image> files) {
+    public TaskDTO(Task task, List<AttachDTO> files) {
         this.id = task.getId();
         this.content = task.getContent();
         this.year = task.getYear();
         this.month = task.getMonth();
         this.day = task.getDay();
         this.groupId = task.getGroupId();
-        this.files = files;
+        this.attaches = files;
     }
 
     public Long getId() {
@@ -40,7 +39,7 @@ public class TaskDTO {
         return day;
     }
     public String getGroupId() { return groupId; }
-    public List<Image> getFiles() {
-        return files;
+    public List<AttachDTO> getAttaches() {
+        return attaches;
     }
 }

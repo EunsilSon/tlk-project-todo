@@ -23,14 +23,8 @@ public class TaskController {
     }
 
     @PostMapping
-    public ApiResponse<String> create(@RequestParam("images") List<MultipartFile> images,
-                                      @RequestParam("content") String content,
-                                      @RequestParam("year") String year,
-                                      @RequestParam("month") String month,
-                                      @RequestParam("day") String day,
-                                      @RequestParam("createdBy") Long createdBy,
-                                      @RequestParam("groupId") String groupId) {
-        if (taskService.create(new TaskVO(images, content, year, month, day, createdBy, groupId))) {
+    public ApiResponse<String> create(@ModelAttribute("images") List<MultipartFile> files, @RequestParam TaskVO taskVO) {
+        if (taskService.create(files, taskVO)) {
             return ResponseUtil.createSuccessResponse("Successes Create Task");
         }
         return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
