@@ -19,6 +19,15 @@ public class TaskVO {
     private Long createdBy;
     private String groupId;
 
+    public TaskVO(String content, String year, String month, String day, Long createdBy, String groupId) {
+        this.content = content;
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.createdBy = createdBy;
+        this.groupId = groupId;
+    }
+
     public String getContent() {
         return content;
     }
@@ -35,4 +44,5 @@ public class TaskVO {
         return createdBy;
     }
     public String getGroupId() { return groupId; }
+
 }

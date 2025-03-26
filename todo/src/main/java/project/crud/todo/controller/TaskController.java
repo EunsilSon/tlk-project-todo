@@ -23,9 +23,10 @@ public class TaskController {
     }
 
     @PostMapping
-    public ApiResponse<String> create(@ModelAttribute("images") List<MultipartFile> files, @RequestParam TaskVO taskVO) {
+    public ApiResponse<String> create(@RequestParam("files") List<MultipartFile> files,
+                                      @ModelAttribute TaskVO taskVO) {
         if (taskService.create(files, taskVO)) {
-            return ResponseUtil.createSuccessResponse("Successes Create Task");
+            return ResponseUtil.createSuccessResponse("Success Create Task");
         }
         return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
     }
@@ -39,17 +40,22 @@ public class TaskController {
     }
 
     @GetMapping("/monthly")
-    public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month) {
+    public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam int year,
+                                                           @RequestParam int month) {
         return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getMonthlyTask(page, year, month));
     }
 
     @GetMapping("/daily")
-    public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+    public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year,
+                                                   @RequestParam int month,
+                                                   @RequestParam int day) {
         return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getDailyTask(page, year, month, day));
     }
 
     @GetMapping("/count")
-    public ApiResponse<int[]> getCount(@RequestParam int year, @RequestParam int month) {
+    public ApiResponse<int[]> getCount(@RequestParam int year,
+                                       @RequestParam int month) {
         return ResponseUtil.createSuccessResponse("Successes Get Task Counts", taskService.getTaskCount(year, month));
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.dto.AttachDTO;
 import project.crud.todo.domain.dto.TaskDTO;
@@ -40,7 +39,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public boolean create(List<MultipartFile> files, @RequestParam TaskVO taskVO) {
+    public boolean create(List<MultipartFile> files, TaskVO taskVO) {
         try {
             attachService.save(files, taskVO.getGroupId(), taskVO.getCreatedBy());
             taskRepository.save(Task.from(taskVO));
@@ -62,7 +61,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("createdBy"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return getTasks(tasks);
     }
@@ -70,7 +69,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("id"));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("createdBy"));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return getTasks(tasks);
     }
