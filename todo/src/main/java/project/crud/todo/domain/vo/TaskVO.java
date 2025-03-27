@@ -2,10 +2,6 @@ package project.crud.todo.domain.vo;
 
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TaskVO {
     @Size(min = 1, max = 100, message = "입력 길이는 최소 1자, 최대 100자입니다.")
@@ -22,17 +18,14 @@ public class TaskVO {
 
     private Long createdBy;
     private String groupId;
-    private List<MultipartFile> files;
 
-    public TaskVO(List<MultipartFile> files, String content, String year, String month, String day, Long createdBy, String groupId) {
+    public TaskVO(String content, String year, String month, String day, Long createdBy, String groupId) {
         this.content = content;
         this.year = year;
         this.month = month;
         this.day = day;
         this.createdBy = createdBy;
         this.groupId = groupId;
-        this.files = new ArrayList<>();
-        this.files.addAll(files);
     }
 
     public String getContent() {
@@ -51,5 +44,5 @@ public class TaskVO {
         return createdBy;
     }
     public String getGroupId() { return groupId; }
-    public List<MultipartFile> getFiles() { return files; }
+
 }

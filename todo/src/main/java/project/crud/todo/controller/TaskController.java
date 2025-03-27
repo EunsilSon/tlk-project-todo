@@ -23,17 +23,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public ApiResponse<String> create(@RequestParam("images") List<MultipartFile> images,
-                                      @RequestParam("content") String content,
-                                      @RequestParam("year") String year,
-                                      @RequestParam("month") String month,
-                                      @RequestParam("day") String day,
-                                      @RequestParam("createdBy") Long createdBy,
-                                      @RequestParam("groupId") String groupId) {
-        if (taskService.create(new TaskVO(images, content, year, month, day, createdBy, groupId))) {
-            return ResponseUtil.createSuccessResponse("Successes Create Task");
+    public ApiResponse<String> create(@RequestParam(value = "attaches", required = false) List<MultipartFile> files,
+                                      @ModelAttribute TaskVO taskVO) {
+        if (taskService.create(files, taskVO)) {
+            return ResponseUtil.createSuccessResponse("Success Create Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
+        return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, "Failed Create Task");
     }
 
     @DeleteMapping("/{id}")
@@ -41,21 +36,26 @@ public class TaskController {
         if (taskService.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task");
+        return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, "Failed Delete Task");
     }
 
     @GetMapping("/monthly")
-    public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month) {
+    public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam int year,
+                                                           @RequestParam int month) {
         return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getMonthlyTask(page, year, month));
     }
 
     @GetMapping("/daily")
-    public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year, @RequestParam int month, @RequestParam int day) {
+    public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year,
+                                                   @RequestParam int month,
+                                                   @RequestParam int day) {
         return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getDailyTask(page, year, month, day));
     }
 
     @GetMapping("/count")
-    public ApiResponse<int[]> getCount(@RequestParam int year, @RequestParam int month) {
+    public ApiResponse<int[]> getCount(@RequestParam int year,
+                                       @RequestParam int month) {
         return ResponseUtil.createSuccessResponse("Successes Get Task Counts", taskService.getTaskCount(year, month));
     }
 }
