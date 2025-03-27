@@ -1,5 +1,5 @@
 # CRUD 과제 - 투두리스트
-<img src="https://github.com/user-attachments/assets/661094c8-7dab-4ad7-bb8e-d435739334a2" width="80%" />
+https://github.com/user-attachments/assets/360ea3a5-f659-4d97-9fc2-0b001cc3f1b4
 
 <br><br>
 
