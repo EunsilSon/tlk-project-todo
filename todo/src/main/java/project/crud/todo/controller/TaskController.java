@@ -23,12 +23,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public ApiResponse<String> create(@RequestParam("files") List<MultipartFile> files,
+    public ApiResponse<String> create(@RequestParam(value = "attaches", required = false) List<MultipartFile> files,
                                       @ModelAttribute TaskVO taskVO) {
         if (taskService.create(files, taskVO)) {
             return ResponseUtil.createSuccessResponse("Success Create Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Create Task");
+        return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, "Failed Create Task");
     }
 
     @DeleteMapping("/{id}")
@@ -36,7 +36,7 @@ public class TaskController {
         if (taskService.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Delete Task");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Delete Task");
+        return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, "Failed Delete Task");
     }
 
     @GetMapping("/monthly")

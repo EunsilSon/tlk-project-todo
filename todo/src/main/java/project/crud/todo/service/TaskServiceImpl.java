@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 @Service
 public class TaskServiceImpl implements TaskService {
     private final int DEFAULT_TASK_SIZE = 20;
+    private final String DEFAULT_TASK_SORT_BY = "scheduledDate";
+
     private final TaskRepository taskRepository;
     private final AttachService attachService;
     private final AttachRepository attachRepository;
@@ -41,7 +43,9 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean create(List<MultipartFile> files, TaskVO taskVO) {
         try {
-            attachService.save(files, taskVO.getGroupId(), taskVO.getCreatedBy());
+            if (files != null) {
+                attachService.save(files, taskVO.getGroupId(), taskVO.getCreatedBy());
+            }
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch (Exception e) {
@@ -61,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("createdBy"));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY));
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return getTasks(tasks);
     }
@@ -69,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by("createdBy"));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY));
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return getTasks(tasks);
     }

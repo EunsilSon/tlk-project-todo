@@ -20,7 +20,7 @@ public class AttachController {
         if (attachService.delete(id)) {
             return ResponseUtil.createSuccessResponse("Successes Deleted file");
         }
-        return ResponseUtil.createErrorResponse(HttpStatus.NOT_FOUND, "Failed Deleted file");
+        return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, "Failed Deleted file");
     }
 
 }
