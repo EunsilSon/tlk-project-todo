@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     renderCalendar(year, month);
-    renderNewTasks(await getMonthlyTaskList(year, month+1, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month+1, 0), true);
 })
 
 const prevBtn = document.getElementById('prev');
@@ -114,7 +114,7 @@ async function moveToPrevCalendar() {
     }
 
     renderCalendar(year, month-1);
-    renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month, 0), true);
 }
 
 /* 다음 달 */
@@ -130,5 +130,5 @@ async function moveToPrevCalendar() {
     }
     
     renderCalendar(year, month-1);
-    renderNewTasks(await getMonthlyTaskList(year, month, 0), "none");
+    renderNewTasks(await getMonthlyTaskList(year, month, 0), true);
 }

@@ -1,5 +1,5 @@
 import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth, setScrollTop } from "../components/calendarForm.js";
-import { setTaskPage, monthlyTaskProcess } from "../components/taskForm.js";
+import { setTaskPage, reloadMonthlyTask } from "../components/taskForm.js";
 import { getDailyTaskList, getTaskCount } from "../services/taskService.js";
 import { renderNewTasks } from "./taskRenderUtils.js";
 
@@ -13,7 +13,7 @@ function renderTitle(year: number, month: number) {
     calDate.innerText = year + "." + (month + 1);
 
     calDate.addEventListener('click', () => {
-        monthlyTaskProcess();
+        reloadMonthlyTask();
     })
 }
 
@@ -43,7 +43,7 @@ async function renderInner(year: number, month: number) {
         calInnerDiv.innerHTML = "";
     }
 
-    const countArr: number[] = await getTaskCount(year, month+1); // 저장된 task 개수
+    const countArr: number[] = await getTaskCount(year, month + 1); // 저장된 task 개수
     let countIdx = 1;
 
     for (let i = 0; i < weekCount; i++) {
@@ -55,7 +55,7 @@ async function renderInner(year: number, month: number) {
             let day = document.createElement("div");
             let count = document.createElement("div");
             count.className = "count"
-            
+
             if (i === 0 && j < firstDayIdx) { // 이전
                 day.textContent = ++prevDay + "";
                 day.className = "not-now";
@@ -69,7 +69,7 @@ async function renderInner(year: number, month: number) {
                 countIdx++;
 
                 // 현재 날짜 표시
-                if (isCurrentYearAndMonth === true && dayCount == date.getDate()+1) {
+                if (isCurrentYearAndMonth === true && dayCount == date.getDate() + 1) {
                     day.id = "current-date";
                 }
             } else if (dayCount > lastDay) { // 다음
@@ -87,9 +87,9 @@ async function renderInner(year: number, month: number) {
                 // task 조회 전 page 초기화
                 setScrollTop();
                 setTaskPage();
-                
-                renderSelectedDay(year, month+1, day.innerText);
-                renderNewTasks(await getDailyTaskList(year, month+1, day.innerText, 0), day.innerText); // 날짜 변경될 때마다 해당 일의 task 조회
+
+                renderSelectedDay(year, month + 1, day.innerText);
+                renderNewTasks(await getDailyTaskList(year, month + 1, day.innerText, 0), false); // 날짜 변경될 때마다 해당 일의 task 조회
             });
 
             dayItem.appendChild(day);

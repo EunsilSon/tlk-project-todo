@@ -4,11 +4,12 @@ import { deleteTaskProcess, deleteImageProcess } from "../components/taskForm.js
 declare var swal: any;
 
 /* 달력을 넘기거나 다른 날을 선택했을 때 지우고 새로 그리기 */
-export const renderNewTasks = (taskList: Task[], day: string) => {
+export const renderNewTasks = (taskList: Task[], isDifferentCal: boolean) => {
+    showNoDataNotice("none");
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     let currentCalendar: number[] = getCurrentCalendar();
 
-    if (day === "none") { // 다른 달력
+    if (isDifferentCal) { // 다른 달력
         if (localStorage.getItem("currentMonth") != currentCalendar[1] + "") {
             localStorage.setItem("currentMonth", currentCalendar[1] + "");
             taskDiv.innerHTML = '';
@@ -22,6 +23,7 @@ export const renderNewTasks = (taskList: Task[], day: string) => {
 
 /* 기존의 달력, 날짜에서 이어서 그리기 */
 export const renderTasks = (taskList: Task[]) => {
+    showNoDataNotice("none");
     const taskDiv = document.getElementById('task-div') as HTMLElement;
 
     taskList.forEach(task => {
@@ -39,7 +41,7 @@ export const renderTasks = (taskList: Task[]) => {
 
         const content = document.createElement('div');
         content.className = 'content';
-        const shortContent = task.content.length > 17 ? task.content.substring(0, 17) + ' ------- 최대 100자' : task.content; // 글자 수 넘침 처리
+        const shortContent = task.content.length > 30 ? task.content.substring(0, 30) : task.content; // 글자 수 넘침 처리
         content.textContent = shortContent;
 
         const deleteBtn = document.createElement('button');
@@ -65,13 +67,17 @@ export const renderTasks = (taskList: Task[]) => {
         });
 
         task.attaches.forEach(attach => {
-            const img = document.createElement("img");
+            const imgItem = document.createElement("div");
+            const img = document.createElement('img');
+            const imgDeleteBtn = document.createElement('img');
+
+            imgItem.className = "image-item";
             img.src = attach.preSignedUrl;
             img.id = attach.id;
             img.alt = attach.originName;
-            imgDiv.appendChild(img);
-
-            img.addEventListener('click', () => {
+            imgDeleteBtn.src = "/assets/remove.png";
+            imgDeleteBtn.className = "image-delete-btn";
+            imgDeleteBtn.addEventListener('click', () => {
                 console.log(attach.preSignedUrl);
                 try {
                     swal({
@@ -88,6 +94,10 @@ export const renderTasks = (taskList: Task[]) => {
                     console.log(error.message);
                 }
             })
+
+            imgItem.appendChild(img);
+            imgItem.appendChild(imgDeleteBtn);
+            imgDiv.appendChild(imgItem);
         })
 
         taskDetail.appendChild(date);
@@ -123,9 +133,33 @@ export const renderImgPreview = (src: string, file: File, fileArray: File[]) => 
                         fileArray.splice(index, 1);
                     }
                     img.remove();
+                    checkImageLimit();
                 }
             })
     })
 
     preview.appendChild(img);
+    checkImageLimit();
+}
+
+function checkImageLimit() {
+    const preview = document.getElementById("preview-div") as HTMLImageElement;
+    const imgCount = preview.getElementsByTagName("img").length;
+    const fileUploadInput = document.getElementById("file-upload") as HTMLInputElement;
+    const fileUploadNotice = document.getElementById("file-upload-notice") as HTMLElement;
+
+    if (imgCount >= 5) {
+        fileUploadInput.disabled = true;
+        fileUploadNotice.innerText = "5개까지 첨부 가능합니다.";
+        fileUploadNotice.style.display = "block";
+    } else {
+        fileUploadInput.disabled = false;
+        fileUploadNotice.innerText = "";
+        fileUploadNotice.style.display = "notice";
+    }
+}
+
+export const showNoDataNotice = (status: string) => {
+    const noticeP = document.getElementById('no-data-notice') as HTMLElement;
+    noticeP.style.display = status;
 }
