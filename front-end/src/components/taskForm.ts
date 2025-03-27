@@ -1,6 +1,6 @@
 import { createTask, getMonthlyTaskList, getDailyTaskList, deleteTask } from "../services/taskService.js";
 import { deleteImage } from "../services/fileService.js";
-import { renderTasks, renderImgPreview } from "../utils/taskRenderUtils.js"
+import { renderTasks, renderImgPreview, showNoDataNotice, renderNewTasks } from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
 declare var swal: any;
@@ -93,37 +93,39 @@ function scrollForTask() {
 
 /* 특정 월의 모든 task 조회 */
 export async function monthlyTaskProcess() {
+    const taskDiv = document.getElementById('task-div') as HTMLElement;
+    
     let currentCalendar: number[] = getCurrentCalendar();
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], taskPage++);
 
-    if (newTasks.length == 0) {
-        swal({
-            position: "top-end",
-            icon: "info",
-            title: "마지막 기록입니다.",
-            timer: 650
-        })
+    if (taskDiv.scrollHeight > taskDiv.clientHeight && newTasks.length == 0) {
+        showNoDataNotice("block");
     } else {
+        showNoDataNotice("none");
         renderTasks(newTasks);
     }
 }
 
 /* 특정 일자의 모든 task 조회 */
 async function dailyTaskProcess() {
+    const taskDiv = document.getElementById('task-div') as HTMLElement;
     const inputDate = document.getElementById('input-date') as HTMLElement;
-    let currentCalendar: number[] = getCurrentCalendar();
 
+    let currentCalendar: number[] = getCurrentCalendar();
     let newTasks: Task[] = await getDailyTaskList(currentCalendar[0], currentCalendar[1], inputDate.innerText.substring(9, 11), taskPage++);
-    if (newTasks.length == 0) {
-        swal({
-            position: "top-end",
-            icon: "info",
-            title: "마지막 기록입니다.",
-            timer: 650
-        })
+
+    if (taskDiv.scrollHeight > taskDiv.clientHeight && newTasks.length == 0) {
+        showNoDataNotice("block");
     } else {
+        showNoDataNotice("none");
         renderTasks(newTasks);
     }
+}
+
+export async function reloadMonthlyTask() {
+    let currentCalendar: number[] = getCurrentCalendar();
+    let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], 0);
+    renderNewTasks(newTasks, false);
 }
 
 /* task 생성 */
@@ -132,9 +134,12 @@ async function createTaskProcess() {
     let splitDate = inputDate.innerText.split(". ");
 
     const formData = new FormData();
-    fileArray.forEach((file) => {
-        formData.append("images", file);
-    });
+
+    if (fileArray.length > 0) {
+        fileArray.forEach((file) => {
+            formData.append("attaches", file);
+        });
+    }
 
     formData.append("content", content.value);
     formData.append("year", splitDate[0]);

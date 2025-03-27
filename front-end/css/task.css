@@ -24,10 +24,37 @@ body {
     padding: 5px 0px 5px 5px;
 }
 
-.task-item img {
-    cursor: pointer;
+#imgDiv {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#imgDiv {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.image-item {
+    position: relative;
+    display: inline-block;
     width: 100px;
-    margin: 0px 5px 0px 5px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.image-item img:first-child {
+    width: 100%;
+    height: 100%;
+}
+
+.image-delete-btn {
+    position: absolute;
+    width: 25px;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
 }
 
 .task-detail {
@@ -97,4 +124,20 @@ body {
 #create:disabled {
     cursor: default;
     background-color: #cccccc;
+}
+
+#no-data-notice {
+    display: none;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+#file-upload-notice {
+    display: none;
+    color: #ca2929;
+    font-weight: bold;
+}
+
+#file-div p {
+    text-align: center;
 }

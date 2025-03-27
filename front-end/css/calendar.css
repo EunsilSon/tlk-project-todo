@@ -75,7 +75,7 @@ table {
 .now {
     cursor: pointer;
     font-weight: bold;
-    color:#464646;
+    color: #464646;
 }
 
 .now:hover {
@@ -84,18 +84,19 @@ table {
 }
 
 .now.selected {
-    border: solid 3px #002fff;
+    border: solid 3px #113dff;
     border-radius: 50%;
 }
 
 .count {
-    color: #002fff;
+    color: #113dff;
     margin: 10px 0px -10px 0px;
     font-size: 20px;
+    font-weight: bold;
 }
 
 #current-date {
-    background-color: #4466ff;
+    background-color: #7b93ff;
     border-radius: 50%;
 }
 

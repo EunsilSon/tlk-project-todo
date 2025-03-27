@@ -1,5 +1,5 @@
 import { getWeekCount, getFirstDay, getLastDay, getLastDayOfPrevMonth, setScrollTop } from "../components/calendarForm.js";
-import { setTaskPage, monthlyTaskProcess } from "../components/taskForm.js";
+import { setTaskPage, reloadMonthlyTask } from "../components/taskForm.js";
 import { getDailyTaskList, getTaskCount } from "../services/taskService.js";
 import { renderNewTasks } from "./taskRenderUtils.js";
 export function renderCalendar(year, month) {
@@ -10,9 +10,8 @@ function renderTitle(year, month) {
     const calDate = document.getElementById("cal-date");
     calDate.innerText = year + "." + (month + 1);
     calDate.addEventListener('click', () => {
-        monthlyTaskProcess();
-    });
-}
+        reloadMonthlyTask();
+    })}
 async function renderInner(year, month) {
     let isCurrentYearAndMonth = false;
     let date = new Date();
@@ -35,7 +34,12 @@ async function renderInner(year, month) {
     else {
         calInnerDiv.innerHTML = "";
     }
+<<<<<<< HEAD:front-end/dist/utils/calendarRenderUtils.js
     const countArr = await getTaskCount(year, month + 1); // 저장된 task 개수
+=======
+
+    const countArr: number[] = await getTaskCount(year, month + 1); // 저장된 task 개수
+>>>>>>> front:front-end/src/utils/calendarRenderUtils.ts
     let countIdx = 1;
     for (let i = 0; i < weekCount; i++) {
         let row = document.createElement("tr");
@@ -44,7 +48,12 @@ async function renderInner(year, month) {
             let dayItem = document.createElement("td");
             let day = document.createElement("div");
             let count = document.createElement("div");
+<<<<<<< HEAD:front-end/dist/utils/calendarRenderUtils.js
             count.className = "count";
+=======
+            count.className = "count"
+
+>>>>>>> front:front-end/src/utils/calendarRenderUtils.ts
             if (i === 0 && j < firstDayIdx) { // 이전
                 day.textContent = ++prevDay + "";
                 day.className = "not-now";
@@ -74,8 +83,14 @@ async function renderInner(year, month) {
                 // task 조회 전 page 초기화
                 setScrollTop();
                 setTaskPage();
+<<<<<<< HEAD:front-end/dist/utils/calendarRenderUtils.js
                 renderSelectedDay(year, month + 1, day.innerText);
                 renderNewTasks(await getDailyTaskList(year, month + 1, day.innerText, 0), day.innerText); // 날짜 변경될 때마다 해당 일의 task 조회
+=======
+
+                renderSelectedDay(year, month + 1, day.innerText);
+                renderNewTasks(await getDailyTaskList(year, month + 1, day.innerText, 0), false); // 날짜 변경될 때마다 해당 일의 task 조회
+>>>>>>> front:front-end/src/utils/calendarRenderUtils.ts
             });
             dayItem.appendChild(day);
             dayItem.appendChild(count);
