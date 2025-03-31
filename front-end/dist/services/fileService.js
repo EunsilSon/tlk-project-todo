@@ -1,16 +1,14 @@
-declare var axios: any;
-
 const instance = axios.create({
     baseURL: `http://127.0.0.1:8080/attaches`,
-})
-
-export const deleteImage = async (id: string) => {
+});
+export const deleteImage = async (id) => {
     try {
         const response = await instance.delete(`/${id}`);
         console.log(response);
         return response;
-    } catch (error: any) {
+    }
+    catch (error) {
         console.log(error.response);
         return error;
     }
-}
+};

@@ -72,6 +72,13 @@ fileUploadBtn?.addEventListener('change', (event) => {
     }
 });
 
+export function removeFileInArray(file: File) {
+    const index = fileArray.indexOf(file);
+    if (index !== -1) {
+        fileArray.splice(index, 1);
+    }
+}
+
 export function setTaskPage() {
     taskPage = 1;
 }
@@ -94,7 +101,7 @@ function scrollForTask() {
 /* 특정 월의 모든 task 조회 */
 export async function monthlyTaskProcess() {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
-    
+
     let currentCalendar: number[] = getCurrentCalendar();
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], taskPage++);
 
@@ -125,7 +132,9 @@ async function dailyTaskProcess() {
 export async function reloadMonthlyTask() {
     let currentCalendar: number[] = getCurrentCalendar();
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], 0);
+    const taskDiv = document.getElementById('task-div') as HTMLElement;
     renderNewTasks(newTasks, false);
+    taskDiv.scrollTop = 0;
 }
 
 /* task 생성 */
