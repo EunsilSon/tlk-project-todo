@@ -9,6 +9,10 @@ import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.entity.Attach;
 import project.crud.todo.repository.AttachRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
@@ -18,49 +22,75 @@ public class AttachServiceImpl implements AttachService {
     Logger logger = LoggerFactory.getLogger(AttachServiceImpl.class);
 
     private final AttachRepository attachRepository;
-    private final S3UploadServiceImpl s3UploadServiceImpl;
 
     @Autowired
-    public AttachServiceImpl(AttachRepository attachRepository, S3UploadServiceImpl s3UploadServiceImpl) {
+    public AttachServiceImpl(AttachRepository attachRepository) {
         this.attachRepository = attachRepository;
-        this.s3UploadServiceImpl = s3UploadServiceImpl;
     }
 
     @Transactional
     @Override
     public boolean save(List<MultipartFile> files, String groupId, Long createdBy) {
+        String path = getPath();
+
         for (MultipartFile file : files) {
-            String key = "uploads/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
+            String targetName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
             try {
-                s3UploadServiceImpl.saveFile(file, key);
+                saveLocal(file, path, targetName);
                 Attach attach = new Attach(
-                        key
-                        , file.getOriginalFilename()
-                        , file.getContentType()
-                        , file.getSize()
-                        , groupId
-                        , createdBy
+                        file.getOriginalFilename(),
+                        targetName,
+                        path + targetName,
+                        file.getContentType(),
+                        file.getSize(),
+                        groupId,
+                        createdBy
                 );
                 attachRepository.save(attach);
             } catch (Exception e) {
-                logger.error(e.getMessage());
-                return false;
+                logger.warn("Failed Save Attach {}", e.toString());
+                throw new NoSuchElementException("Failed Save Attach: " + e);
             }
         }
         return true;
+    }
+
+    private void saveLocal(MultipartFile file, String path, String targetName) {
+        try {
+            file.transferTo(new File(path + targetName));
+        } catch (IOException e) {
+            logger.warn("Failed Save Image {}", e.toString());
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String getPath() {
+        String dir = "uploads";
+        String path = System.getProperty("user.home")
+                + File.separator
+                + dir
+                + File.separator;
+
+        File f = new File(path);
+        if (!f.exists()) {
+            boolean created = f.mkdirs();
+            if (!created) {
+                logger.warn("Failed Create directory: {}", path);
+            }
+        }
+        return path;
     }
 
     @Transactional
     @Override
     public boolean delete(Long id) {
         try {
-            Attach attach = attachRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Attach not found"));
+            Attach attach = attachRepository.findById(id).orElseThrow(NoSuchElementException::new);
             attachRepository.delete(attach);
-            s3UploadServiceImpl.deleteFile(attach.getS3Key());
         } catch (Exception e) {
-            logger.warn(e.getMessage());
-            return false;
+            logger.warn("Failed Delete Attach {}", e.toString());
+            throw new NoSuchElementException("Failed Delete Attach: " + e);
         }
         return true;
     }

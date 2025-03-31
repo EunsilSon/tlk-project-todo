@@ -18,10 +18,3 @@ spring:
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
-
-  cloud:
-    aws:
-      active: false
-
-  profiles:
-    active: dev

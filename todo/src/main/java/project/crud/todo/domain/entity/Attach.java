@@ -11,10 +11,13 @@ public class Attach {
     private Long id;
 
     @Column(nullable = false, length = 100)
-    private String s3Key;
+    private String originName;
 
     @Column(nullable = false, length = 100)
-    private String originName;
+    private String targetName;
+
+    @Column(nullable = false, length = 100)
+    private String path;
 
     @Column(nullable = false, length = 100)
     private String contentType;
@@ -35,9 +38,10 @@ public class Attach {
 
     }
 
-    public Attach(String s3Key, String originName, String contentType, long size, String groupId, Long createdBy) {
-        this.s3Key = s3Key;
+    public Attach(String originName, String targetName, String path, String contentType, long size, String groupId, Long createdBy) {
         this.originName = originName;
+        this.targetName = targetName;
+        this.path = path;
         this.contentType = contentType;
         this.size = size;
         this.groupId = groupId;
@@ -48,10 +52,11 @@ public class Attach {
     public Long getId() {
         return id;
     }
-    public String getS3Key() { return s3Key; }
     public String getOriginName() {
         return originName;
     }
+    public String getTargetName() { return targetName; }
+    public String getPath() { return path; }
     public String getContentType() {
         return contentType;
     }

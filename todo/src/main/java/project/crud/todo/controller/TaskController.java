@@ -1,6 +1,8 @@
 package project.crud.todo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,6 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
+    private final int DEFAULT_TASK_SIZE = 20;
+    private final String DEFAULT_TASK_SORT_BY = "scheduledDate";
+
     private final TaskService taskService;
 
     @Autowired
@@ -42,15 +47,17 @@ public class TaskController {
     @GetMapping("/monthly")
     public ApiResponse<List<TaskDTO>> getAllByYearAndMonth(@RequestParam(defaultValue = "0") int page,
                                                            @RequestParam int year,
-                                                           @RequestParam int month) {
-        return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getMonthlyTask(page, year, month));
+                                                           @RequestParam int month,
+                                                           @PageableDefault(size = DEFAULT_TASK_SIZE, sort = DEFAULT_TASK_SORT_BY) Pageable pageable) {
+        return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getMonthlyTask(page, year, month, pageable));
     }
 
     @GetMapping("/daily")
     public ApiResponse<List<TaskDTO>> getAllByDate(@RequestParam(defaultValue = "0") int page, @RequestParam int year,
                                                    @RequestParam int month,
-                                                   @RequestParam int day) {
-        return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getDailyTask(page, year, month, day));
+                                                   @RequestParam int day,
+                                                   @PageableDefault(size = DEFAULT_TASK_SIZE, sort = DEFAULT_TASK_SORT_BY) Pageable pageable) {
+        return ResponseUtil.createSuccessResponse("Success Get Tasks", taskService.getDailyTask(page, year, month, day, pageable));
     }
 
     @GetMapping("/count")
