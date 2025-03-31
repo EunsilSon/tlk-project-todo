@@ -43,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean create(List<MultipartFile> files, TaskVO taskVO) {
         try {
-            if (files != null) {
+            if (files != null) { // TODO: List 가 없을 수도 있고, List 는 있지만 비어있을 수도 있음. 현재는 List 가 비어있을 때에도 내부 로직을 타게 됨
                 attachService.save(files, taskVO.getGroupId(), taskVO.getCreatedBy());
             }
             taskRepository.save(Task.from(taskVO));
@@ -57,7 +57,7 @@ public class TaskServiceImpl implements TaskService {
     @Transactional
     public boolean delete(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Task not found"));
-        attachRepository.deleteByGroupId(task.getGroupId());
+        attachRepository.deleteByGroupId(task.getGroupId()); // TODO: 반환 값이 void 이면 이 메서드가 정말 성공해서 true 인지 모름. 실무에서는 nativeQuery 만들어서 int 반환하고 있음
         taskRepository.deleteById(id);
         return true;
     }
@@ -65,7 +65,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getMonthlyTask(int page, int year, int month) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY)); // TODO: Pageable 컨트롤러에서 자동 매핑
         Page<Task> tasks = taskRepository.findAllByYearAndMonth(year, month, pageable);
         return getTasks(tasks);
     }
@@ -73,7 +73,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDTO> getDailyTask(int page, int year, int month, int day) {
-        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY));
+        Pageable pageable = PageRequest.of(page, DEFAULT_TASK_SIZE, Sort.by(DEFAULT_TASK_SORT_BY));  // TODO: Pageable 컨트롤러에서 자동 매핑
         Page<Task> tasks = taskRepository.findAllByYearAndMonthAndDay(year, month, day, pageable);
         return getTasks(tasks);
     }
@@ -93,7 +93,7 @@ public class TaskServiceImpl implements TaskService {
                 .map(attach -> new AttachDTO(
                         attach.getId(),
                         attach.getOriginName(),
-                        s3UploadService.generatePreSignedUrl(attach.getS3Key())
+                        s3UploadService.generatePreSignedUrl(attach.getS3Key()) // TODO: 느려짐 / 퍼블릭 액세스 + 특정 IP만 허용
                 ))
                 .collect(Collectors.toList());
     }

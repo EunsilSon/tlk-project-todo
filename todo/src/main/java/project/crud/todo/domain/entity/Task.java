@@ -33,7 +33,7 @@ public class Task {
     @Column(nullable = false)
     private LocalDate scheduledDate;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String groupId;
 
     public Task() { }
