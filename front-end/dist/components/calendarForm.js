@@ -89,9 +89,9 @@ export function getCurrentCalendar() {
 }
 /* 이전 달 */
 async function moveToPrevCalendar() {
-    let seletedDate = getCurrentCalendar();
-    let year = seletedDate[0];
-    let month = seletedDate[1];
+    let selectedDate = getCurrentCalendar();
+    let year = selectedDate[0];
+    let month = selectedDate[1];
     month--;
     if (month <= 0) {
         year--;
@@ -102,9 +102,9 @@ async function moveToPrevCalendar() {
 }
 /* 다음 달 */
 async function moveToNextCalendar() {
-    let seletedDate = getCurrentCalendar();
-    let year = seletedDate[0];
-    let month = seletedDate[1];
+    let selectedDate = getCurrentCalendar();
+    let year = selectedDate[0];
+    let month = selectedDate[1];
     month++;
     if (month > 12) {
         year++;

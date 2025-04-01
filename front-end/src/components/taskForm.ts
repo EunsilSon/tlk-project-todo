@@ -1,10 +1,11 @@
 import { createTask, getMonthlyTaskList, getDailyTaskList, deleteTask } from "../services/taskService.js";
 import { deleteImage } from "../services/fileService.js";
-import { renderTasks, renderImgPreview, showNoDataNotice, renderNewTasks } from "../utils/taskRenderUtils.js"
+import { renderTasks, renderImgPreview, showLastDataNotice, renderNewTasks} from "../utils/taskRenderUtils.js"
 import { getCurrentCalendar } from "./calendarForm.js";
 
+
 declare var swal: any;
-var MAX_FILE_SIZE = 2 * 1024 * 1024;
+const MAX_FILE_SIZE = 2 * 1024 * 1024;
 let taskPage: number = 1;
 let fileArray: File[] = [];
 
@@ -29,7 +30,7 @@ taskInput?.addEventListener('input', function () {
 });
 
 createBtn?.addEventListener('click', async () => {
-    createTaskProcess();
+    await createTaskProcess();
 });
 
 fileUploadBtn?.addEventListener('change', (event) => {
@@ -45,30 +46,20 @@ fileUploadBtn?.addEventListener('change', (event) => {
                 title: "최대 2MB 크기까지 업로드 가능합니다.",
                 timer: 800
             })
-            inputFile.value = '';
             return;
         }
 
-        const previewDiv = document.getElementById('preview-div');
-        if (previewDiv && previewDiv.children.length < 5) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                renderImgPreview(reader.result as string, uploadFile, fileArray);
-            };
-            reader.readAsDataURL(uploadFile);
+        // 파일 첨부
+        const reader = new FileReader();
+        reader.onload = () => {
+            renderImgPreview(reader.result as string, uploadFile);
+        };
+        reader.readAsDataURL(uploadFile);
 
-            Array.from(inputFile.files).forEach((file) => {
-                fileArray.push(file);
-            })
-        } else {
-            inputFile.value = '';
-            swal({
-                position: "top-end",
-                icon: "info",
-                title: "최대 5개까지 업로드 가능합니다.",
-                timer: 800
-            })
-        }
+        // 첨부한 파일들
+        Array.from(inputFile.files).forEach((file) => {
+            fileArray.push(file);
+        })
     }
 });
 
@@ -106,9 +97,8 @@ export async function monthlyTaskProcess() {
     let newTasks: Task[] = await getMonthlyTaskList(currentCalendar[0], currentCalendar[1], taskPage++);
 
     if (taskDiv.scrollHeight > taskDiv.clientHeight && newTasks.length == 0) {
-        showNoDataNotice("block");
+        showLastDataNotice();
     } else {
-        showNoDataNotice("none");
         renderTasks(newTasks);
     }
 }
@@ -122,9 +112,8 @@ async function dailyTaskProcess() {
     let newTasks: Task[] = await getDailyTaskList(currentCalendar[0], currentCalendar[1], inputDate.innerText.substring(9, 11), taskPage++);
 
     if (taskDiv.scrollHeight > taskDiv.clientHeight && newTasks.length == 0) {
-        showNoDataNotice("block");
+        showLastDataNotice();
     } else {
-        showNoDataNotice("none");
         renderTasks(newTasks);
     }
 }
@@ -135,6 +124,15 @@ export async function reloadMonthlyTask() {
     const taskDiv = document.getElementById('task-div') as HTMLElement;
     renderNewTasks(newTasks, false);
     taskDiv.scrollTop = 0;
+}
+
+/* UUID v4 규격의 UUID 직접 생성 */
+function generateUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
 }
 
 /* task 생성 */
@@ -148,14 +146,13 @@ async function createTaskProcess() {
         fileArray.forEach((file) => {
             formData.append("attaches", file);
         });
+        formData.append("groupId",  generateUUID());
     }
-
     formData.append("content", content.value);
     formData.append("year", splitDate[0]);
     formData.append("month", splitDate[1]);
     formData.append("day", splitDate[2]);
     formData.append("createdBy", "1");
-    formData.append("groupId", crypto.randomUUID());
 
     const response = await createTask(formData);
     if (response.status === 200) {
@@ -191,13 +188,13 @@ export async function deleteTaskProcess(taskId: string) {
                     title: "삭제 완료",
                     timer: 750
                 })
-                    .then(() => {
-                        let currentCalendar: number[] = getCurrentCalendar();
-                        localStorage.setItem("updatedYear", currentCalendar[0] + "");
-                        localStorage.setItem("updatedMonth", currentCalendar[1] + "");
-                        localStorage.setItem("updated", "true");
-                        window.location.reload();
-                    })
+                .then(() => {
+                    let currentCalendar: number[] = getCurrentCalendar();
+                    localStorage.setItem("updatedYear", currentCalendar[0] + "");
+                    localStorage.setItem("updatedMonth", currentCalendar[1] + "");
+                    localStorage.setItem("updated", "true");
+                    window.location.reload();
+                })
             } else {
                 swal({
                     position: "top-end",
@@ -205,7 +202,6 @@ export async function deleteTaskProcess(taskId: string) {
                     title: "삭제 실패",
                     timer: 650
                 })
-
             }
         });
 }
