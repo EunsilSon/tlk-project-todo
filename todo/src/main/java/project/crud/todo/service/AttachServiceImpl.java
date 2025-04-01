@@ -5,93 +5,66 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import project.crud.todo.domain.entity.Attach;
 import project.crud.todo.repository.AttachRepository;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AttachServiceImpl implements AttachService {
     Logger logger = LoggerFactory.getLogger(AttachServiceImpl.class);
 
     private final AttachRepository attachRepository;
+    private final FileService fileService;
 
     @Autowired
-    public AttachServiceImpl(AttachRepository attachRepository) {
+    public AttachServiceImpl(AttachRepository attachRepository, FileService fileService) {
         this.attachRepository = attachRepository;
+        this.fileService = fileService;
     }
 
-    @Transactional
     @Override
-    public boolean save(List<MultipartFile> files, String groupId, Long createdBy) {
-        String path = getPath();
+    public List<Attach> save(List<MultipartFile> files, String groupId, Long createdBy) {
+        String dir = "attaches";
+        String path = fileService.getPath(dir);
+        List<Attach> attaches = new ArrayList<>();
 
         for (MultipartFile file : files) {
+            String originalName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
             String targetName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
             try {
-                saveLocal(file, path, targetName);
-                Attach attach = new Attach(
-                        file.getOriginalFilename(),
-                        targetName,
-                        path + targetName,
-                        file.getContentType(),
-                        file.getSize(),
-                        groupId,
-                        createdBy
-                );
-                attachRepository.save(attach);
+                if (fileService.saveLocal(file, path, targetName)) {
+                    Attach attach = new Attach(
+                            originalName,
+                            targetName,
+                            dir + File.separator + targetName,
+                            file.getContentType(),
+                            file.getSize(),
+                            groupId,
+                            createdBy
+                    );
+                    attachRepository.save(attach);
+                    attaches.add(attach);
+                }
+                logger.info("[Success] group_id: {} - Save completed.", groupId);
             } catch (Exception e) {
-                logger.warn("Failed Save Attach {}", e.toString());
-                throw new NoSuchElementException("Failed Save Attach: " + e);
+                throw new RuntimeException(e);
             }
         }
-        return true;
-    }
-
-    private void saveLocal(MultipartFile file, String path, String targetName) {
-        try {
-            file.transferTo(new File(path + targetName));
-        } catch (IOException e) {
-            logger.warn("Failed Save Image {}", e.toString());
-            throw new RuntimeException(e);
-        }
-    }
-
-    private String getPath() {
-        String dir = "uploads";
-        String path = System.getProperty("user.home")
-                + File.separator
-                + dir
-                + File.separator;
-
-        File f = new File(path);
-        if (!f.exists()) {
-            boolean created = f.mkdirs();
-            if (!created) {
-                logger.warn("Failed Create directory: {}", path);
-            }
-        }
-        return path;
+        return attaches;
     }
 
     @Transactional
     @Override
     public boolean delete(Long id) {
-        try {
-            Attach attach = attachRepository.findById(id).orElseThrow(NoSuchElementException::new);
-            attachRepository.delete(attach);
-        } catch (Exception e) {
-            logger.warn("Failed Delete Attach {}", e.toString());
-            throw new NoSuchElementException("Failed Delete Attach: " + e);
-        }
+        Attach attach = attachRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Attach not found"));
+        fileService.deleteLocal(attach.getPath());
+        attachRepository.deleteById(id);
         return true;
     }
 }

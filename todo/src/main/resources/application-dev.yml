@@ -1,8 +1,0 @@
-cloud:
-  aws:
-    active: true
-    auth: profile
-    s3:
-      bucket: eunsil-uploaded-files
-      region: ap-northeast-2
-      profile: aws-iam-eunsil #개발 서버의 시스템 변수로 설정한 AWS 자격 증명

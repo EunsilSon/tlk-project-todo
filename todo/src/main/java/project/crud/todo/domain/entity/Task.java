@@ -5,6 +5,7 @@ import project.crud.todo.domain.vo.TaskVO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 public class Task {
@@ -33,7 +34,7 @@ public class Task {
     @Column(nullable = false)
     private LocalDate scheduledDate;
 
-    @Column(nullable = false, length = 100)
+    @Column(length = 100)
     private String groupId;
 
     public Task() { }

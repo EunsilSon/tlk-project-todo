@@ -1,7 +1,5 @@
 package project.crud.todo.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,17 +20,17 @@ import java.util.stream.Collectors;
 
 @Service
 public class TaskServiceImpl implements TaskService {
-    Logger logger = LoggerFactory.getLogger(AttachServiceImpl.class);
-
     private final TaskRepository taskRepository;
     private final AttachService attachService;
     private final AttachRepository attachRepository;
+    private final FileService fileService;
 
     @Autowired
-    public TaskServiceImpl(TaskRepository taskRepository, AttachService attachService, AttachRepository attachRepository) {
+    public TaskServiceImpl(TaskRepository taskRepository, AttachService attachService, AttachRepository attachRepository, FileService fileService) {
         this.taskRepository = taskRepository;
         this.attachService = attachService;
         this.attachRepository = attachRepository;
+        this.fileService = fileService;
     }
 
     @Override
@@ -45,7 +43,6 @@ public class TaskServiceImpl implements TaskService {
             taskRepository.save(Task.from(taskVO));
             return true;
         } catch(Exception e) {
-            logger.error("Task could not be created: {}", e.toString());
             throw new RuntimeException("Task could not be created: " + e);
         }
     }
@@ -55,11 +52,13 @@ public class TaskServiceImpl implements TaskService {
     public boolean delete(Long id) {
         Task task = taskRepository.findById(id).orElseThrow(NoSuchElementException::new);
         try {
+            List<Attach> attaches = attachRepository.findByGroupId(task.getGroupId());
+            attaches.forEach(attach -> fileService.deleteLocal(attach.getPath()));
+
             attachRepository.deleteByGroupId(task.getGroupId());
             taskRepository.deleteById(id);
             return true;
         } catch (Exception e) {
-            logger.error("Task could not be deleted: {}", e.toString());
             throw new RuntimeException("Task could not be deleted: " + e);
         }
     }

@@ -15,13 +15,17 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        log.error("Failed Validation: {}", e.getMessage());
+        log.error(logMessageTitle(), e.getMessage());
         return ResponseUtil.createErrorResponse(HttpStatus.BAD_REQUEST, e.getAllErrors().get(0).getDefaultMessage());
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ApiResponse<String> handleException(Exception e) {
-        log.error("Failed: {}", e.getMessage());
+        log.error(logMessageTitle(), e.getMessage());
         return ResponseUtil.createErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
+    private String logMessageTitle() {
+        return "[Fail] {}";
     }
 }
