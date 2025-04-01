@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 const instance = axios.create({
     baseURL: `http://127.0.0.1:8080/tasks`,
     withCredentials: true,
+=======
+import { config } from "../config.js";
+const instance = axios.create({
+    baseURL: config.API_BASE_URL + 'tasks',
+>>>>>>> front
 });
 export const createTask = async (formData) => {
     try {
@@ -65,7 +71,10 @@ export const getTaskCount = async (year, month) => {
     try {
         const response = await instance.get(`/count?year=${year}&month=${month}`);
         if (response.data.status == 200) {
+<<<<<<< HEAD
             console.log(response.data.data);
+=======
+>>>>>>> front
             return response.data.data;
         }
         else {

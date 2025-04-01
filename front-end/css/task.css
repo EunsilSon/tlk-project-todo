@@ -5,7 +5,7 @@ body {
 #task-div {
     width: 600px;
     height: 330px;
-    margin: 5px 0px 5px 0px;
+    margin: 5px 0 5px 0;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -21,7 +21,7 @@ body {
 
 .task-item div {
     display: flex;
-    padding: 5px 0px 5px 5px;
+    padding: 5px 0 5px 5px;
 }
 
 #imgDiv {
@@ -65,7 +65,7 @@ body {
 }
 
 .task-item:last-child {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .content {
@@ -99,7 +99,7 @@ body {
 }
 
 #input-div p {
-    margin: 0px 0px 10px 0px;
+    margin: 0 0 10px 0;
     height: 20px;
     font-size: 20px;
 }
@@ -107,7 +107,7 @@ body {
 #input-div input {
     width: 510px;
     padding: 10px;
-    border: 0px;
+    border: 0;
     font-size: 18px;
 }
 
@@ -127,7 +127,6 @@ body {
 }
 
 #no-data-notice {
-    display: none;
     font-weight: bold;
     font-size: 20px;
 }
