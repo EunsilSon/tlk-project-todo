@@ -20,9 +20,9 @@ https://github.com/user-attachments/assets/360ea3a5-f659-4d97-9fc2-0b001cc3f1b4
 | 일일 모든 task 조회 | GET   | /tasks/daily?year={}&month={}&day={}&page={} |
 | 한 달 모든 task 조회 | GET   | /tasks/monthly?year={}&month={}&page={} |
 | task 개수 조회     | GET   | /tasks/count?year={}&month={} |
-| 파일 삭제    | DELETE   | /tasks/images/{id} |
+| 파일 삭제    | DELETE   | /attaches/{id} |
 
 <br>
 
 ## ERD
-<img src="https://github.com/user-attachments/assets/92198ead-236c-4cb1-a358-ec26eac99410" width="100%" />
+<img src="https://github.com/user-attachments/assets/d310ba90-ea80-4a7e-9c8c-6a7aa204031a" width="100%" />
