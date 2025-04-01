@@ -3,12 +3,14 @@ package project.crud.todo.domain.dto;
 public class AttachDTO {
     private Long id;
     private String originName;
-    private String preSignedUrl;
+    private String targetName;
+    private String path;
 
-    public AttachDTO(Long id, String originName, String preSignedUrl) {
+    public AttachDTO(Long id, String originName, String targetName, String path) {
         this.id = id;
         this.originName = originName;
-        this.preSignedUrl = preSignedUrl;
+        this.targetName = targetName;
+        this.path = path;
     }
 
     public Long getId() {
@@ -17,7 +19,8 @@ public class AttachDTO {
     public String getOriginName() {
         return originName;
     }
-    public String getPreSignedUrl() {
-        return preSignedUrl;
+    public String getTargetName() { return targetName; }
+    public String getPath() {
+        return path;
     }
 }

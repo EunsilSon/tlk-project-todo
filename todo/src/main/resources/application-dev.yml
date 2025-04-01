@@ -1,8 +1,0 @@
-cloud:
-  aws:
-    active: true
-    auth: profile
-    s3:
-      bucket: eunsil-uploaded-files
-      region: ap-northeast-2
-      profile: aws-iam-eunsil
