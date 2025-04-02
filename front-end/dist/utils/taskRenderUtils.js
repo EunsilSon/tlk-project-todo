@@ -1,12 +1,4 @@
 import { getCurrentCalendar } from "../components/calendarForm.js";
-<<<<<<< HEAD
-import { deleteTaskProcess } from "../components/taskForm.js";
-/* 달력을 넘기거나 다른 날을 선택했을 때 지우고 새로 그리기 */
-export const renderNewTasks = (taskList, day) => {
-    const taskDiv = document.getElementById('task-div');
-    let currentCalendar = getCurrentCalendar();
-    if (day === "none") { // 다른 달력
-=======
 import { deleteTaskProcess, deleteImageProcess, removeFileInArray } from "../components/taskForm.js";
 import { config } from "../config.js";
 /* 달력을 넘기거나 다른 날을 선택했을 때 지우고 새로 그리기 */
@@ -14,7 +6,6 @@ export const renderNewTasks = (taskList, isDifferentCal) => {
     const taskDiv = document.getElementById('task-div');
     let currentCalendar = getCurrentCalendar();
     if (isDifferentCal) { // 다른 달력
->>>>>>> front
         if (localStorage.getItem("currentMonth") != currentCalendar[1] + "") {
             localStorage.setItem("currentMonth", currentCalendar[1] + "");
             taskDiv.innerHTML = '';
@@ -30,18 +21,6 @@ export const renderTasks = (taskList) => {
     const taskDiv = document.getElementById('task-div');
     taskList.forEach(task => {
         const taskItem = document.createElement('div');
-<<<<<<< HEAD
-        taskItem.className = 'task-item';
-        const taskDetail = document.createElement('div');
-        taskDetail.className = 'task-detail';
-        const dateDiv = document.createElement('div');
-        dateDiv.className = 'date';
-        dateDiv.textContent = task.year + ". " + task.month + ". " + task.day;
-        const contentDiv = document.createElement('div');
-        contentDiv.className = 'content';
-        const shortContent = task.content.length > 17 ? task.content.substring(0, 17) + ' ------- 최대 100자' : task.content; // 글자 수 넘침 처리
-        contentDiv.textContent = shortContent;
-=======
         const contentDiv = document.createElement('div');
         const imgDiv = document.createElement('div');
         taskItem.className = 'task-item';
@@ -53,20 +32,11 @@ export const renderTasks = (taskList) => {
         const content = document.createElement('div');
         content.className = 'content';
         content.textContent = task.content.length > 30 ? task.content.substring(0, 30) : task.content;
->>>>>>> front
         const deleteBtn = document.createElement('button');
         deleteBtn.className = 'delete';
         deleteBtn.id = task.id.toString();
         deleteBtn.textContent = '삭제';
-<<<<<<< HEAD
-        taskDetail.appendChild(dateDiv);
-        taskDetail.appendChild(contentDiv);
-        taskItem.appendChild(taskDetail);
-        taskDiv.appendChild(taskItem);
-        deleteBtn.addEventListener('click', async () => {
-=======
         deleteBtn.addEventListener('click', () => {
->>>>>>> front
             try {
                 swal({
                     title: "삭제하시겠습니까?",
@@ -75,11 +45,7 @@ export const renderTasks = (taskList) => {
                 })
                     .then(async (confirm) => {
                     if (confirm) {
-<<<<<<< HEAD
-                        deleteTaskProcess(task.id);
-=======
                         await deleteTaskProcess(task.id);
->>>>>>> front
                     }
                 });
             }
@@ -87,11 +53,6 @@ export const renderTasks = (taskList) => {
                 console.log(error.message);
             }
         });
-<<<<<<< HEAD
-    });
-};
-export const renderImgPreview = (src, file, fileArray) => {
-=======
         task.attaches.forEach(attach => {
             const imgItem = document.createElement("div");
             const img = document.createElement('img');
@@ -133,7 +94,6 @@ export const renderImgPreview = (src, file, fileArray) => {
     });
 };
 export const renderImgPreview = (src, file) => {
->>>>>>> front
     const preview = document.getElementById("preview-div");
     const img = document.createElement('img');
     img.src = src;
@@ -147,23 +107,13 @@ export const renderImgPreview = (src, file) => {
         })
             .then((confirm) => {
             if (confirm) {
-<<<<<<< HEAD
-                const index = fileArray.indexOf(file);
-                if (index !== -1) {
-                    fileArray.splice(index, 1);
-                }
-                img.remove();
-=======
                 removeFileInArray(file);
                 img.remove();
                 checkImageLimit();
->>>>>>> front
             }
         });
     });
     preview.appendChild(img);
-<<<<<<< HEAD
-=======
     checkImageLimit();
 };
 function checkImageLimit() {
@@ -197,5 +147,4 @@ export const showLastDataNotice = () => {
             lastTaskItem.appendChild(noticeP);
         }
     }
->>>>>>> front
 };

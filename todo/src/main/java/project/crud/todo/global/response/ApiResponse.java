@@ -22,7 +22,6 @@ public class ApiResponse<T> {
     public int getStatus() {
         return status;
     }
-<<<<<<< Updated upstream
     public String getMessage() {
         return message;
     }
@@ -30,12 +29,4 @@ public class ApiResponse<T> {
         return data;
     }
 
-=======
-
-    public String getMessage() {
-        return message;
-    }
-
-    public T getData() { return data; }
->>>>>>> Stashed changes
 }

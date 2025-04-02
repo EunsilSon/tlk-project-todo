@@ -12,9 +12,11 @@ import java.io.IOException;
 public class FileServiceImpl implements FileService {
     Logger logger = LoggerFactory.getLogger(FileServiceImpl.class);
 
+    private final String FILE_UPLOAD_PATH = "user.dir";
+
     @Override
     public String getPath(String dir) {
-        String path = System.getProperty("user.home")
+        String path = System.getProperty(FILE_UPLOAD_PATH)
                 + File.separator
                 + dir
                 + File.separator;
@@ -44,7 +46,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public void deleteLocal(String path) {
         try {
-            File file = new File(System.getProperty("user.home") + File.separator + path);
+            File file = new File(System.getProperty(FILE_UPLOAD_PATH) + File.separator + path);
             if (file.exists()) {
                 if (file.delete()) {
                     logger.info("[Success] Delete attach in local: {}", path);

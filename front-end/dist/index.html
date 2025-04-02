@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" initial-scale="1.0">
+    <title>TODO</title>
+    <link rel="stylesheet" href="../../css/calendar.css">
+    <link rel="stylesheet" href="../../css/task.css">
+    <script type="module" src="../../dist/components/calendarForm.js"></script>
+    <script type="module" src="../../dist/components/taskForm.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+
+<body>
+<div id="main-div">
+    <div id="sub-div">
+
+        <!-- 캘린더 영역 -->
+        <div id="cal-div">
+            <div id="cal-navigation">
+                <button id="prev"><</button>
+                <p id="cal-date"></p>
+                <button id="next">></button>
+            </div>
+            <table id="calender">
+                <div id="day-navigation">
+                    <th>일</th>
+                    <th>월</th>
+                    <th>화</th>
+                    <th>수</th>
+                    <th>목</th>
+                    <th>금</th>
+                    <th>토</th>
+                </div>
+            </table>
+        </div>
+
+        <!-- 할 일 조회 영역 -->
+        <div id="task-div"></div>
+
+        <!-- 할 일 입력 영역 -->
+        <div id="input-div">
+            <p id="input-date"></p>
+            <div>
+                <input type="text" id="task-input" placeholder="최소 1자, 최대 100자 입력 가능합니다.">
+                <button id="create" disabled>등록</button>
+            </div>
+            <form id="file-div">
+                <input id="file-upload" type="file" accept="image/*" disabled>
+                <p>이미지를 클릭해 삭제할 수 있습니다.</p>
+                <div id="preview-div"></div>
+                <p id="file-upload-notice"></p>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
